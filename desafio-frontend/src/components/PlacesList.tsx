@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlaceContext } from "../context/PlaceContext";
-import Place from "./Place";
+import Place from "./place/Place";
 
 interface PlacesListProps {
   fieldsToDisplay: string[];

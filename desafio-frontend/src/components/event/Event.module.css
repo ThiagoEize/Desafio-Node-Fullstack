@@ -1,0 +1,38 @@
+.event {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+  position: relative;
+}
+
+.eventOptions {
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 5px;
+  z-index: 1;
+}
+
+.eventInfo {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.eventField {
+  flex: 1;
+}
+
+.eventOptions div {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.eventOptions div:hover {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}

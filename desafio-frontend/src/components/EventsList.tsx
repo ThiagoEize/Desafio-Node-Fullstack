@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEventContext } from "../context/EventContext";
-import Event from "./Event";
+import Event from "./event/Event";
 
 interface EventsListProps {
   fieldsToDisplay: string[];
