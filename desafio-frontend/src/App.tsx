@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import PlacesList from "./components/PlacesList";
 import EventsList from "./components/EventsList";
 import PlaceForm from "./components/PlaceForm";
+import EventForm from "./components/EventForm";
 // import EventForm from "./components/EventForm";
 
 const App: React.FC = () => {
@@ -30,6 +31,7 @@ const App: React.FC = () => {
               />
             }
           />
+          <Route path="/edit-event/:id" element={<EventForm />} />
           <Route path="/edit-place/:id" element={<PlaceForm />} />
         </Routes>
       </EventProvider>

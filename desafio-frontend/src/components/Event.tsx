@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaEllipsisV } from "react-icons/fa";
 import { useEventContext } from "../context/EventContext";
 import { usePlaceContext } from "../context/PlaceContext";
@@ -15,8 +16,13 @@ const Event: React.FC<EventProps> = ({ id, placeId, event, type, date }) => {
   const { deleteEvent } = useEventContext();
   const { placesList } = usePlaceContext();
   const [showOptions, setShowOptions] = useState(false);
+  const navigate = useNavigate();
 
   const place = placesList.find((place) => place.id === placeId);
+
+  const handleEdit = () => {
+    navigate(`/edit-event/${id}`);
+  };
 
   return (
     <div
@@ -49,7 +55,7 @@ const Event: React.FC<EventProps> = ({ id, placeId, event, type, date }) => {
             padding: "5px",
           }}
         >
-          <button onClick={() => console.log(`Edit ${id}`)}>Edit</button>
+          <button onClick={handleEdit}>Edit</button>
           <button onClick={() => deleteEvent(id)}>Delete</button>
         </div>
       )}

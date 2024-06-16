@@ -1,32 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useEventContext } from "../context/EventContext";
 import { usePlaceContext } from "../context/PlaceContext";
+import { useParams, useNavigate } from "react-router-dom";
 
-interface EventFormProps {
-  eventId?: string;
-  initialData?: {
-    placeId?: string;
-    event?: string;
-    type?: string;
-    date?: string;
-  };
-  onSubmit: () => void;
-}
-
-const EventForm: React.FC<EventFormProps> = ({
-  eventId,
-  initialData,
-  onSubmit,
-}) => {
-  const { addEvent, updateEvent } = useEventContext();
+const EventForm: React.FC = () => {
+  const { eventsList, addEvent, updateEvent } = useEventContext();
   const { placesList } = usePlaceContext();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [formState, setFormState] = useState({
-    id: eventId || "",
-    placeId: initialData?.placeId || "",
-    event: initialData?.event || "",
-    type: initialData?.type || "",
-    date: initialData?.date || "",
+    id: "",
+    placeId: "",
+    event: "",
+    type: "",
+    date: "",
   });
+
+  useEffect(() => {
+    if (id) {
+      const event = eventsList.find((event) => event.id === id);
+      if (event) {
+        setFormState({
+          id: event.id,
+          placeId: event.placeId,
+          event: event.event,
+          type: event.type,
+          date: event.date,
+        });
+      }
+    }
+  }, [id, eventsList]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -37,12 +40,14 @@ const EventForm: React.FC<EventFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (eventId) {
-      updateEvent(eventId, formState as any); // Type assertion to match updateEvent signature
+
+    if (formState.id) {
+      updateEvent(formState.id, formState);
     } else {
       addEvent({ ...formState, id: Date.now().toString() });
     }
-    onSubmit();
+
+    navigate("/events"); // Navigate back to the events list after submission
   };
 
   return (
@@ -86,7 +91,9 @@ const EventForm: React.FC<EventFormProps> = ({
         onChange={handleChange}
         required
       />
-      <button type="submit">{eventId ? "Update Event" : "Add Event"}</button>
+      <button type="submit">
+        {formState.id ? "Update Event" : "Add Event"}
+      </button>
     </form>
   );
 };
