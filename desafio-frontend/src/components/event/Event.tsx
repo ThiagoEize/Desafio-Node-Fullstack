@@ -46,13 +46,19 @@ const Event: React.FC<EventProps> = ({ id, placeId, event, type, date }) => {
         <div
           onClick={() => setShowOptions(!showOptions)}
           style={{ cursor: "pointer" }}
+          role="button"
+          aria-label="options"
         >
           <FaEllipsisV />
         </div>
         {showOptions && (
           <div className={styles.eventOptions}>
-            <div onClick={handleEdit}>Edit</div>
-            <div onClick={handleDelete}>Delete</div>
+            <div onClick={handleEdit} role="button">
+              Edit
+            </div>
+            <div onClick={handleDelete} role="button">
+              Delete
+            </div>
           </div>
         )}
       </div>

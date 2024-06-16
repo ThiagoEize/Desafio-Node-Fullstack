@@ -54,6 +54,8 @@ const Place: React.FC<PlaceProps> = ({
         <div
           onClick={() => setShowOptions(!showOptions)}
           style={{ cursor: "pointer" }}
+          role="button"
+          aria-label="options"
         >
           <FaEllipsisV />
         </div>
