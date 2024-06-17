@@ -17,9 +17,12 @@ export class EventsService {
     return await this.prisma.event.create({
       data: {
         placeId: data.placeId,
-        evento: data.evento,
+        event: data.event,
         type: data.type,
-        date: data.date,
+        dateStart: data.dateStart,
+        hourStart: data.hourStart,
+        dateEnd: data.dateEnd,
+        hourEnd: data.hourEnd,
       },
     });
   }
@@ -43,9 +46,12 @@ export class EventsService {
       },
       data: {
         placeId: data.placeId ?? event.placeId,
-        evento: data.evento ?? event.evento,
+        event: data.event ?? event.event,
         type: data.type ?? event.type,
-        date: data.date ?? event.date,
+        dateStart: data.dateStart ?? event.dateStart,
+        hourStart: data.hourStart ?? event.hourStart,
+        dateEnd: data.dateEnd ?? event.dateEnd,
+        hourEnd: data.hourEnd ?? event.hourEnd,
       },
     });
   }
@@ -69,13 +75,20 @@ export class EventsService {
     return await this.prisma.event.findMany({
       where: {
         placeId: query.placeId ?? undefined,
-        evento: {
-          contains: query.evento ?? undefined,
+        event: {
+          contains: query.event ?? undefined,
         },
         type: {
           contains: query.type ?? undefined,
         },
-        date: query.date ?? undefined,
+        dateStart: query.dateStart ?? undefined,
+        hourStart: {
+          contains: query.hourStart ?? undefined,
+        },
+        dateEnd: query.dateEnd ?? undefined,
+        hourEnd: {
+          contains: query.hourEnd ?? undefined,
+        },
       },
       orderBy: query.order
         ? {

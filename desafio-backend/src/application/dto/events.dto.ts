@@ -4,11 +4,17 @@ export class EventsCreateDto {
   @ApiProperty()
   placeId: number;
   @ApiProperty()
-  evento: string;
+  event: string;
   @ApiProperty()
   type: string;
   @ApiProperty()
-  date: Date;
+  dateStart: Date;
+  @ApiProperty()
+  hourStart: string;
+  @ApiProperty()
+  dateEnd: Date;
+  @ApiProperty()
+  hourEnd: string;
 }
 
 export class EventsUpdateDto {
@@ -17,22 +23,34 @@ export class EventsUpdateDto {
   @ApiPropertyOptional()
   placeId?: number;
   @ApiPropertyOptional()
-  evento?: string;
+  event?: string;
   @ApiPropertyOptional()
   type?: string;
   @ApiPropertyOptional()
-  date?: Date;
+  dateStart?: Date;
+  @ApiPropertyOptional()
+  hourStart?: string;
+  @ApiPropertyOptional()
+  dateEnd?: Date;
+  @ApiPropertyOptional()
+  hourEnd?: string;
 }
 
 export class EventsQueryDto {
   @ApiPropertyOptional()
   placeId?: number;
   @ApiPropertyOptional()
-  evento?: string;
+  event?: string;
   @ApiPropertyOptional()
   type?: string;
   @ApiPropertyOptional()
-  date?: Date;
+  dateStart?: Date;
+  @ApiPropertyOptional()
+  hourStart?: string;
+  @ApiPropertyOptional()
+  dateEnd?: Date;
+  @ApiPropertyOptional()
+  hourEnd?: string;
   @ApiPropertyOptional()
   order?: string;
 }
