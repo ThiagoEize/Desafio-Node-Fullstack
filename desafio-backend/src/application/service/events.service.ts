@@ -72,29 +72,40 @@ export class EventsService {
   async list(query: EventsQueryDto) {
     this.logger.log(`Listing events with filters ${JSON.stringify(query)}`);
 
-    return await this.prisma.event.findMany({
-      where: {
-        placeId: query.placeId ?? undefined,
-        event: {
-          contains: query.event ?? undefined,
-        },
-        type: {
-          contains: query.type ?? undefined,
-        },
-        dateStart: query.dateStart ?? undefined,
-        hourStart: {
-          contains: query.hourStart ?? undefined,
-        },
-        dateEnd: query.dateEnd ?? undefined,
-        hourEnd: {
-          contains: query.hourEnd ?? undefined,
-        },
-      },
-      orderBy: query.order
-        ? {
-            [query.order.split(' ')[0]]: query.order.split(' ')[1],
-          }
-        : undefined,
+    const page = query.page ? parseInt(query.page.toString(), 10) : 1;
+    const limit = query.limit ? parseInt(query.limit.toString(), 10) : 10;
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+    if (query.placeId) where.placeId = query.placeId;
+    if (query.event) where.event = { contains: query.event };
+    if (query.type) where.type = { contains: query.type };
+    if (query.dateStart) where.dateStart = query.dateStart;
+    if (query.hourStart) where.hourStart = { contains: query.hourStart };
+    if (query.dateEnd) where.dateEnd = query.dateEnd;
+    if (query.hourEnd) where.hourEnd = { contains: query.hourEnd };
+
+    const orderBy: any = {};
+    if (query.order) {
+      const [field, direction] = query.order.split(' ');
+      orderBy[field] = direction;
+    }
+
+    const events = await this.prisma.event.findMany({
+      where,
+      orderBy: Object.keys(orderBy).length ? orderBy : undefined,
+      skip: skip,
+      take: limit,
     });
+
+    const totalEvents = await this.prisma.event.count({ where });
+
+    return {
+      data: events,
+      total: totalEvents,
+      page: page,
+      limit: limit,
+      totalPages: Math.ceil(totalEvents / limit),
+    };
   }
 }

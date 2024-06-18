@@ -53,4 +53,9 @@ export class EventsQueryDto {
   hourEnd?: string;
   @ApiPropertyOptional()
   order?: string;
+
+  @ApiPropertyOptional()
+  page?: number;
+  @ApiPropertyOptional()
+  limit?: number;
 }

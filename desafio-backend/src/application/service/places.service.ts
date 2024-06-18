@@ -45,26 +45,49 @@ export class PlacesService {
       where: {
         id: Number(data.id),
       },
+      include: {
+        gates: true, // Include gates for the place
+      },
     });
 
     if (!place) {
       throw new Error('Place not found');
     }
 
-    if (data.gates.length > 0) {
+    // Extract existing gate names
+    const existingGateNames = place.gates.map((gate) => gate.name);
+
+    // Find missing gates and delete them
+    const missingGates = place.gates.filter(
+      (gate) => !data.gates.includes(gate.name),
+    );
+
+    if (missingGates.length > 0) {
       await this.prisma.gate.deleteMany({
         where: {
-          placeId: place.id,
+          id: {
+            in: missingGates.map((gate) => gate.id),
+          },
         },
       });
-      data.gates.forEach(async (gate) => {
-        await this.prisma.gate.create({
-          data: {
-            name: gate,
-            placeId: place.id,
-          },
-        });
-      });
+    }
+
+    // Create new gates with different names
+    const newGates = data.gates.filter(
+      (gate) => !existingGateNames.includes(gate),
+    );
+
+    if (newGates.length > 0) {
+      await Promise.all(
+        newGates.map(async (gate) => {
+          await this.prisma.gate.create({
+            data: {
+              name: gate,
+              placeId: place.id,
+            },
+          });
+        }),
+      );
     }
 
     return await this.prisma.place.update({
@@ -81,7 +104,7 @@ export class PlacesService {
   }
 
   async find(id: number) {
-    this.logger.log(`Find place with ID ${id}`);
+    // this.logger.log(`Find place with ID ${id}`);
 
     return await this.prisma.place.findFirstOrThrow({
       include: {
@@ -94,7 +117,7 @@ export class PlacesService {
   }
 
   async list(query: PlacesQueryDto) {
-    this.logger.log(`Listing places with filters ${JSON.stringify(query)}`);
+    // this.logger.log(`Listing places with filters ${JSON.stringify(query)}`);
 
     return await this.prisma.place.findMany({
       include: {

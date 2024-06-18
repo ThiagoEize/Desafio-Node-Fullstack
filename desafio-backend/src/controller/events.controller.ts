@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import {
   EventsCreateDto,
   EventsQueryDto,
@@ -27,7 +27,7 @@ export class EventsController {
   }
 
   @Get('/')
-  async list(@Body() query: EventsQueryDto) {
+  async list(@Query() query: EventsQueryDto) {
     return this.eventsService.list(query);
   }
 }
