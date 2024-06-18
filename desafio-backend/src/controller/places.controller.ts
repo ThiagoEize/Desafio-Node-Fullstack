@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import {
   PlacesCreateDto,
   PlacesQueryDto,
@@ -27,7 +27,7 @@ export class PlacesController {
   }
 
   @Get('/')
-  async list(@Body() query: PlacesQueryDto) {
+  async list(@Query() query: PlacesQueryDto) {
     return this.placesService.list(query);
   }
 }

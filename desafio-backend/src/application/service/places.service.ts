@@ -117,26 +117,44 @@ export class PlacesService {
   }
 
   async list(query: PlacesQueryDto) {
-    // this.logger.log(`Listing places with filters ${JSON.stringify(query)}`);
+    this.logger.log(`Listing places with filters ${JSON.stringify(query)}`);
 
-    return await this.prisma.place.findMany({
+    const page = query.page ? parseInt(query.page.toString(), 10) : 1;
+    const limit = query.limit ? parseInt(query.limit.toString(), 10) : 10;
+    const skip = (page - 1) * limit;
+
+    const where: any = {};
+    if (query.name) where.name = { contains: query.name };
+    if (query.address) where.address = { contains: query.address };
+    if (query.city) where.city = { contains: query.city };
+    if (query.state) where.state = { contains: query.state };
+
+    let orderBy: any = {};
+    if (query.order) {
+      const [field, direction] = query.order.split(' ');
+      orderBy = { [field]: direction };
+    } else {
+      orderBy = { name: 'asc' }; // Default ordering
+    }
+
+    const places = await this.prisma.place.findMany({
+      where,
+      orderBy: Object.keys(orderBy).length ? orderBy : undefined,
+      skip: skip,
+      take: limit,
       include: {
         gates: true,
       },
-      where: {
-        name: {
-          contains: query.name ?? undefined,
-        },
-        address: {
-          contains: query.address ?? undefined,
-        },
-        city: {
-          contains: query.city ?? undefined,
-        },
-        state: {
-          contains: query.state ?? undefined,
-        },
-      },
     });
+
+    const totalPlaces = await this.prisma.place.count({ where });
+
+    return {
+      data: places,
+      total: totalPlaces,
+      page: page,
+      limit: limit,
+      totalPages: Math.ceil(totalPlaces / limit),
+    };
   }
 }

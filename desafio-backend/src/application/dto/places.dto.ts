@@ -30,13 +30,18 @@ export class PlacesUpdateDto {
 
 export class PlacesQueryDto {
   @ApiPropertyOptional()
-  name: string;
+  name?: string;
   @ApiPropertyOptional()
-  address: string;
+  address?: string;
   @ApiPropertyOptional()
-  city: string;
+  city?: string;
   @ApiPropertyOptional()
-  state: string;
+  state?: string;
   @ApiPropertyOptional()
-  order: string;
+  order?: string;
+
+  @ApiPropertyOptional()
+  page?: number;
+  @ApiPropertyOptional()
+  limit?: number;
 }
