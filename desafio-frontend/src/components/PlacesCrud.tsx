@@ -5,14 +5,7 @@ import PlacesList from "./PlacesList";
 const PlacesCrud: React.FC = () => {
   return (
     <div>
-      <nav
-      // style={{
-      //   display: "flex",
-      //   justifyContent: "space-between",
-      //   padding: "10px",
-      //   backgroundColor: "#eee",
-      // }}
-      >
+      <nav>
         <Link
           to="/"
           style={{ marginRight: "10px", textDecoration: "none", color: "#000" }}

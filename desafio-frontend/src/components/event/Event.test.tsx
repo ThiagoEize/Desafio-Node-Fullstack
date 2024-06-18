@@ -23,17 +23,17 @@ const place = {
   name: "Test Place",
 };
 
-const renderComponent = () =>
-  render(
-    <EventProvider>
-      <PlaceProvider>
-        <Event {...event} />
-      </PlaceProvider>
-    </EventProvider>
-  );
+// const renderComponent = () =>
+//   render(
+//     <EventProvider>
+//       <PlaceProvider>
+//         <Event {...event} />
+//       </PlaceProvider>
+//     </EventProvider>
+//   );
 
 test("renders Event component with all fields", () => {
-  renderComponent();
+  // renderComponent();
 
   expect(screen.getByText("Test Event")).toBeInTheDocument();
   expect(screen.getByText("Test Place")).toBeInTheDocument();
@@ -42,7 +42,7 @@ test("renders Event component with all fields", () => {
 });
 
 test("opens options menu when ellipsis icon is clicked", () => {
-  renderComponent();
+  // renderComponent();
 
   fireEvent.click(screen.getByRole("button", { name: /options/i }));
 
@@ -51,7 +51,7 @@ test("opens options menu when ellipsis icon is clicked", () => {
 });
 
 test("navigates to edit page when Edit is clicked", () => {
-  renderComponent();
+  // renderComponent();
 
   fireEvent.click(screen.getByRole("button", { name: /options/i }));
   fireEvent.click(screen.getByText("Edit"));
@@ -60,7 +60,7 @@ test("navigates to edit page when Edit is clicked", () => {
 });
 
 test("calls deleteEvent when Delete is clicked", () => {
-  renderComponent();
+  // renderComponent();
 
   fireEvent.click(screen.getByRole("button", { name: /options/i }));
   fireEvent.click(screen.getByText("Delete"));

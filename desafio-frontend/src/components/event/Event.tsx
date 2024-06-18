@@ -2,25 +2,31 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEllipsisV } from "react-icons/fa";
 import { useEventContext } from "../../context/EventContext";
-import { usePlaceContext } from "../../context/PlaceContext";
 import styles from "./Event.module.css";
 import useOutsideClick from "../../hooks/useOutsideClick";
 
 interface EventProps {
   id: string;
-  placeId: string;
   event?: string;
   type?: string;
-  date?: string;
+  dateStart?: string;
+  hourStart?: string;
+  dateEnd?: string;
+  hourEnd?: string;
 }
 
-const Event: React.FC<EventProps> = ({ id, placeId, event, type, date }) => {
+const Event: React.FC<EventProps> = ({
+  id,
+  event,
+  type,
+  dateStart,
+  hourStart,
+  dateEnd,
+  hourEnd,
+}) => {
   const { deleteEvent } = useEventContext();
-  const { placesList } = usePlaceContext();
   const [showOptions, setShowOptions] = useState(false);
   const navigate = useNavigate();
-
-  const place = placesList.find((place) => place.id === placeId);
 
   const handleEdit = () => {
     navigate(`/edit-event/${id}`);
@@ -38,9 +44,11 @@ const Event: React.FC<EventProps> = ({ id, placeId, event, type, date }) => {
     <div className={styles.event}>
       <div className={styles.eventInfo}>
         {event && <div className={styles.eventField}>{event}</div>}
-        {place && <div className={styles.eventField}>{place.name}</div>}
         {type && <div className={styles.eventField}>{type}</div>}
-        {date && <div className={styles.eventField}>{date}</div>}
+        {dateStart && <div className={styles.eventField}>{dateStart}</div>}
+        {hourStart && <div className={styles.eventField}>{hourStart}</div>}
+        {dateEnd && <div className={styles.eventField}>{dateEnd}</div>}
+        {hourEnd && <div className={styles.eventField}>{hourEnd}</div>}
       </div>
       <div ref={ref} style={{ position: "relative" }}>
         <div
@@ -53,12 +61,8 @@ const Event: React.FC<EventProps> = ({ id, placeId, event, type, date }) => {
         </div>
         {showOptions && (
           <div className={styles.eventOptions}>
-            <div onClick={handleEdit} role="button">
-              Edit
-            </div>
-            <div onClick={handleDelete} role="button">
-              Delete
-            </div>
+            <div onClick={handleEdit}>Edit</div>
+            <div onClick={handleDelete}>Delete</div>
           </div>
         )}
       </div>

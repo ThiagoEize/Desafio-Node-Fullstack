@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { usePlaceContext } from "../context/PlaceContext";
 import { useParams, useNavigate } from "react-router-dom";
+import { formatDate } from "../utils/dateUtils";
 
 const PlaceForm: React.FC = () => {
-  const { placesList, addPlace, updatePlace } = usePlaceContext();
+  const { placesList, addPlace, updatePlace, fetchPlaces } = usePlaceContext();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [formState, setFormState] = useState({
@@ -13,12 +14,16 @@ const PlaceForm: React.FC = () => {
     city: "",
     state: "",
     gates: "",
-    lastUpdate: "",
+    updates: "",
   });
+
+  // useEffect(() => {
+  //   fetchPlaces(1, 100, "", "name asc");
+  // }, [fetchPlaces]);
 
   useEffect(() => {
     if (id) {
-      const place = placesList.find((place) => place.id === id);
+      const place = placesList.find((place) => place.id.toString() === id);
       if (place) {
         setFormState({
           id: place.id,
@@ -27,7 +32,7 @@ const PlaceForm: React.FC = () => {
           city: place.city,
           state: place.state,
           gates: place.gates.join(", "),
-          lastUpdate: place.lastUpdate,
+          updates: formatDate(place.updates),
         });
       }
     }
@@ -96,9 +101,9 @@ const PlaceForm: React.FC = () => {
       />
       <input
         type="date"
-        name="lastUpdate"
+        name="updates"
         placeholder="Last Update"
-        value={formState.lastUpdate}
+        value={formState.updates}
         onChange={handleChange}
         required
       />

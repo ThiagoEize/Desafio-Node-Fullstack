@@ -8,18 +8,15 @@ interface EventsListProps {
 }
 
 const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
-  const { eventsList } = useEventContext();
+  const { eventsList, totalEvents, currentPage, fetchEvents } =
+    useEventContext();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredEvents, setFilteredEvents] = useState(eventsList);
+  const [orderBy, setOrderBy] = useState("event asc");
   const navigate = useNavigate();
 
   useEffect(() => {
-    setFilteredEvents(
-      eventsList.filter((event) =>
-        event.event.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
-  }, [searchTerm, eventsList]);
+    fetchEvents(currentPage, 10, searchTerm, orderBy);
+  }, [searchTerm, orderBy]);
 
   const handleAddEvent = () => {
     navigate("/edit-event/new");
@@ -35,6 +32,12 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
     return filteredProps;
   };
 
+  const handlePageChange = (page: number) => {
+    fetchEvents(page, 10, searchTerm, orderBy);
+  };
+
+  if (!eventsList) return <p>Loading...</p>;
+
   return (
     <div>
       <div
@@ -46,20 +49,43 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
       >
         <input
           type="text"
-          placeholder="Search by event name"
+          placeholder="Search by event"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{ flex: 1, marginRight: "10px" }}
         />
+        <select
+          value={orderBy}
+          onChange={(e) => setOrderBy(e.target.value)}
+          style={{ marginRight: "10px" }}
+        >
+          <option value="event asc">Event Ascending</option>
+          <option value="event desc">Event Descending</option>
+          <option value="type asc">Type Ascending</option>
+          <option value="type desc">Type Descending</option>
+        </select>
         <button onClick={handleAddEvent}>Add Event</button>
       </div>
       <h1>Events List</h1>
-      {filteredEvents.length === 0 ? (
+      {eventsList.length === 0 ? (
         <p>No events available.</p>
       ) : (
-        filteredEvents.map((event) => (
+        eventsList.map((event) => (
           <Event key={event.id} {...getFilteredEventProps(event)} />
         ))
+      )}
+      {totalEvents > 10 && (
+        <div>
+          {Array.from({ length: Math.ceil(totalEvents / 10) }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              disabled={currentPage === index + 1}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       )}
     </div>
   );

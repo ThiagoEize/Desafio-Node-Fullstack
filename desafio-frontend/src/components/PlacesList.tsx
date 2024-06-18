@@ -8,18 +8,15 @@ interface PlacesListProps {
 }
 
 const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
-  const { placesList } = usePlaceContext();
+  const { placesList, totalPlaces, currentPage, fetchPlaces } =
+    usePlaceContext();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredPlaces, setFilteredPlaces] = useState(placesList);
+  const [orderBy, setOrderBy] = useState("name asc");
   const navigate = useNavigate();
 
   useEffect(() => {
-    setFilteredPlaces(
-      placesList.filter((place) =>
-        place.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
-  }, [searchTerm, placesList]);
+    fetchPlaces(currentPage, 10, searchTerm, orderBy);
+  }, [searchTerm, orderBy]);
 
   const handleAddPlace = () => {
     navigate("/edit-place/new");
@@ -34,6 +31,12 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
     });
     return filteredProps;
   };
+
+  const handlePageChange = (page: number) => {
+    fetchPlaces(page, 10, searchTerm, orderBy);
+  };
+
+  if (!placesList) return <p>Loading...</p>;
 
   return (
     <div>
@@ -51,15 +54,38 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
           onChange={(e) => setSearchTerm(e.target.value)}
           style={{ flex: 1, marginRight: "10px" }}
         />
+        <select
+          value={orderBy}
+          onChange={(e) => setOrderBy(e.target.value)}
+          style={{ marginRight: "10px" }}
+        >
+          <option value="name asc">Name Ascending</option>
+          <option value="name desc">Name Descending</option>
+          <option value="city asc">City Ascending</option>
+          <option value="city desc">City Descending</option>
+        </select>
         <button onClick={handleAddPlace}>Add Place</button>
       </div>
       <h1>Places List</h1>
-      {filteredPlaces.length === 0 ? (
+      {placesList.length === 0 ? (
         <p>No places available.</p>
       ) : (
-        filteredPlaces.map((place) => (
+        placesList.map((place) => (
           <Place key={place.id} {...getFilteredPlaceProps(place)} />
         ))
+      )}
+      {totalPlaces > 10 && (
+        <div>
+          {Array.from({ length: Math.ceil(totalPlaces / 10) }, (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              disabled={currentPage === index + 1}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       )}
     </div>
   );

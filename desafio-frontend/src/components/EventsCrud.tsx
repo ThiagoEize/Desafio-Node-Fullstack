@@ -5,14 +5,7 @@ import EventsList from "./EventsList";
 const EventsCrud: React.FC = () => {
   return (
     <div>
-      <nav
-      // style={{
-      //   display: "flex",
-      //   justifyContent: "space-between",
-      //   padding: "10px",
-      //   backgroundColor: "#eee",
-      // }}
-      >
+      <nav>
         <Link
           to="/"
           style={{ marginRight: "10px", textDecoration: "none", color: "#000" }}
@@ -33,7 +26,16 @@ const EventsCrud: React.FC = () => {
           This section allows you to view, add, edit, and delete events in the
           system.
         </p>
-        <EventsList fieldsToDisplay={["event", "placeId", "type", "date"]} />
+        <EventsList
+          fieldsToDisplay={[
+            "event",
+            "type",
+            "dateStart",
+            "hourStart",
+            "dateEnd",
+            "hourEnd",
+          ]}
+        />
       </div>
     </div>
   );
