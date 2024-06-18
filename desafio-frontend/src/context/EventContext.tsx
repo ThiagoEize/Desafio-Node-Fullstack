@@ -9,7 +9,7 @@ import axios from "axios";
 
 interface Event {
   id: string;
-  placeId: string;
+  placeId: number;
   event: string;
   type: string;
   dateStart: string;

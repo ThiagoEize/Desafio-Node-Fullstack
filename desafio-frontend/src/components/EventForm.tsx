@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useEventContext } from "../context/EventContext";
 import { useParams, useNavigate } from "react-router-dom";
-import { formatDate } from "../utils/dateUtils";
+import { formatDate, formatTime } from "../utils/dateUtils";
+import axios from "axios";
+
+interface Place {
+  id: number;
+  name: string;
+}
 
 const EventForm: React.FC = () => {
   const { eventsList, addEvent, updateEvent, fetchEvents } = useEventContext();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [placesList, setPlacesList] = useState<Place[]>([]);
   const [formState, setFormState] = useState({
     id: "",
-    placeId: "",
+    placeId: 0,
     event: "",
     type: "",
     dateStart: "",
@@ -17,6 +24,18 @@ const EventForm: React.FC = () => {
     dateEnd: "",
     hourEnd: "",
   });
+
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/places");
+        setPlacesList(response.data.data);
+      } catch (error) {
+        console.error("Error fetching places:", error);
+      }
+    };
+    fetchPlaces();
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -28,22 +47,35 @@ const EventForm: React.FC = () => {
           event: event.event,
           type: event.type,
           dateStart: formatDate(event.dateStart),
-          hourStart: event.hourStart,
+          hourStart: formatTime(event.dateStart),
           dateEnd: formatDate(event.dateEnd),
-          hourEnd: event.hourEnd,
+          hourEnd: formatTime(event.dateEnd),
         });
       }
     }
   }, [id, eventsList]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setFormState((prev) => ({ ...prev, [name]: value }));
+    setFormState((prev) => ({
+      ...prev,
+      [name]: name === "placeId" ? parseInt(value) : value,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const eventData = { ...formState };
+
+    const formattedDateStart = `${formState.dateStart}T${formState.hourStart}:00Z`;
+    const formattedDateEnd = `${formState.dateEnd}T${formState.hourEnd}:00Z`;
+
+    const eventData = {
+      ...formState,
+      dateStart: formattedDateStart,
+      dateEnd: formattedDateEnd,
+    };
 
     if (formState.id) {
       updateEvent(formState.id, eventData);
@@ -56,6 +88,19 @@ const EventForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <select
+        name="placeId"
+        value={formState.placeId}
+        onChange={handleChange}
+        required
+      >
+        <option value={0}>Select Place</option>
+        {placesList.map((place) => (
+          <option key={place.id} value={place.id}>
+            {place.name}
+          </option>
+        ))}
+      </select>
       <input
         type="text"
         name="event"

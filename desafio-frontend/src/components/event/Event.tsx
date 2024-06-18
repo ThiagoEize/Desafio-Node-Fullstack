@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEllipsisV } from "react-icons/fa";
 import { useEventContext } from "../../context/EventContext";
 import styles from "./Event.module.css";
 import useOutsideClick from "../../hooks/useOutsideClick";
+import axios from "axios";
 
 interface EventProps {
   id: string;
+  placeId?: number;
   event?: string;
   type?: string;
   dateStart?: string;
@@ -17,6 +19,7 @@ interface EventProps {
 
 const Event: React.FC<EventProps> = ({
   id,
+  placeId,
   event,
   type,
   dateStart,
@@ -26,7 +29,25 @@ const Event: React.FC<EventProps> = ({
 }) => {
   const { deleteEvent } = useEventContext();
   const [showOptions, setShowOptions] = useState(false);
+  const [placeName, setPlaceName] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPlaceName = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/places/${placeId}`
+        );
+        setPlaceName(response.data.name);
+      } catch (error) {
+        console.error("Error fetching place name:", error);
+      }
+    };
+
+    if (placeId) {
+      fetchPlaceName();
+    }
+  }, [placeId]);
 
   const handleEdit = () => {
     navigate(`/edit-event/${id}`);
@@ -43,6 +64,7 @@ const Event: React.FC<EventProps> = ({
   return (
     <div className={styles.event}>
       <div className={styles.eventInfo}>
+        {placeName && <div className={styles.eventField}>{placeName}</div>}
         {event && <div className={styles.eventField}>{event}</div>}
         {type && <div className={styles.eventField}>{type}</div>}
         {dateStart && <div className={styles.eventField}>{dateStart}</div>}

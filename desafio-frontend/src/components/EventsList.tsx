@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEventContext } from "../context/EventContext";
 import Event from "./event/Event";
+import axios from "axios";
 
 interface EventsListProps {
   fieldsToDisplay: string[];
@@ -12,11 +13,35 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
     useEventContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState("event asc");
+  const [placesMap, setPlacesMap] = useState<Record<number, string>>({});
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchEvents(currentPage, 10, searchTerm, orderBy);
   }, [searchTerm, orderBy]);
+
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/places");
+        const places = response.data.data;
+        const placesObj = places.reduce(
+          (
+            acc: Record<number, string>,
+            place: { id: number; name: string }
+          ) => {
+            acc[place.id] = place.name;
+            return acc;
+          },
+          {}
+        );
+        setPlacesMap(placesObj);
+      } catch (error) {
+        console.error("Error fetching places:", error);
+      }
+    };
+    fetchPlaces();
+  }, []);
 
   const handleAddEvent = () => {
     navigate("/edit-event/new");
@@ -29,6 +54,7 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
         filteredProps[field] = event[field];
       }
     });
+
     return filteredProps;
   };
 

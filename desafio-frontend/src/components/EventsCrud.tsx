@@ -28,6 +28,7 @@ const EventsCrud: React.FC = () => {
         </p>
         <EventsList
           fieldsToDisplay={[
+            "placeId",
             "event",
             "type",
             "dateStart",

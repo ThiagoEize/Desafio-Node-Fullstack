@@ -19,9 +19,9 @@ export class EventsService {
         placeId: data.placeId,
         event: data.event,
         type: data.type,
-        dateStart: data.dateStart,
+        dateStart: new Date(data.dateStart).toISOString(),
         hourStart: data.hourStart,
-        dateEnd: data.dateEnd,
+        dateEnd: new Date(data.dateEnd).toISOString(),
         hourEnd: data.hourEnd,
       },
     });
@@ -48,9 +48,13 @@ export class EventsService {
         placeId: data.placeId ?? event.placeId,
         event: data.event ?? event.event,
         type: data.type ?? event.type,
-        dateStart: data.dateStart ?? event.dateStart,
+        dateStart: data.dateStart
+          ? new Date(data.dateStart).toISOString()
+          : event.dateStart,
         hourStart: data.hourStart ?? event.hourStart,
-        dateEnd: data.dateEnd ?? event.dateEnd,
+        dateEnd: data.dateEnd
+          ? new Date(data.dateEnd).toISOString()
+          : event.dateEnd,
         hourEnd: data.hourEnd ?? event.hourEnd,
       },
     });
@@ -80,9 +84,10 @@ export class EventsService {
     if (query.placeId) where.placeId = query.placeId;
     if (query.event) where.event = { contains: query.event };
     if (query.type) where.type = { contains: query.type };
-    if (query.dateStart) where.dateStart = query.dateStart;
+    if (query.dateStart)
+      where.dateStart = new Date(query.dateStart).toISOString();
     if (query.hourStart) where.hourStart = { contains: query.hourStart };
-    if (query.dateEnd) where.dateEnd = query.dateEnd;
+    if (query.dateEnd) where.dateEnd = new Date(query.dateEnd).toISOString();
     if (query.hourEnd) where.hourEnd = { contains: query.hourEnd };
 
     const orderBy: any = {};
