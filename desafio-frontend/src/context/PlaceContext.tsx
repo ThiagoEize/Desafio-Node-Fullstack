@@ -13,6 +13,12 @@ interface Gate {
   name: string;
 }
 
+interface Turnstile {
+  id?: string;
+  placeId?: string;
+  name: string;
+}
+
 interface Place {
   id: string;
   name: string;
@@ -20,6 +26,7 @@ interface Place {
   city: string;
   state: string;
   gates: Gate[];
+  turnstiles: Turnstile[];
   updates: string;
 }
 

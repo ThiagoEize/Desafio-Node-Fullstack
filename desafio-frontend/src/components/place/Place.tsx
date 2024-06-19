@@ -11,6 +11,12 @@ interface Gate {
   name: string;
 }
 
+interface Turnstile {
+  id: string;
+  placeId: string;
+  name: string;
+}
+
 interface PlaceProps {
   id: string;
   name?: string;
@@ -18,6 +24,7 @@ interface PlaceProps {
   city?: string;
   state?: string;
   gates?: Gate[];
+  turnstiles?: Turnstile[];
   lastUpdate?: string;
 }
 
@@ -28,6 +35,7 @@ const Place: React.FC<PlaceProps> = ({
   city,
   state,
   gates,
+  turnstiles,
   lastUpdate,
 }) => {
   const { deletePlace } = usePlaceContext();
@@ -56,6 +64,11 @@ const Place: React.FC<PlaceProps> = ({
         {gates && (
           <div className={styles.placeField}>
             {gates.map((gate) => gate.name).join(", ")}
+          </div>
+        )}
+        {turnstiles && (
+          <div className={styles.placeField}>
+            {turnstiles.map((turnstile) => turnstile.name).join(", ")}
           </div>
         )}
         {lastUpdate && <div className={styles.placeField}>{lastUpdate}</div>}

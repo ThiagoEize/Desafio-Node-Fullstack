@@ -27,7 +27,14 @@ const PlacesCrud: React.FC = () => {
           system.
         </p>
         <PlacesList
-          fieldsToDisplay={["name", "address", "city", "state", "gates"]}
+          fieldsToDisplay={[
+            "name",
+            "address",
+            "city",
+            "state",
+            "gates",
+            "turnstiles",
+          ]}
         />
       </div>
     </div>

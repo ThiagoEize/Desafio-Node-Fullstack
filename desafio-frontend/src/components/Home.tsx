@@ -3,7 +3,14 @@ import EventsList from "./EventsList";
 import PlacesList from "./PlacesList";
 
 const Home: React.FC = () => {
-  const placesToDisplay = ["name", "address", "city", "state", "gates"];
+  const placesToDisplay = [
+    "name",
+    "address",
+    "city",
+    "state",
+    "gates",
+    "turnstiles",
+  ];
   const eventsToDisplay = [
     "event",
     "type",
@@ -12,6 +19,7 @@ const Home: React.FC = () => {
     "dateEnd",
     "hourEnd",
     "gates",
+    "turnstiles",
   ];
 
   return (

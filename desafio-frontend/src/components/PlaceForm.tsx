@@ -9,6 +9,12 @@ interface Gate {
   name: string;
 }
 
+interface Turnstile {
+  id?: string;
+  placeId?: string;
+  name: string;
+}
+
 interface PlaceFormState {
   id: string;
   name: string;
@@ -16,6 +22,7 @@ interface PlaceFormState {
   city: string;
   state: string;
   gates: Gate[];
+  turnstiles: Turnstile[];
   updates: string;
 }
 
@@ -30,9 +37,11 @@ const PlaceForm: React.FC = () => {
     city: "",
     state: "",
     gates: [],
+    turnstiles: [],
     updates: "",
   });
   const [newGateName, setNewGateName] = useState("");
+  const [newTurnstileName, setNewTurnstileName] = useState("");
 
   useEffect(() => {
     if (id) {
@@ -45,6 +54,7 @@ const PlaceForm: React.FC = () => {
           city: place.city,
           state: place.state,
           gates: place.gates,
+          turnstiles: place.turnstiles,
           updates: formatDate(place.updates),
         });
       }
@@ -60,6 +70,12 @@ const PlaceForm: React.FC = () => {
     setNewGateName(e.target.value);
   };
 
+  const handleTurnstileNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNewTurnstileName(e.target.value);
+  };
+
   const addGate = () => {
     if (newGateName.trim()) {
       const newGate: Gate = {
@@ -73,10 +89,32 @@ const PlaceForm: React.FC = () => {
     }
   };
 
-  const removeGate = (gateId?: string) => {
+  const addTurnstile = () => {
+    if (newTurnstileName.trim()) {
+      const newTurnstile: Turnstile = {
+        name: newTurnstileName.trim(),
+      };
+      setFormState((prev) => ({
+        ...prev,
+        turnstiles: [...prev.turnstiles, newTurnstile],
+      }));
+      setNewTurnstileName("");
+    }
+  };
+
+  const removeGate = (gateName?: string) => {
     setFormState((prev) => ({
       ...prev,
-      gates: prev.gates.filter((gate) => gate.id !== gateId),
+      gates: prev.gates.filter((gate) => gate.name !== gateName),
+    }));
+  };
+
+  const removeTurnstile = (turnstileName?: string) => {
+    setFormState((prev) => ({
+      ...prev,
+      turnstiles: prev.turnstiles.filter(
+        (turnstile) => turnstile.name !== turnstileName
+      ),
     }));
   };
 
@@ -85,6 +123,10 @@ const PlaceForm: React.FC = () => {
     const placeData = {
       ...formState,
       gates: formState.gates.map((gate) => ({ id: gate.id, name: gate.name })), // Send gate IDs and names
+      turnstiles: formState.turnstiles.map((turnstile) => ({
+        id: turnstile.id,
+        name: turnstile.name,
+      })), // Send turnstile IDs and names
     };
 
     if (formState.id) {
@@ -145,7 +187,31 @@ const PlaceForm: React.FC = () => {
         {formState.gates.map((gate) => (
           <div key={gate.id ?? gate.name}>
             {gate.name}
-            <button type="button" onClick={() => removeGate(gate.id)}>
+            <button type="button" onClick={() => removeGate(gate.name)}>
+              X
+            </button>
+          </div>
+        ))}
+      </div>
+      <div>
+        <input
+          type="text"
+          placeholder="Add a turnstile"
+          value={newTurnstileName}
+          onChange={handleTurnstileNameChange}
+        />
+        <button type="button" onClick={addTurnstile}>
+          +
+        </button>
+      </div>
+      <div>
+        {formState.turnstiles.map((turnstile) => (
+          <div key={turnstile.id ?? turnstile.name}>
+            {turnstile.name}
+            <button
+              type="button"
+              onClick={() => removeTurnstile(turnstile.name)}
+            >
               X
             </button>
           </div>
