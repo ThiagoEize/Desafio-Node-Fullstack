@@ -10,7 +10,7 @@ interface Place {
 }
 
 const EventForm: React.FC = () => {
-  const { eventsList, addEvent, updateEvent, fetchEvents } = useEventContext();
+  const { eventsList, addEvent, updateEvent } = useEventContext();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [placesList, setPlacesList] = useState<Place[]>([]);

@@ -12,28 +12,31 @@ jest.mock("react-router-dom", () => ({
 
 const event = {
   id: "1",
-  placeId: "1",
+  placeId: 1,
   event: "Test Event",
   type: "Test Type",
-  date: "2023-01-01",
+  // dateStart: new Date("2023-01-01"),
+  // hourStart: "10:00 AM",
+  // dateEnd: new Date("2023-01-01"),
+  // hourEnd: "12:00 PM",
 };
 
-const place = {
-  id: "1",
-  name: "Test Place",
-};
+// const place = {
+//   id: "1",
+//   name: "Test Place",
+// };
 
-// const renderComponent = () =>
-//   render(
-//     <EventProvider>
-//       <PlaceProvider>
-//         <Event {...event} />
-//       </PlaceProvider>
-//     </EventProvider>
-//   );
+const renderComponent = () =>
+  render(
+    <EventProvider>
+      <PlaceProvider>
+        <Event {...event} />
+      </PlaceProvider>
+    </EventProvider>
+  );
 
 test("renders Event component with all fields", () => {
-  // renderComponent();
+  renderComponent();
 
   expect(screen.getByText("Test Event")).toBeInTheDocument();
   expect(screen.getByText("Test Place")).toBeInTheDocument();
@@ -42,7 +45,7 @@ test("renders Event component with all fields", () => {
 });
 
 test("opens options menu when ellipsis icon is clicked", () => {
-  // renderComponent();
+  renderComponent();
 
   fireEvent.click(screen.getByRole("button", { name: /options/i }));
 
@@ -51,7 +54,7 @@ test("opens options menu when ellipsis icon is clicked", () => {
 });
 
 test("navigates to edit page when Edit is clicked", () => {
-  // renderComponent();
+  renderComponent();
 
   fireEvent.click(screen.getByRole("button", { name: /options/i }));
   fireEvent.click(screen.getByText("Edit"));
@@ -60,7 +63,7 @@ test("navigates to edit page when Edit is clicked", () => {
 });
 
 test("calls deleteEvent when Delete is clicked", () => {
-  // renderComponent();
+  renderComponent();
 
   fireEvent.click(screen.getByRole("button", { name: /options/i }));
   fireEvent.click(screen.getByText("Delete"));
