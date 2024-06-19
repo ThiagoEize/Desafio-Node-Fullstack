@@ -13,9 +13,7 @@ interface Event {
   event: string;
   type: string;
   dateStart: string;
-  hourStart: string;
   dateEnd: string;
-  hourEnd: string;
 }
 
 interface EventContextType {

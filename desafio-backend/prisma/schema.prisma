@@ -27,14 +27,13 @@ model Event {
   event     String
   type      String
   dateStart DateTime
-  hourStart String
   dateEnd   DateTime
-  hourEnd   String
   place     Place    @relation(fields: [placeId], references: [id])
 
   @@index([placeId])
   @@map("events")
 }
+
 
 model Gate {
   id       Int      @id @default(autoincrement())

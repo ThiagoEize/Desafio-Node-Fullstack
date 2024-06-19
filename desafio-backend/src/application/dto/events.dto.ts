@@ -10,11 +10,7 @@ export class EventsCreateDto {
   @ApiProperty()
   dateStart: Date;
   @ApiProperty()
-  hourStart: string;
-  @ApiProperty()
   dateEnd: Date;
-  @ApiProperty()
-  hourEnd: string;
 }
 
 export class EventsUpdateDto {
@@ -29,11 +25,7 @@ export class EventsUpdateDto {
   @ApiPropertyOptional()
   dateStart?: Date;
   @ApiPropertyOptional()
-  hourStart?: string;
-  @ApiPropertyOptional()
   dateEnd?: Date;
-  @ApiPropertyOptional()
-  hourEnd?: string;
 }
 
 export class EventsQueryDto {
@@ -46,11 +38,7 @@ export class EventsQueryDto {
   @ApiPropertyOptional()
   dateStart?: Date;
   @ApiPropertyOptional()
-  hourStart?: string;
-  @ApiPropertyOptional()
   dateEnd?: Date;
-  @ApiPropertyOptional()
-  hourEnd?: string;
   @ApiPropertyOptional()
   order?: string;
 

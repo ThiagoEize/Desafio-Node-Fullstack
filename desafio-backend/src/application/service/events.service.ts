@@ -20,9 +20,7 @@ export class EventsService {
         event: data.event,
         type: data.type,
         dateStart: new Date(data.dateStart).toISOString(),
-        hourStart: data.hourStart,
         dateEnd: new Date(data.dateEnd).toISOString(),
-        hourEnd: data.hourEnd,
       },
     });
   }
@@ -51,11 +49,9 @@ export class EventsService {
         dateStart: data.dateStart
           ? new Date(data.dateStart).toISOString()
           : event.dateStart,
-        hourStart: data.hourStart ?? event.hourStart,
         dateEnd: data.dateEnd
           ? new Date(data.dateEnd).toISOString()
           : event.dateEnd,
-        hourEnd: data.hourEnd ?? event.hourEnd,
       },
     });
   }
@@ -86,9 +82,7 @@ export class EventsService {
     if (query.type) where.type = { contains: query.type };
     if (query.dateStart)
       where.dateStart = new Date(query.dateStart).toISOString();
-    if (query.hourStart) where.hourStart = { contains: query.hourStart };
     if (query.dateEnd) where.dateEnd = new Date(query.dateEnd).toISOString();
-    if (query.hourEnd) where.hourEnd = { contains: query.hourEnd };
 
     const orderBy: any = {};
     if (query.order) {

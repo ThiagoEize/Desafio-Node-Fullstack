@@ -12,9 +12,7 @@ interface EventProps {
   event?: string;
   type?: string;
   dateStart?: string;
-  hourStart?: string;
   dateEnd?: string;
-  hourEnd?: string;
 }
 
 const Event: React.FC<EventProps> = ({
@@ -23,9 +21,7 @@ const Event: React.FC<EventProps> = ({
   event,
   type,
   dateStart,
-  hourStart,
   dateEnd,
-  hourEnd,
 }) => {
   const { deleteEvent } = useEventContext();
   const [showOptions, setShowOptions] = useState(false);
@@ -61,16 +57,35 @@ const Event: React.FC<EventProps> = ({
     if (showOptions) setShowOptions(false);
   });
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB");
+  };
+
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
     <div className={styles.event}>
       <div className={styles.eventInfo}>
         {placeName && <div className={styles.eventField}>{placeName}</div>}
         {event && <div className={styles.eventField}>{event}</div>}
         {type && <div className={styles.eventField}>{type}</div>}
-        {dateStart && <div className={styles.eventField}>{dateStart}</div>}
-        {hourStart && <div className={styles.eventField}>{hourStart}</div>}
-        {dateEnd && <div className={styles.eventField}>{dateEnd}</div>}
-        {hourEnd && <div className={styles.eventField}>{hourEnd}</div>}
+        {dateStart && (
+          <div className={styles.eventField}>
+            {formatDate(dateStart)} {formatTime(dateStart)}
+          </div>
+        )}
+        {dateEnd && (
+          <div className={styles.eventField}>
+            {formatDate(dateEnd)} {formatTime(dateEnd)}
+          </div>
+        )}
       </div>
       <div ref={ref} style={{ position: "relative" }}>
         <div
