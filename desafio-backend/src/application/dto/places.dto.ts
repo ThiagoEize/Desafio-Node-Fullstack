@@ -11,6 +11,17 @@ class GateDto {
   name: string;
 }
 
+class TurnstileDto {
+  @ApiPropertyOptional()
+  id?: number;
+
+  @ApiPropertyOptional()
+  placeId?: number;
+
+  @ApiProperty()
+  name: string;
+}
+
 export class PlacesCreateDto {
   @ApiProperty()
   name: string;
@@ -22,6 +33,8 @@ export class PlacesCreateDto {
   state: string;
   @ApiPropertyOptional({ type: [GateDto] })
   gates?: GateDto[];
+  @ApiPropertyOptional({ type: [TurnstileDto] })
+  turnstiles?: TurnstileDto[];
 }
 
 export class PlacesUpdateDto {
@@ -37,6 +50,8 @@ export class PlacesUpdateDto {
   state?: string;
   @ApiPropertyOptional({ type: [GateDto] })
   gates?: GateDto[];
+  @ApiPropertyOptional({ type: [TurnstileDto] })
+  turnstiles?: TurnstileDto[];
 }
 
 export class PlacesQueryDto {

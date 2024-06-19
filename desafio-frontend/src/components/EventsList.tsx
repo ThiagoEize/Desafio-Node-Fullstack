@@ -18,6 +18,7 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
 
   useEffect(() => {
     fetchEvents(currentPage, 10, searchTerm, orderBy);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, orderBy]);
 
   // useEffect(() => {

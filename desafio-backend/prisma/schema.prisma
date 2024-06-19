@@ -16,6 +16,7 @@ model Place {
   updates  DateTime @updatedAt
   events   Event[]
   gates    Gate[]
+  turnstiles Turnstile[]
 
   @@map("places")
 }
@@ -43,4 +44,14 @@ model Gate {
 
   @@index([placeId])
   @@map("gates")
+}
+
+model Turnstile {
+  id       Int      @id @default(autoincrement())
+  name     String
+  placeId  Int 
+  place    Place    @relation(fields: [placeId], references: [id])
+
+  @@index([placeId])
+  @@map("turnstiles")
 }

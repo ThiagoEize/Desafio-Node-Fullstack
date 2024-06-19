@@ -21,13 +21,21 @@ export class PlacesService {
         city: data.city,
         state: data.state,
         gates: {
-          create: data.gates.map((gate) => ({
-            name: gate.name,
-          })),
+          create:
+            data.gates?.map((gate) => ({
+              name: gate.name,
+            })) || [],
+        },
+        turnstiles: {
+          create:
+            data.turnstiles?.map((turnstile) => ({
+              name: turnstile.name,
+            })) || [],
         },
       },
       include: {
-        gates: true, // Include gates in the response
+        gates: true,
+        turnstiles: true,
       },
     });
 
@@ -42,7 +50,8 @@ export class PlacesService {
         id: Number(data.id),
       },
       include: {
-        gates: true, // Include gates for the place
+        gates: true,
+        turnstiles: true,
       },
     });
 
@@ -50,16 +59,24 @@ export class PlacesService {
       throw new Error('Place not found');
     }
 
-    // Extract existing gate IDs and names
     const existingGates = place.gates.map((gate) => ({
       id: gate.id,
       name: gate.name,
     }));
+    const existingTurnstiles = place.turnstiles.map((turnstile) => ({
+      id: turnstile.id,
+      name: turnstile.name,
+    }));
 
-    // Find gates to be deleted
     const missingGates = existingGates.filter(
       (existingGate) =>
-        !data.gates.some((newGate) => newGate.id === existingGate.id),
+        !data.gates?.some((newGate) => newGate.id === existingGate.id),
+    );
+    const missingTurnstiles = existingTurnstiles.filter(
+      (existingTurnstile) =>
+        !data.turnstiles?.some(
+          (newTurnstile) => newTurnstile.id === existingTurnstile.id,
+        ),
     );
 
     if (missingGates.length > 0) {
@@ -72,11 +89,19 @@ export class PlacesService {
       });
     }
 
-    // Create or update gates
+    if (missingTurnstiles.length > 0) {
+      await this.prisma.turnstile.deleteMany({
+        where: {
+          id: {
+            in: missingTurnstiles.map((turnstile) => turnstile.id),
+          },
+        },
+      });
+    }
+
     await Promise.all(
-      data.gates.map(async (gate) => {
+      data.gates?.map(async (gate) => {
         if (gate.id) {
-          // Update existing gate
           await this.prisma.gate.update({
             where: { id: gate.id },
             data: {
@@ -85,7 +110,6 @@ export class PlacesService {
             },
           });
         } else {
-          // Create new gate
           await this.prisma.gate.create({
             data: {
               name: gate.name,
@@ -93,10 +117,30 @@ export class PlacesService {
             },
           });
         }
-      }),
+      }) || [],
     );
 
-    // Update the place details
+    await Promise.all(
+      data.turnstiles?.map(async (turnstile) => {
+        if (turnstile.id) {
+          await this.prisma.turnstile.update({
+            where: { id: turnstile.id },
+            data: {
+              name: turnstile.name,
+              placeId: place.id,
+            },
+          });
+        } else {
+          await this.prisma.turnstile.create({
+            data: {
+              name: turnstile.name,
+              placeId: place.id,
+            },
+          });
+        }
+      }) || [],
+    );
+
     const updatedPlace = await this.prisma.place.update({
       where: {
         id: Number(place.id),
@@ -108,7 +152,8 @@ export class PlacesService {
         state: data.state ?? place.state,
       },
       include: {
-        gates: true, // Include gates in the updated response
+        gates: true,
+        turnstiles: true,
       },
     });
 
@@ -121,6 +166,7 @@ export class PlacesService {
     return await this.prisma.place.findFirstOrThrow({
       include: {
         gates: true,
+        turnstiles: true,
       },
       where: {
         id: Number(id),
@@ -146,7 +192,7 @@ export class PlacesService {
       const [field, direction] = query.order.split(' ');
       orderBy = { [field]: direction };
     } else {
-      orderBy = { name: 'asc' }; // Default ordering
+      orderBy = { name: 'asc' };
     }
 
     const places = await this.prisma.place.findMany({
@@ -156,6 +202,7 @@ export class PlacesService {
       take: limit,
       include: {
         gates: true,
+        turnstiles: true,
       },
     });
 
