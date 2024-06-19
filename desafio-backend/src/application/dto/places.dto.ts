@@ -1,5 +1,16 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
+class GateDto {
+  @ApiPropertyOptional()
+  id?: number;
+
+  @ApiPropertyOptional()
+  placeId?: number;
+
+  @ApiProperty()
+  name: string;
+}
+
 export class PlacesCreateDto {
   @ApiProperty()
   name: string;
@@ -9,23 +20,23 @@ export class PlacesCreateDto {
   city: string;
   @ApiProperty()
   state: string;
-  @ApiPropertyOptional()
-  gates: string[];
+  @ApiPropertyOptional({ type: [GateDto] })
+  gates?: GateDto[];
 }
 
 export class PlacesUpdateDto {
   @ApiProperty()
   id: number;
   @ApiPropertyOptional()
-  name: string;
+  name?: string;
   @ApiPropertyOptional()
-  address: string;
+  address?: string;
   @ApiPropertyOptional()
-  city: string;
+  city?: string;
   @ApiPropertyOptional()
-  state: string;
-  @ApiPropertyOptional()
-  gates: string[];
+  state?: string;
+  @ApiPropertyOptional({ type: [GateDto] })
+  gates?: GateDto[];
 }
 
 export class PlacesQueryDto {

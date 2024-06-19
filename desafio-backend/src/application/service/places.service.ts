@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-
 import { PrismaService } from 'src/application/module/prisma.service';
 import {
   PlacesCreateDto,
@@ -23,7 +22,7 @@ export class PlacesService {
         state: data.state,
         gates: {
           create: data.gates.map((gate) => ({
-            name: gate,
+            name: gate.name,
           })),
         },
       },
@@ -51,12 +50,16 @@ export class PlacesService {
       throw new Error('Place not found');
     }
 
-    // Extract existing gate names
-    const existingGateNames = place.gates.map((gate) => gate.name);
+    // Extract existing gate IDs and names
+    const existingGates = place.gates.map((gate) => ({
+      id: gate.id,
+      name: gate.name,
+    }));
 
-    // Find missing gates and delete them
-    const missingGates = place.gates.filter(
-      (gate) => !data.gates.includes(gate.name),
+    // Find gates to be deleted
+    const missingGates = existingGates.filter(
+      (existingGate) =>
+        !data.gates.some((newGate) => newGate.id === existingGate.id),
     );
 
     if (missingGates.length > 0) {
@@ -69,23 +72,29 @@ export class PlacesService {
       });
     }
 
-    // Create new gates with different names
-    const newGates = data.gates.filter(
-      (gate) => !existingGateNames.includes(gate),
-    );
-
-    if (newGates.length > 0) {
-      await Promise.all(
-        newGates.map(async (gate) => {
-          await this.prisma.gate.create({
+    // Create or update gates
+    await Promise.all(
+      data.gates.map(async (gate) => {
+        if (gate.id) {
+          // Update existing gate
+          await this.prisma.gate.update({
+            where: { id: gate.id },
             data: {
-              name: gate,
+              name: gate.name,
               placeId: place.id,
             },
           });
-        }),
-      );
-    }
+        } else {
+          // Create new gate
+          await this.prisma.gate.create({
+            data: {
+              name: gate.name,
+              placeId: place.id,
+            },
+          });
+        }
+      }),
+    );
 
     // Update the place details
     const updatedPlace = await this.prisma.place.update({
@@ -107,7 +116,7 @@ export class PlacesService {
   }
 
   async find(id: number) {
-    // this.logger.log(`Find place with ID ${id}`);
+    this.logger.log(`Find place with ID ${id}`);
 
     return await this.prisma.place.findFirstOrThrow({
       include: {

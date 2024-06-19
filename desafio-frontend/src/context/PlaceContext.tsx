@@ -7,13 +7,19 @@ import React, {
 } from "react";
 import axios from "axios";
 
+interface Gate {
+  id?: string;
+  placeId?: string;
+  name: string;
+}
+
 interface Place {
   id: string;
   name: string;
   address: string;
   city: string;
   state: string;
-  gates: string[];
+  gates: Gate[];
   updates: string;
 }
 
@@ -73,11 +79,8 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         `http://localhost:8080/places/${id}`,
         updatedPlace
       );
-      const updatedPlaceWithGates = response.data;
       setPlacesList((prevPlaces) =>
-        prevPlaces.map((place) =>
-          place.id === id ? updatedPlaceWithGates : place
-        )
+        prevPlaces.map((place) => (place.id === id ? response.data : place))
       );
     } catch (error) {
       console.error("Error updating place:", error);

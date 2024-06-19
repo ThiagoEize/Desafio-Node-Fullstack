@@ -44,11 +44,7 @@ const PlaceForm: React.FC = () => {
           address: place.address,
           city: place.city,
           state: place.state,
-          gates: Array.isArray(place.gates)
-            ? place.gates.map((gate: any) =>
-                typeof gate === "string" ? { name: gate } : gate
-              )
-            : [],
+          gates: place.gates,
           updates: formatDate(place.updates),
         });
       }
@@ -77,10 +73,10 @@ const PlaceForm: React.FC = () => {
     }
   };
 
-  const removeGate = (gateName: string) => {
+  const removeGate = (gateId?: string) => {
     setFormState((prev) => ({
       ...prev,
-      gates: prev.gates.filter((gate) => gate.name !== gateName),
+      gates: prev.gates.filter((gate) => gate.id !== gateId),
     }));
   };
 
@@ -88,7 +84,7 @@ const PlaceForm: React.FC = () => {
     e.preventDefault();
     const placeData = {
       ...formState,
-      gates: formState.gates.map((gate) => gate.name), // Only send gate names
+      gates: formState.gates.map((gate) => ({ id: gate.id, name: gate.name })), // Send gate IDs and names
     };
 
     if (formState.id) {
@@ -147,9 +143,9 @@ const PlaceForm: React.FC = () => {
       </div>
       <div>
         {formState.gates.map((gate) => (
-          <div key={gate.name}>
+          <div key={gate.id ?? gate.name}>
             {gate.name}
-            <button type="button" onClick={() => removeGate(gate.name)}>
+            <button type="button" onClick={() => removeGate(gate.id)}>
               X
             </button>
           </div>
