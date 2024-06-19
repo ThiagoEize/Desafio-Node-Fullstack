@@ -15,7 +15,7 @@ const place = {
   address: "123 Test St",
   city: "Test City",
   state: "TS",
-  gates: ["Gate1", "Gate2"],
+  gates: [],
   lastUpdate: "2023-01-01",
 };
 

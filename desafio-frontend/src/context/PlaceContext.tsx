@@ -59,8 +59,8 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const addPlace = async (place: Place) => {
     try {
-      await axios.post(`http://localhost:8080/places`, place);
-      setPlacesList((prevPlaces) => [...prevPlaces, place]);
+      const response = await axios.post(`http://localhost:8080/places`, place);
+      setPlacesList((prevPlaces) => [...prevPlaces, response.data]);
       setTotalPlaces((prevTotal) => prevTotal + 1);
     } catch (error) {
       console.error("Error adding place:", error);
@@ -69,9 +69,15 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const updatePlace = async (id: string, updatedPlace: Place) => {
     try {
-      await axios.put(`http://localhost:8080/places/${id}`, updatedPlace);
+      const response = await axios.put(
+        `http://localhost:8080/places/${id}`,
+        updatedPlace
+      );
+      const updatedPlaceWithGates = response.data;
       setPlacesList((prevPlaces) =>
-        prevPlaces.map((place) => (place.id === id ? updatedPlace : place))
+        prevPlaces.map((place) =>
+          place.id === id ? updatedPlaceWithGates : place
+        )
       );
     } catch (error) {
       console.error("Error updating place:", error);

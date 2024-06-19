@@ -26,7 +26,9 @@ const PlacesCrud: React.FC = () => {
           This section allows you to view, add, edit, and delete places in the
           system.
         </p>
-        <PlacesList fieldsToDisplay={["name", "address", "city", "state"]} />
+        <PlacesList
+          fieldsToDisplay={["name", "address", "city", "state", "gates"]}
+        />
       </div>
     </div>
   );

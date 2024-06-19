@@ -3,23 +3,36 @@ import { usePlaceContext } from "../context/PlaceContext";
 import { useParams, useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/dateUtils";
 
+interface Gate {
+  id?: string;
+  placeId?: string;
+  name: string;
+}
+
+interface PlaceFormState {
+  id: string;
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  gates: Gate[];
+  updates: string;
+}
+
 const PlaceForm: React.FC = () => {
-  const { placesList, addPlace, updatePlace, fetchPlaces } = usePlaceContext();
+  const { placesList, addPlace, updatePlace } = usePlaceContext();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<PlaceFormState>({
     id: "",
     name: "",
     address: "",
     city: "",
     state: "",
-    gates: "",
+    gates: [],
     updates: "",
   });
-
-  // useEffect(() => {
-  //   fetchPlaces(1, 100, "", "name asc");
-  // }, [fetchPlaces]);
+  const [newGateName, setNewGateName] = useState("");
 
   useEffect(() => {
     if (id) {
@@ -31,7 +44,11 @@ const PlaceForm: React.FC = () => {
           address: place.address,
           city: place.city,
           state: place.state,
-          gates: place.gates.join(", "),
+          gates: Array.isArray(place.gates)
+            ? place.gates.map((gate: any) =>
+                typeof gate === "string" ? { name: gate } : gate
+              )
+            : [],
           updates: formatDate(place.updates),
         });
       }
@@ -43,10 +60,36 @@ const PlaceForm: React.FC = () => {
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleGateNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewGateName(e.target.value);
+  };
+
+  const addGate = () => {
+    if (newGateName.trim()) {
+      const newGate: Gate = {
+        name: newGateName.trim(),
+      };
+      setFormState((prev) => ({
+        ...prev,
+        gates: [...prev.gates, newGate],
+      }));
+      setNewGateName("");
+    }
+  };
+
+  const removeGate = (gateName: string) => {
+    setFormState((prev) => ({
+      ...prev,
+      gates: prev.gates.filter((gate) => gate.name !== gateName),
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const gatesArray = formState.gates.split(",").map((gate) => gate.trim());
-    const placeData = { ...formState, gates: gatesArray };
+    const placeData = {
+      ...formState,
+      gates: formState.gates.map((gate) => gate.name), // Only send gate names
+    };
 
     if (formState.id) {
       updatePlace(formState.id, placeData);
@@ -91,14 +134,27 @@ const PlaceForm: React.FC = () => {
         onChange={handleChange}
         required
       />
-      <input
-        type="text"
-        name="gates"
-        placeholder="gates (comma separated)"
-        value={formState.gates}
-        onChange={handleChange}
-        required
-      />
+      <div>
+        <input
+          type="text"
+          placeholder="Add a gate"
+          value={newGateName}
+          onChange={handleGateNameChange}
+        />
+        <button type="button" onClick={addGate}>
+          +
+        </button>
+      </div>
+      <div>
+        {formState.gates.map((gate) => (
+          <div key={gate.name}>
+            {gate.name}
+            <button type="button" onClick={() => removeGate(gate.name)}>
+              X
+            </button>
+          </div>
+        ))}
+      </div>
       <input
         type="date"
         name="updates"

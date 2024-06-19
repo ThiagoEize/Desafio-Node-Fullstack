@@ -21,19 +21,16 @@ export class PlacesService {
         address: data.address,
         city: data.city,
         state: data.state,
+        gates: {
+          create: data.gates.map((gate) => ({
+            name: gate,
+          })),
+        },
+      },
+      include: {
+        gates: true, // Include gates in the response
       },
     });
-
-    if (data.gates.length > 0) {
-      data.gates.forEach(async (gate) => {
-        await this.prisma.gate.create({
-          data: {
-            name: gate,
-            placeId: place.id,
-          },
-        });
-      });
-    }
 
     return place;
   }
@@ -90,7 +87,8 @@ export class PlacesService {
       );
     }
 
-    return await this.prisma.place.update({
+    // Update the place details
+    const updatedPlace = await this.prisma.place.update({
       where: {
         id: Number(place.id),
       },
@@ -100,7 +98,12 @@ export class PlacesService {
         city: data.city ?? place.city,
         state: data.state ?? place.state,
       },
+      include: {
+        gates: true, // Include gates in the updated response
+      },
     });
+
+    return updatedPlace;
   }
 
   async find(id: number) {
