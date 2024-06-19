@@ -126,7 +126,7 @@ const EventForm: React.FC = () => {
         required
       />
       <input
-        type="text"
+        type="time"
         name="hourStart"
         placeholder="Start Hour"
         value={formState.hourStart}
@@ -142,7 +142,7 @@ const EventForm: React.FC = () => {
         required
       />
       <input
-        type="text"
+        type="time"
         name="hourEnd"
         placeholder="End Hour"
         value={formState.hourEnd}
