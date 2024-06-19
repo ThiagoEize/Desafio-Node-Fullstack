@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEventContext } from "../context/EventContext";
 import Event from "./event/Event";
-import axios from "axios";
+// import axios from "axios";
 
 interface EventsListProps {
   fieldsToDisplay: string[];

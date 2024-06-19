@@ -16,6 +16,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
 
   useEffect(() => {
     fetchPlaces(currentPage, 10, searchTerm, orderBy);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, orderBy]);
 
   const handleAddPlace = () => {
