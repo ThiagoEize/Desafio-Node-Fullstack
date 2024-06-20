@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import {
   EventsCreateDto,
   EventsQueryDto,
@@ -29,5 +38,10 @@ export class EventsController {
   @Get('/')
   async list(@Query() query: EventsQueryDto) {
     return this.eventsService.list(query);
+  }
+
+  @Delete('/:id')
+  async delete(@Param('id') id: number) {
+    return this.eventsService.delete(id);
   }
 }

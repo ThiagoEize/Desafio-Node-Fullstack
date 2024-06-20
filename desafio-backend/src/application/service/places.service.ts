@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/application/module/prisma.service';
 import {
   PlacesCreateDto,
@@ -220,5 +220,41 @@ export class PlacesService {
       limit: limit,
       totalPages: Math.ceil(totalPlaces / limit),
     };
+  }
+
+  async delete(id: number) {
+    this.logger.log(`Deleting place with ID ${id}`);
+
+    const events = await this.prisma.event.findMany({
+      where: {
+        placeId: Number(id),
+      },
+    });
+
+    if (events.length > 0) {
+      console.log('events', events);
+      throw new HttpException(
+        'Existe um evento nesse lugar não é possível deletar.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    await this.prisma.gate.deleteMany({
+      where: {
+        placeId: Number(id),
+      },
+    });
+
+    await this.prisma.turnstile.deleteMany({
+      where: {
+        placeId: Number(id),
+      },
+    });
+
+    return await this.prisma.place.delete({
+      where: {
+        id: Number(id),
+      },
+    });
   }
 }

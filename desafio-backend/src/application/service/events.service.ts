@@ -112,4 +112,24 @@ export class EventsService {
       totalPages: Math.ceil(totalEvents / limit),
     };
   }
+
+  async delete(id: number) {
+    this.logger.log(`Deleting event with ID ${id}`);
+
+    const event = await this.prisma.event.findFirstOrThrow({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    if (!event) {
+      throw new Error('Event not found');
+    }
+
+    return await this.prisma.event.delete({
+      where: {
+        id: Number(event.id),
+      },
+    });
+  }
 }
