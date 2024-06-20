@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import EventsList from "./EventsList";
+import EventSearch from "./EventSearch";
 
 const EventsCrud: React.FC = () => {
   return (
@@ -26,6 +27,7 @@ const EventsCrud: React.FC = () => {
           This section allows you to view, add, edit, and delete events in the
           system.
         </p>
+        <EventSearch />
         <EventsList
           fieldsToDisplay={[
             "placeId",

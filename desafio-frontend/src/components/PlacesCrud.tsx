@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import PlacesList from "./PlacesList";
+import PlaceSearch from "./PlaceSearch";
 
 const PlacesCrud: React.FC = () => {
   return (
@@ -26,6 +27,7 @@ const PlacesCrud: React.FC = () => {
           This section allows you to view, add, edit, and delete places in the
           system.
         </p>
+        <PlaceSearch />
         <PlacesList
           fieldsToDisplay={[
             "name",
