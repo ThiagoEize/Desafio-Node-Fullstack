@@ -65,7 +65,6 @@ export class PlacesQueryDto {
   state?: string;
   @ApiPropertyOptional()
   order?: string;
-
   @ApiPropertyOptional()
   page?: number;
   @ApiPropertyOptional()

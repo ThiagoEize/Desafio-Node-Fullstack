@@ -88,19 +88,27 @@ const EventForm: React.FC = () => {
       formState.hourEnd
     }:00`;
 
-    const eventData = {
-      ...formState,
-      dateStart: new Date(formattedDateStart).toISOString(),
-      dateEnd: new Date(formattedDateEnd).toISOString(),
-    };
+    console.log("formattedDateStart:", formattedDateStart);
+    console.log("formattedDateEnd:", formattedDateEnd);
 
-    if (formState.id) {
-      updateEvent(formState.id, eventData);
-    } else {
-      addEvent({ ...eventData, id: Date.now().toString() });
+    try {
+      const eventData = {
+        ...formState,
+        placeId: Number(formState.placeId),
+        dateStart: new Date(formattedDateStart).toISOString(),
+        dateEnd: new Date(formattedDateEnd).toISOString(),
+      };
+
+      if (formState.id) {
+        updateEvent(formState.id, eventData);
+      } else {
+        addEvent({ ...eventData, id: Date.now().toString() });
+      }
+
+      navigate("/events"); // Navigate back to the events list after submission
+    } catch (error) {
+      console.error("Error formatting dates:", error);
     }
-
-    navigate("/events"); // Navigate back to the events list after submission
   };
 
   const formatDate = (date: Date) => {

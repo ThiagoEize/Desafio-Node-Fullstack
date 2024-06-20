@@ -27,7 +27,6 @@ interface Place {
   state: string;
   gates: Gate[];
   turnstiles: Turnstile[];
-  updates: string;
 }
 
 interface PlaceContextType {

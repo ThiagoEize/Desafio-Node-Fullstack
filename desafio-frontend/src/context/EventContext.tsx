@@ -68,7 +68,11 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const updateEvent = async (id: string, updatedEvent: Event) => {
     try {
-      await axios.put(`http://localhost:8080/events/${id}`, updatedEvent);
+      const newUdatedEvent = {
+        ...updatedEvent,
+        placeId: Number(updatedEvent.placeId),
+      };
+      await axios.put(`http://localhost:8080/events/${id}`, newUdatedEvent);
       setEventsList((prevEvents) =>
         prevEvents.map((event) => (event.id === id ? updatedEvent : event))
       );

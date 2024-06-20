@@ -23,7 +23,6 @@ interface PlaceFormState {
   state: string;
   gates: Gate[];
   turnstiles: Turnstile[];
-  updates: string;
 }
 
 const PlaceForm: React.FC = () => {
@@ -38,7 +37,6 @@ const PlaceForm: React.FC = () => {
     state: "",
     gates: [],
     turnstiles: [],
-    updates: "",
   });
   const [newGateName, setNewGateName] = useState("");
   const [newTurnstileName, setNewTurnstileName] = useState("");
@@ -55,7 +53,6 @@ const PlaceForm: React.FC = () => {
           state: place.state,
           gates: place.gates,
           turnstiles: place.turnstiles,
-          updates: formatDate(place.updates),
         });
       }
     }
@@ -217,14 +214,6 @@ const PlaceForm: React.FC = () => {
           </div>
         ))}
       </div>
-      <input
-        type="date"
-        name="updates"
-        placeholder="Last Update"
-        value={formState.updates}
-        onChange={handleChange}
-        required
-      />
       <button type="submit">
         {formState.id ? "Update Place" : "Add Place"}
       </button>
