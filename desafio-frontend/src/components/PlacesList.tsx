@@ -12,12 +12,12 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
     usePlaceContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState("name asc");
+  const [searchField, setSearchField] = useState("name");
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPlaces(currentPage, 10, searchTerm, orderBy);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTerm, orderBy]);
+    fetchPlaces(currentPage, 10, `${searchField}:${searchTerm}`, orderBy);
+  }, [searchTerm, orderBy, searchField, currentPage]);
 
   const handleAddPlace = () => {
     navigate("/edit-place/new");
@@ -34,7 +34,11 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
   };
 
   const handlePageChange = (page: number) => {
-    fetchPlaces(page, 10, searchTerm, orderBy);
+    fetchPlaces(page, 10, `${searchField}:${searchTerm}`, orderBy);
+  };
+
+  const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
   };
 
   if (!placesList) return <p>Loading...</p>;
@@ -48,11 +52,21 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
           marginBottom: "20px",
         }}
       >
+        <select
+          value={searchField}
+          onChange={(e) => setSearchField(e.target.value)}
+          style={{ marginRight: "10px" }}
+        >
+          <option value="name">Name</option>
+          <option value="address">Address</option>
+          <option value="city">City</option>
+          <option value="state">State</option>
+        </select>
         <input
           type="text"
-          placeholder="Search by name"
+          placeholder={`Search by ${searchField}`}
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearchTermChange}
           style={{ flex: 1, marginRight: "10px" }}
         />
         <select

@@ -182,10 +182,15 @@ export class PlacesService {
     const skip = (page - 1) * limit;
 
     const where: any = {};
-    if (query.name) where.name = { contains: query.name };
-    if (query.address) where.address = { contains: query.address };
-    if (query.city) where.city = { contains: query.city };
-    if (query.state) where.state = { contains: query.state };
+    if (query.search) {
+      const [field, term] = query.search.split(':');
+      if (field && term) {
+        where[field] = {
+          contains: term,
+          mode: 'insensitive', // Prisma specific option for case-insensitive search
+        };
+      }
+    }
 
     let orderBy: any = {};
     if (query.order) {

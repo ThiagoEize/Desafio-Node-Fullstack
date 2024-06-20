@@ -69,4 +69,6 @@ export class PlacesQueryDto {
   page?: number;
   @ApiPropertyOptional()
   limit?: number;
+  @ApiPropertyOptional()
+  search?: string; // Add this line to include the search property
 }
