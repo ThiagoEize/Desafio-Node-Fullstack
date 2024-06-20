@@ -4,6 +4,7 @@ import React, {
   useState,
   ReactNode,
   useEffect,
+  useCallback,
 } from "react";
 import axios from "axios";
 
@@ -51,23 +52,26 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [totalPlaces, setTotalPlaces] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchPlaces = async (
-    page: number,
-    limit: number,
-    searchTerm: string,
-    orderBy: string
-  ) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/places?page=${page}&limit=${limit}&order=${orderBy}&search=${searchTerm}`
-      );
-      setPlacesList(response.data.data);
-      setTotalPlaces(response.data.total);
-      setCurrentPage(page);
-    } catch (error) {
-      console.error("Error fetching places:", error);
-    }
-  };
+  const fetchPlaces = useCallback(
+    async (
+      page: number,
+      limit: number,
+      searchTerm: string,
+      orderBy: string
+    ) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/places?page=${page}&limit=${limit}&order=${orderBy}&search=${searchTerm}`
+        );
+        setPlacesList(response.data.data);
+        setTotalPlaces(response.data.total);
+        setCurrentPage(page);
+      } catch (error) {
+        console.error("Error fetching places:", error);
+      }
+    },
+    []
+  );
 
   const addPlace = async (place: Place) => {
     try {
@@ -107,7 +111,7 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     fetchPlaces(1, 10, "", "name asc");
-  }, []);
+  }, [fetchPlaces]);
 
   return (
     <PlaceContext.Provider

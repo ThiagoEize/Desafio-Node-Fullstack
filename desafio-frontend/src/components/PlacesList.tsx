@@ -33,8 +33,8 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
   };
 
   useEffect(() => {
-    fetchPlaces(currentPage, 10, "", "name asc"); // Initial fetch
-  }, [currentPage]);
+    fetchPlaces(currentPage, 10, "", "name asc");
+  }, [currentPage, fetchPlaces]);
 
   if (!placesList) return <p>Loading...</p>;
 
