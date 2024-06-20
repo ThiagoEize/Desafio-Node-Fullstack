@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useEventContext } from "../context/EventContext";
 import Event from "./event/Event";
@@ -32,10 +32,6 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
     }
   };
 
-  useEffect(() => {
-    fetchEvents(currentPage, 10, "", "event asc"); // Initial fetch
-  }, [currentPage]);
-
   if (!eventsList) return <p>Loading...</p>;
 
   return (
@@ -49,7 +45,7 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
           <Event key={event.id} {...getFilteredEventProps(event)} />
         ))
       )}
-      {totalEvents > 10 && (
+      {totalEvents > 10 && !fieldsToDisplay.includes("singlePage") && (
         <div>
           {Array.from({ length: Math.ceil(totalEvents / 10) }, (_, index) => (
             <button

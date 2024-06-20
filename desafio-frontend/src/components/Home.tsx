@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import EventsList from "./EventsList";
 import PlacesList from "./PlacesList";
 import { usePlaceContext } from "../context/PlaceContext";
+import { useEventContext } from "../context/EventContext";
 
 const Home: React.FC = () => {
   const placesToDisplay = [
@@ -22,12 +23,15 @@ const Home: React.FC = () => {
     "hourEnd",
     "gates",
     "turnstiles",
+    "singlePage",
   ];
 
-  const { currentPage, fetchPlaces } = usePlaceContext();
+  const { fetchPlaces } = usePlaceContext();
+  const { fetchEvents } = useEventContext();
 
   useEffect(() => {
     fetchPlaces(1, 3, "", "dateStart");
+    fetchEvents(1, 3, "", "dateStart");
   }, []);
 
   return (

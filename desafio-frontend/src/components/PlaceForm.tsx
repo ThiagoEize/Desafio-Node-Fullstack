@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { usePlaceContext } from "../context/PlaceContext";
 import { useParams, useNavigate } from "react-router-dom";
-import { formatDate } from "../utils/dateUtils";
 
 interface Gate {
   id?: string;

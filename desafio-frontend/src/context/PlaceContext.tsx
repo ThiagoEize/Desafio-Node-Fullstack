@@ -3,7 +3,6 @@ import React, {
   useContext,
   useState,
   ReactNode,
-  useEffect,
   useCallback,
 } from "react";
 import axios from "axios";
@@ -109,10 +108,6 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       console.error("Error deleting place:", error);
     }
   };
-
-  // useEffect(() => {
-  //   fetchPlaces(1, 10, "", "name asc");
-  // }, [fetchPlaces]);
 
   return (
     <PlaceContext.Provider

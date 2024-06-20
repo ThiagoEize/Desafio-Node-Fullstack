@@ -3,7 +3,7 @@ import React, {
   useContext,
   useState,
   ReactNode,
-  useEffect,
+  // useEffect,
 } from "react";
 import axios from "axios";
 
@@ -93,9 +93,9 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    fetchEvents(1, 10, "", "event asc");
-  }, []);
+  // useEffect(() => {
+  //   fetchEvents(1, 10, "", "event asc");
+  // }, []);
 
   return (
     <EventContext.Provider
