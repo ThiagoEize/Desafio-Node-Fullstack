@@ -60,6 +60,7 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       orderBy: string
     ) => {
       try {
+        console.log("Fetching places...");
         const response = await axios.get(
           `http://localhost:8080/places?page=${page}&limit=${limit}&order=${orderBy}&search=${searchTerm}`
         );
@@ -109,9 +110,9 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    fetchPlaces(1, 10, "", "name asc");
-  }, [fetchPlaces]);
+  // useEffect(() => {
+  //   fetchPlaces(1, 10, "", "name asc");
+  // }, [fetchPlaces]);
 
   return (
     <PlaceContext.Provider

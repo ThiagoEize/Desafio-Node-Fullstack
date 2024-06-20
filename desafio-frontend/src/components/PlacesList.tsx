@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { usePlaceContext } from "../context/PlaceContext";
 import Place from "./place/Place";
@@ -8,6 +8,8 @@ interface PlacesListProps {
 }
 
 const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
+  console.log("fieldsToDisplay", fieldsToDisplay);
+  console.log("fieldsToDisplay", fieldsToDisplay.includes("singlePage"));
   const { placesList, totalPlaces, currentPage, fetchPlaces } =
     usePlaceContext();
   const navigate = useNavigate();
@@ -32,10 +34,6 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
     }
   };
 
-  useEffect(() => {
-    fetchPlaces(currentPage, 10, "", "name asc");
-  }, [currentPage, fetchPlaces]);
-
   if (!placesList) return <p>Loading...</p>;
 
   return (
@@ -49,7 +47,8 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
           <Place key={place.id} {...getFilteredPlaceProps(place)} />
         ))
       )}
-      {totalPlaces > 10 && (
+
+      {totalPlaces > 10 && !fieldsToDisplay.includes("singlePage") && (
         <div>
           {Array.from({ length: Math.ceil(totalPlaces / 10) }, (_, index) => (
             <button
