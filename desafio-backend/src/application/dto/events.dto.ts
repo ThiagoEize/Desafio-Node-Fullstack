@@ -41,7 +41,8 @@ export class EventsQueryDto {
   dateEnd?: Date;
   @ApiPropertyOptional()
   order?: string;
-
+  @ApiPropertyOptional()
+  search?: string;
   @ApiPropertyOptional()
   page?: number;
   @ApiPropertyOptional()

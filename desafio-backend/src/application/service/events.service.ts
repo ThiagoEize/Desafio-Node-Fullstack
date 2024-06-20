@@ -77,17 +77,22 @@ export class EventsService {
     const skip = (page - 1) * limit;
 
     const where: any = {};
-    if (query.placeId) where.placeId = query.placeId;
-    if (query.event) where.event = { contains: query.event };
-    if (query.type) where.type = { contains: query.type };
-    if (query.dateStart)
-      where.dateStart = new Date(query.dateStart).toISOString();
-    if (query.dateEnd) where.dateEnd = new Date(query.dateEnd).toISOString();
+    if (query.search) {
+      const [field, term] = query.search.split(':');
+      if (field && term) {
+        where[field] = {
+          contains: term,
+          mode: 'insensitive', // Prisma specific option for case-insensitive search
+        };
+      }
+    }
 
-    const orderBy: any = {};
+    let orderBy: any = {};
     if (query.order) {
       const [field, direction] = query.order.split(' ');
-      orderBy[field] = direction;
+      orderBy = { [field]: direction };
+    } else {
+      orderBy = { event: 'asc' };
     }
 
     const events = await this.prisma.event.findMany({

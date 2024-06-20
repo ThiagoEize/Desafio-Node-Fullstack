@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEventContext } from "../context/EventContext";
 import Event from "./event/Event";
-// import axios from "axios";
 
 interface EventsListProps {
   fieldsToDisplay: string[];
@@ -12,37 +11,29 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
   const { eventsList, totalEvents, currentPage, fetchEvents } =
     useEventContext();
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const [orderBy, setOrderBy] = useState("event asc");
-  // const [placesMap, setPlacesMap] = useState<Record<number, string>>({});
+  const [searchField, setSearchField] = useState("event");
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchEvents(currentPage, 10, searchTerm, orderBy);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTerm, orderBy]);
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 1000); // 1000ms debounce delay
 
-  // useEffect(() => {
-  //   const fetchPlaces = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:8080/places");
-  //       const places = response.data.data;
-  //       const placesObj = places.reduce(
-  //         (
-  //           acc: Record<number, string>,
-  //           place: { id: number; name: string }
-  //         ) => {
-  //           acc[place.id] = place.name;
-  //           return acc;
-  //         },
-  //         {}
-  //       );
-  //       // setPlacesMap(placesObj);
-  //     } catch (error) {
-  //       console.error("Error fetching places:", error);
-  //     }
-  //   };
-  //   fetchPlaces();
-  // }, []);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
+
+  useEffect(() => {
+    fetchEvents(
+      currentPage,
+      10,
+      `${searchField}:${debouncedSearchTerm}`,
+      orderBy
+    );
+  }, [debouncedSearchTerm, orderBy, searchField, currentPage]);
 
   const handleAddEvent = () => {
     navigate("/edit-event/new");
@@ -55,12 +46,15 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
         filteredProps[field] = event[field];
       }
     });
-
     return filteredProps;
   };
 
   const handlePageChange = (page: number) => {
-    fetchEvents(page, 10, searchTerm, orderBy);
+    fetchEvents(page, 10, `${searchField}:${debouncedSearchTerm}`, orderBy);
+  };
+
+  const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
   };
 
   if (!eventsList) return <p>Loading...</p>;
@@ -74,11 +68,21 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
           marginBottom: "20px",
         }}
       >
+        <select
+          value={searchField}
+          onChange={(e) => setSearchField(e.target.value)}
+          style={{ marginRight: "10px" }}
+        >
+          <option value="event">Event</option>
+          <option value="type">Type</option>
+          <option value="dateStart">Date Start</option>
+          <option value="dateEnd">Date End</option>
+        </select>
         <input
           type="text"
-          placeholder="Search by event"
+          placeholder={`Search by ${searchField}`}
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleSearchTermChange}
           style={{ flex: 1, marginRight: "10px" }}
         />
         <select

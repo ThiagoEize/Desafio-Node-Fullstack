@@ -13,11 +13,27 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [orderBy, setOrderBy] = useState("name asc");
   const [searchField, setSearchField] = useState("name");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPlaces(currentPage, 10, `${searchField}:${searchTerm}`, orderBy);
-  }, [searchTerm, orderBy, searchField, currentPage]);
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 1000); // 500ms debounce delay
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
+
+  useEffect(() => {
+    fetchPlaces(
+      currentPage,
+      10,
+      `${searchField}:${debouncedSearchTerm}`,
+      orderBy
+    );
+  }, [debouncedSearchTerm, orderBy, searchField, currentPage]);
 
   const handleAddPlace = () => {
     navigate("/edit-place/new");
@@ -34,7 +50,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
   };
 
   const handlePageChange = (page: number) => {
-    fetchPlaces(page, 10, `${searchField}:${searchTerm}`, orderBy);
+    fetchPlaces(page, 10, `${searchField}:${debouncedSearchTerm}`, orderBy);
   };
 
   const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
