@@ -59,7 +59,7 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const addEvent = async (event: Event) => {
     try {
       await axios.post(`http://localhost:8080/events`, event);
-      setEventsList((prevEvents) => [...prevEvents, event]);
+      setEventsList((prevEvents) => [event, ...prevEvents]);
       setTotalEvents((prevTotal) => prevTotal + 1);
     } catch (error) {
       console.error("Error adding event:", error);

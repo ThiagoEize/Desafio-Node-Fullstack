@@ -1,22 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { usePlaceContext } from "../context/PlaceContext";
+import { usePlaceSearchContext } from "../context/PlaceSearchContext";
 
 const PlaceSearch: React.FC = () => {
   const { fetchPlaces, currentPage } = usePlaceContext();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
-  const [orderBy, setOrderBy] = useState("name asc");
-  const [searchField, setSearchField] = useState("name");
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 1200); // 1200ms debounce delay
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchTerm]);
+  const {
+    searchTerm,
+    setSearchTerm,
+    debouncedSearchTerm,
+    orderBy,
+    setOrderBy,
+    searchField,
+    setSearchField,
+  } = usePlaceSearchContext();
 
   useEffect(() => {
     fetchPlaces(
@@ -25,7 +21,7 @@ const PlaceSearch: React.FC = () => {
       `${searchField}:${debouncedSearchTerm}`,
       orderBy
     );
-  }, [debouncedSearchTerm, orderBy, searchField, currentPage, fetchPlaces]);
+  }, [debouncedSearchTerm, orderBy, searchField, currentPage]);
 
   return (
     <div

@@ -50,6 +50,7 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [placesList, setPlacesList] = useState<Place[]>([]);
   const [totalPlaces, setTotalPlaces] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [orderBy, setOrderBy] = useState("name asc");
 
   const fetchPlaces = useCallback(
     async (
@@ -75,8 +76,8 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const addPlace = async (place: Place) => {
     try {
-      const response = await axios.post(`http://localhost:8080/places`, place);
-      setPlacesList((prevPlaces) => [...prevPlaces, response.data]);
+      await axios.post(`http://localhost:8080/places`, place);
+      setPlacesList((prevPlaces) => [place, ...prevPlaces]);
       setTotalPlaces((prevTotal) => prevTotal + 1);
     } catch (error) {
       console.error("Error adding place:", error);
