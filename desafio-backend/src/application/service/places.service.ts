@@ -5,14 +5,33 @@ import {
   PlacesQueryDto,
   PlacesUpdateDto,
 } from '../dto/places.dto';
+import { GatesService } from './gates.service';
+import { TurnstilesService } from './turnstiles.service';
 
 @Injectable()
 export class PlacesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private gatesService: GatesService,
+    private turnstilesService: TurnstilesService,
+  ) {}
   private logger: Logger = new Logger();
 
   async create(data: PlacesCreateDto) {
     this.logger.log(`Creating place with data: ${JSON.stringify(data)}`);
+
+    const existingPlace = await this.prisma.place.findFirst({
+      where: {
+        name: data.name,
+      },
+    });
+
+    if (existingPlace) {
+      throw new HttpException(
+        'Já existe um lugar com esse nome.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
     const place = await this.prisma.place.create({
       data: {
@@ -20,26 +39,18 @@ export class PlacesService {
         address: data.address,
         city: data.city,
         state: data.state,
-        gates: {
-          create:
-            data.gates?.map((gate) => ({
-              name: gate.name,
-            })) || [],
-        },
-        turnstiles: {
-          create:
-            data.turnstiles?.map((turnstile) => ({
-              name: turnstile.name,
-            })) || [],
-        },
-      },
-      include: {
-        gates: true,
-        turnstiles: true,
       },
     });
 
-    return place;
+    if (data.gates) {
+      await this.gatesService.createMany(data.gates, place.id);
+    }
+
+    if (data.turnstiles) {
+      await this.turnstilesService.createMany(data.turnstiles, place.id);
+    }
+
+    return this.find(place.id);
   }
 
   async update(data: PlacesUpdateDto) {
@@ -59,87 +70,26 @@ export class PlacesService {
       throw new Error('Place not found');
     }
 
-    const existingGates = place.gates.map((gate) => ({
-      id: gate.id,
-      name: gate.name,
-    }));
-    const existingTurnstiles = place.turnstiles.map((turnstile) => ({
-      id: turnstile.id,
-      name: turnstile.name,
-    }));
+    const existingPlace = await this.prisma.place.findFirst({
+      where: {
+        name: data.name,
+      },
+    });
 
-    const missingGates = existingGates.filter(
-      (existingGate) =>
-        !data.gates?.some((newGate) => newGate.id === existingGate.id),
-    );
-    const missingTurnstiles = existingTurnstiles.filter(
-      (existingTurnstile) =>
-        !data.turnstiles?.some(
-          (newTurnstile) => newTurnstile.id === existingTurnstile.id,
-        ),
-    );
-
-    if (missingGates.length > 0) {
-      await this.prisma.gate.deleteMany({
-        where: {
-          id: {
-            in: missingGates.map((gate) => gate.id),
-          },
-        },
-      });
+    if (existingPlace && existingPlace.id !== place.id) {
+      throw new HttpException(
+        'Já existe um lugar com esse nome.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
-    if (missingTurnstiles.length > 0) {
-      await this.prisma.turnstile.deleteMany({
-        where: {
-          id: {
-            in: missingTurnstiles.map((turnstile) => turnstile.id),
-          },
-        },
-      });
+    if (data.gates) {
+      await this.gatesService.updateMany(data.gates, place.id);
     }
 
-    await Promise.all(
-      data.gates?.map(async (gate) => {
-        if (gate.id) {
-          await this.prisma.gate.update({
-            where: { id: gate.id },
-            data: {
-              name: gate.name,
-              placeId: place.id,
-            },
-          });
-        } else {
-          await this.prisma.gate.create({
-            data: {
-              name: gate.name,
-              placeId: place.id,
-            },
-          });
-        }
-      }) || [],
-    );
-
-    await Promise.all(
-      data.turnstiles?.map(async (turnstile) => {
-        if (turnstile.id) {
-          await this.prisma.turnstile.update({
-            where: { id: turnstile.id },
-            data: {
-              name: turnstile.name,
-              placeId: place.id,
-            },
-          });
-        } else {
-          await this.prisma.turnstile.create({
-            data: {
-              name: turnstile.name,
-              placeId: place.id,
-            },
-          });
-        }
-      }) || [],
-    );
+    if (data.turnstiles) {
+      await this.turnstilesService.updateMany(data.turnstiles, place.id);
+    }
 
     const updatedPlace = await this.prisma.place.update({
       where: {
@@ -239,17 +189,8 @@ export class PlacesService {
       );
     }
 
-    await this.prisma.gate.deleteMany({
-      where: {
-        placeId: Number(id),
-      },
-    });
-
-    await this.prisma.turnstile.deleteMany({
-      where: {
-        placeId: Number(id),
-      },
-    });
+    await this.gatesService.deleteByPlaceId(id);
+    await this.turnstilesService.deleteByPlaceId(id);
 
     return await this.prisma.place.delete({
       where: {

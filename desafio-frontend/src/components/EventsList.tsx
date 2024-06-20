@@ -19,7 +19,7 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 1000); // 1000ms debounce delay
+    }, 1200); // 1000ms debounce delay
 
     return () => {
       clearTimeout(handler);

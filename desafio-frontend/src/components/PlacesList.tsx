@@ -19,7 +19,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 1000); // 500ms debounce delay
+    }, 1200); // 500ms debounce delay
 
     return () => {
       clearTimeout(handler);
