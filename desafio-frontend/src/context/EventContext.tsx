@@ -5,7 +5,10 @@ import React, {
   ReactNode,
   // useEffect,
 } from "react";
+
 import axios from "axios";
+
+import { useNavigate } from "react-router-dom";
 
 interface Event {
   id: string;
@@ -38,6 +41,8 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [totalEvents, setTotalEvents] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const navigate = useNavigate();
+
   const fetchEvents = async (
     page: number,
     limit: number,
@@ -61,6 +66,8 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       await axios.post(`http://localhost:8080/events`, event);
       setEventsList((prevEvents) => [event, ...prevEvents]);
       setTotalEvents((prevTotal) => prevTotal + 1);
+
+      navigate("/events");
     } catch (error) {
       console.error("Error adding event:", error);
     }
@@ -76,6 +83,8 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       setEventsList((prevEvents) =>
         prevEvents.map((event) => (event.id === id ? updatedEvent : event))
       );
+
+      navigate("/events");
     } catch (error) {
       console.error("Error updating event:", error);
     }

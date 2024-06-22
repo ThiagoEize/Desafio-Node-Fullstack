@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { usePlaceContext } from "../context/PlaceContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 interface Gate {
   id?: string;
@@ -27,7 +27,6 @@ interface PlaceFormState {
 const PlaceForm: React.FC = () => {
   const { placesList, addPlace, updatePlace } = usePlaceContext();
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const [formState, setFormState] = useState<PlaceFormState>({
     id: "",
     name: "",
@@ -124,14 +123,13 @@ const PlaceForm: React.FC = () => {
         name: turnstile.name,
       })), // Send turnstile IDs and names
     };
+      if (formState.id) {
+        updatePlace(formState.id, placeData);
+      } else {
+        addPlace({ ...placeData, id: Date.now().toString() });
+      }
 
-    if (formState.id) {
-      updatePlace(formState.id, placeData);
-    } else {
-      addPlace({ ...placeData, id: Date.now().toString() });
-    }
-
-    navigate("/places"); // Navigate back to the places list after submission
+     // Navigate back to the places list after submission
   };
 
   return (

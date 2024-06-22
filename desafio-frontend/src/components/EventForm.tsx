@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useEventContext } from "../context/EventContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 interface Place {
@@ -11,7 +11,6 @@ interface Place {
 const EventForm: React.FC = () => {
   const { eventsList, addEvent, updateEvent } = useEventContext();
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const [placesList, setPlacesList] = useState<Place[]>([]);
   const [formState, setFormState] = useState({
     id: "",
@@ -104,8 +103,6 @@ const EventForm: React.FC = () => {
       } else {
         addEvent({ ...eventData, id: Date.now().toString() });
       }
-
-      navigate("/events"); // Navigate back to the events list after submission
     } catch (error) {
       console.error("Error formatting dates:", error);
     }

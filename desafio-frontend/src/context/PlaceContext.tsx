@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import axios from "axios";
+import {  useNavigate } from "react-router-dom";
 
 interface Gate {
   id?: string;
@@ -47,10 +48,11 @@ interface PlaceContextType {
 const PlaceContext = createContext<PlaceContextType | undefined>(undefined);
 
 const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const navigate = useNavigate();
+
   const [placesList, setPlacesList] = useState<Place[]>([]);
   const [totalPlaces, setTotalPlaces] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [orderBy, setOrderBy] = useState("name asc");
 
   const fetchPlaces = useCallback(
     async (
@@ -79,6 +81,7 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       await axios.post(`http://localhost:8080/places`, place);
       setPlacesList((prevPlaces) => [place, ...prevPlaces]);
       setTotalPlaces((prevTotal) => prevTotal + 1);
+        navigate("/places");
     } catch (error) {
       console.error("Error adding place:", error);
     }
@@ -93,6 +96,8 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       setPlacesList((prevPlaces) =>
         prevPlaces.map((place) => (place.id === id ? response.data : place))
       );
+      
+      navigate("/places"); 
     } catch (error) {
       console.error("Error updating place:", error);
     }
