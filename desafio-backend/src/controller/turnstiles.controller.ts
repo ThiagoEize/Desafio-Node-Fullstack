@@ -7,12 +7,14 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import {
   TurnstileCreateDto,
   TurnstileUpdateDto,
-} from 'src/application/dto/turnstiles.dto';
-import { TurnstilesService } from 'src/application/service/turnstiles.service';
+} from '../application/dto/turnstiles.dto';
+import { TurnstilesService } from '../application/service/turnstiles.service';
 
+@ApiTags('turnstiles')
 @Controller('turnstiles')
 export class TurnstilesController {
   constructor(private readonly turnstilesService: TurnstilesService) {}

@@ -1,10 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'src/application/module/prisma.service';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { PrismaService } from '../module/prisma.service';
 import {
   EventsCreateDto,
   EventsQueryDto,
   EventsUpdateDto,
 } from '../dto/events.dto';
+import { isWithinInterval } from 'date-fns';
 
 @Injectable()
 export class EventsService {
@@ -59,13 +60,70 @@ export class EventsService {
   async find(id: number) {
     this.logger.log(`Find event with ID ${id}`);
 
-    return await this.prisma.event.findFirstOrThrow({
-      where: {
-        id: Number(id),
-      },
-      include: {
-        place: true,
-      },
+    try {
+      const event = await this.prisma.event.findFirstOrThrow({
+        where: {
+          id: Number(id),
+        },
+        include: {
+          place: true,
+        },
+      });
+
+      return event;
+    } catch (error) {
+      throw new BadRequestException('Event not found');
+    }
+  }
+
+  async eventNameExists(eventName: string) {
+    this.logger.log(`Find event with name ${eventName}`);
+
+    try {
+      await this.prisma.event.findFirstOrThrow({
+        where: {
+          event: eventName,
+        },
+        include: {
+          place: true,
+        },
+      });
+
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  isEventOverlapping(
+    events: EventsCreateDto[],
+    dateStart: Date,
+    dateEnd: Date,
+  ): boolean {
+    for (const event of events) {
+      if (
+        isWithinInterval(dateStart, {
+          start: event.dateStart,
+          end: event.dateEnd,
+        }) ||
+        isWithinInterval(dateEnd, {
+          start: event.dateStart,
+          end: event.dateEnd,
+        }) ||
+        isWithinInterval(event.dateStart, { start: dateStart, end: dateEnd }) ||
+        isWithinInterval(event.dateEnd, { start: dateStart, end: dateEnd })
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  async listByPlaceId(placeId: number) {
+    this.logger.log(`Find events by place ID ${placeId}`);
+
+    return this.prisma.event.findMany({
+      where: { placeId },
     });
   }
 

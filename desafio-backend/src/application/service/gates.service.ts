@@ -1,5 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'src/application/module/prisma.service';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { PrismaService } from '../module/prisma.service';
 import { GateCreateDto, GateUpdateDto } from '../dto/gates.dto';
 
 @Injectable()
@@ -49,11 +49,17 @@ export class GatesService {
   async find(id: number) {
     this.logger.log(`Find gate with ID ${id}`);
 
-    return await this.prisma.gate.findFirstOrThrow({
-      where: {
-        id: Number(id),
-      },
-    });
+    try {
+      const gate = await this.prisma.gate.findFirstOrThrow({
+        where: {
+          id: Number(id),
+        },
+      });
+
+      return gate;
+    } catch (error) {
+      throw new BadRequestException('Gate not found');
+    }
   }
 
   async list() {

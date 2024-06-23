@@ -1,5 +1,11 @@
-import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
-import { PrismaService } from 'src/application/module/prisma.service';
+import {
+  Injectable,
+  Logger,
+  HttpException,
+  HttpStatus,
+  BadRequestException,
+} from '@nestjs/common';
+import { PrismaService } from '../module/prisma.service';
 import {
   PlacesCreateDto,
   PlacesQueryDto,
@@ -67,7 +73,7 @@ export class PlacesService {
     });
 
     if (!place) {
-      throw new Error('Place not found');
+      throw new BadRequestException('Place not found');
     }
 
     const existingPlace = await this.prisma.place.findFirst({
@@ -113,15 +119,21 @@ export class PlacesService {
   async find(id: number) {
     this.logger.log(`Find place with ID ${id}`);
 
-    return await this.prisma.place.findFirstOrThrow({
-      include: {
-        gates: true,
-        turnstiles: true,
-      },
-      where: {
-        id: Number(id),
-      },
-    });
+    try {
+      const place = await this.prisma.place.findFirstOrThrow({
+        include: {
+          gates: true,
+          turnstiles: true,
+        },
+        where: {
+          id: Number(id),
+        },
+      });
+
+      return place;
+    } catch (error) {
+      throw new BadRequestException('Place not found');
+    }
   }
 
   async list(query: PlacesQueryDto) {

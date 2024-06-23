@@ -8,13 +8,15 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import {
   PlacesCreateDto,
   PlacesQueryDto,
   PlacesUpdateDto,
-} from 'src/application/dto/places.dto';
-import { PlacesService } from 'src/application/service/places.service';
+} from '../application/dto/places.dto';
+import { PlacesService } from '../application/service/places.service';
 
+@ApiTags('places')
 @Controller('places')
 export class PlacesController {
   constructor(private readonly placesService: PlacesService) {}

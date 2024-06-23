@@ -1,5 +1,7 @@
 import {
+  BadRequestException,
   Body,
+  ConflictException,
   Controller,
   Delete,
   Get,
@@ -9,17 +11,22 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiParam, ApiQuery } from '@nestjs/swagger';
+import { isAfter, isBefore, isValid, parseISO } from 'date-fns';
 import {
   EventsCreateDto,
   EventsQueryDto,
   EventsUpdateDto,
-} from 'src/application/dto/events.dto';
-import { EventsService } from 'src/application/service/events.service';
+} from '../application/dto/events.dto';
+import { EventsService } from '../application/service/events.service';
+import { PlacesService } from '../application/service/places.service';
 
 @ApiTags('events')
 @Controller('events')
 export class EventsController {
-  constructor(private readonly eventsService: EventsService) {}
+  constructor(
+    private readonly eventsService: EventsService,
+    private readonly placesService: PlacesService,
+  ) {}
 
   @Get('/:id')
   @ApiOperation({ summary: 'Find event by ID' })
@@ -31,6 +38,52 @@ export class EventsController {
   @Post('/')
   @ApiOperation({ summary: 'Create a new event' })
   async create(@Body() data: EventsCreateDto) {
+    console.log('data', data);
+    const dateStart = parseISO(String(data.dateStart));
+    const dateEnd = parseISO(String(data.dateEnd));
+
+    if (!isValid(dateStart)) {
+      throw new BadRequestException('Data de início inválida');
+    }
+
+    if (!isValid(dateEnd)) {
+      throw new BadRequestException('Data de término inválida');
+    }
+
+    const now = new Date();
+
+    if (isBefore(dateStart, now)) {
+      throw new BadRequestException('Data do evento não pode ser no passado');
+    }
+
+    if (isAfter(dateStart, dateEnd)) {
+      throw new BadRequestException(
+        'Data de início deve ser anterior a data de término',
+      );
+    }
+
+    await this.placesService.find(data.placeId); // check if place exists
+
+    const placeEvents = await this.eventsService.listByPlaceId(data.placeId);
+
+    const isEventOverlapping = this.eventsService.isEventOverlapping(
+      placeEvents,
+      data.dateStart as Date,
+      data.dateEnd as Date,
+    );
+
+    if (isEventOverlapping) {
+      throw new ConflictException('Já existe um evento nesse horário');
+    }
+
+    const eventNameExists = await this.eventsService.eventNameExists(
+      data.event,
+    );
+
+    if (eventNameExists) {
+      throw new ConflictException('Nome do evento deve ser único');
+    }
+
     return this.eventsService.create(data);
   }
 

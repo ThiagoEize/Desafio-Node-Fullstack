@@ -1,5 +1,5 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from 'src/application/module/prisma.service';
+import { BadGatewayException, Injectable, Logger } from '@nestjs/common';
+import { PrismaService } from '../module/prisma.service';
 import { TurnstileCreateDto, TurnstileUpdateDto } from '../dto/turnstiles.dto';
 
 @Injectable()
@@ -49,11 +49,17 @@ export class TurnstilesService {
   async find(id: number) {
     this.logger.log(`Find turnstile with ID ${id}`);
 
-    return await this.prisma.turnstile.findFirstOrThrow({
-      where: {
-        id: Number(id),
-      },
-    });
+    try {
+      const turnstile = await this.prisma.turnstile.findFirstOrThrow({
+        where: {
+          id: Number(id),
+        },
+      });
+
+      return turnstile;
+    } catch (error) {
+      throw new BadGatewayException('Turnstile not found');
+    }
   }
 
   async list() {

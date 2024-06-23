@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { PlacesController } from './controller/places.controller';
 import { PlacesService } from './application/service/places.service';
 import { PrismaService } from './application/module/prisma.service';
@@ -14,14 +12,12 @@ import { TurnstilesService } from './application/service/turnstiles.service';
 @Module({
   imports: [],
   controllers: [
-    AppController,
     PlacesController,
     EventsController,
     GatesController,
     TurnstilesController,
   ],
   providers: [
-    AppService,
     PlacesService,
     PrismaService,
     EventsService,

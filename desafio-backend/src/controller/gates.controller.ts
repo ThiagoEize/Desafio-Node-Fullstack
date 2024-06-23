@@ -7,9 +7,11 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { GateCreateDto, GateUpdateDto } from 'src/application/dto/gates.dto';
-import { GatesService } from 'src/application/service/gates.service';
+import { ApiTags } from '@nestjs/swagger';
+import { GateCreateDto, GateUpdateDto } from '../application/dto/gates.dto';
+import { GatesService } from '../application/service/gates.service';
 
+@ApiTags('gates')
 @Controller('gates')
 export class GatesController {
   constructor(private readonly gatesService: GatesService) {}

@@ -10,7 +10,7 @@ async function bootstrap() {
   const port = process.env.PORT || 8080;
 
   app.enableCors({
-    origin: '*', // Replace with your frontend URL
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
@@ -20,13 +20,12 @@ async function bootstrap() {
     .setTitle('Event API')
     .setDescription('API for managing events')
     .setVersion('1.0')
-    .addBearerAuth() // Add this if you have authentication
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(port, '0.0.0.0');
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  await app.listen(port);
+  console.log(`Application is running on port ${port}`);
 }
 bootstrap();
