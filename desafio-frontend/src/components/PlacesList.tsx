@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { usePlaceContext } from "../context/PlaceContext";
 import Place from "./place/Place";
 
@@ -8,15 +7,8 @@ interface PlacesListProps {
 }
 
 const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
-  console.log("fieldsToDisplay", fieldsToDisplay);
-  console.log("fieldsToDisplay", fieldsToDisplay.includes("singlePage"));
   const { placesList, totalPlaces, currentPage, fetchPlaces } =
     usePlaceContext();
-  const navigate = useNavigate();
-
-  const handleAddPlace = () => {
-    navigate("/edit-place/new");
-  };
 
   const getFilteredPlaceProps = (place: any) => {
     const filteredProps: any = { id: place.id };
@@ -38,7 +30,6 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
 
   return (
     <div>
-      <button onClick={handleAddPlace}>Add Place</button>
       <h1>Places List</h1>
       {placesList.length === 0 ? (
         <p>No places available.</p>

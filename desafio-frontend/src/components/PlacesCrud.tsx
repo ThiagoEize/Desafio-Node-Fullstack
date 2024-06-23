@@ -1,10 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PlacesList from "./PlacesList";
 import PlaceSearch from "./PlaceSearch";
 import NavBar from "./navBar/NavBar";
 
 const PlacesCrud: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleAddPlace = () => {
+    navigate("/edit-place/new");
+  };
+
   return (
     <div>
       <NavBar></NavBar>
@@ -29,6 +35,7 @@ const PlacesCrud: React.FC = () => {
           This section allows you to view, add, edit, and delete places in the
           system.
         </p>
+        <button onClick={handleAddPlace}>Add Place</button>
         <PlaceSearch />
         <PlacesList
           fieldsToDisplay={[

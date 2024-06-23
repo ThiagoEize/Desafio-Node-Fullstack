@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { useEventContext } from "../context/EventContext";
 import Event from "./event/Event";
 
@@ -10,11 +9,6 @@ interface EventsListProps {
 const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
   const { eventsList, totalEvents, currentPage, fetchEvents } =
     useEventContext();
-  const navigate = useNavigate();
-
-  const handleAddEvent = () => {
-    navigate("/edit-event/new");
-  };
 
   const getFilteredEventProps = (event: any) => {
     const filteredProps: any = { id: event.id };
@@ -36,7 +30,6 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
 
   return (
     <div>
-      <button onClick={handleAddEvent}>Add Event</button>
       <h1>Events List</h1>
       {eventsList.length === 0 ? (
         <p>No events available.</p>

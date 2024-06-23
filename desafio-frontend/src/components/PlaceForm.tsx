@@ -136,8 +136,6 @@ const PlaceForm: React.FC = () => {
     } else {
       addPlace({ ...placeData, id: Date.now().toString() });
     }
-
-    // Navigate back to the places list after submission
   };
 
   return (

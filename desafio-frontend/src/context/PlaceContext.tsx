@@ -73,7 +73,6 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setCurrentPage(page);
       } catch (error: any) {
         console.error("Error fetching places:", error);
-        showResponse("Error", String(error.response.data.message));
       }
     },
     []
@@ -84,10 +83,10 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       await axios.post(`http://localhost:8080/places`, place);
       setPlacesList((prevPlaces) => [place, ...prevPlaces]);
       setTotalPlaces((prevTotal) => prevTotal + 1);
-      navigate("/places");
+      navigate(-1); // Navigate to the previous page
       showResponse("Success", "Place added successfully");
     } catch (error: any) {
-      console.error("Error adding place:", error);
+      // console.error("Error adding place:", error);
       showResponse("Error", String(error.response.data.message));
     }
   };
@@ -101,7 +100,7 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       setPlacesList((prevPlaces) =>
         prevPlaces.map((place) => (place.id === id ? response.data : place))
       );
-      navigate("/places");
+      navigate(-1); // Navigate to the previous page
       showResponse("Success", "Place updated successfully");
     } catch (error: any) {
       console.error("Error updating place:", error);

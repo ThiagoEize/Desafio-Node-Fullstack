@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useEventContext } from "../context/EventContext";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 interface Place {
@@ -11,6 +11,7 @@ interface Place {
 const EventForm: React.FC = () => {
   const { eventsList, addEvent, updateEvent } = useEventContext();
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [placesList, setPlacesList] = useState<Place[]>([]);
   const [formState, setFormState] = useState({
     id: "",
@@ -143,19 +144,28 @@ const EventForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <select
-        name="placeId"
-        value={formState.placeId}
-        onChange={handleChange}
-        required
-      >
-        <option value={0}>Select Place</option>
-        {placesList.map((place) => (
-          <option key={place.id} value={place.id}>
-            {place.name}
-          </option>
-        ))}
-      </select>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <select
+          name="placeId"
+          value={formState.placeId}
+          onChange={handleChange}
+          required
+        >
+          <option value={0}>Select Place</option>
+          {placesList.map((place) => (
+            <option key={place.id} value={place.id}>
+              {place.name}
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          onClick={() => navigate("/edit-place/new")}
+          style={{ marginLeft: "10px" }}
+        >
+          Add New Place
+        </button>
+      </div>
       <input
         type="text"
         name="event"

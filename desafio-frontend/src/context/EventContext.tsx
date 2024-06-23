@@ -58,7 +58,7 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       setCurrentPage(page);
     } catch (error: any) {
       console.error("Error fetching events:", error);
-      showResponse("Error", String(error.response.data.message));
+      // showResponse("Error", String(error.response.data.message));
     }
   };
 
@@ -67,7 +67,7 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       await axios.post(`http://localhost:8080/events`, event);
       setEventsList((prevEvents) => [event, ...prevEvents]);
       setTotalEvents((prevTotal) => prevTotal + 1);
-      navigate("/events");
+      navigate(-1); // Navigate to the previous page
       showResponse("Success", "Event added successfully");
     } catch (error: any) {
       console.error("Error adding event:", error);
@@ -88,7 +88,7 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       setEventsList((prevEvents) =>
         prevEvents.map((event) => (event.id === id ? response.data : event))
       );
-      navigate("/events");
+      navigate(-1); // Navigate to the previous page
       showResponse("Success", "Event updated successfully");
     } catch (error: any) {
       console.error("Error updating event:", error);

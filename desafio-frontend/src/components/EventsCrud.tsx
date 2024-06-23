@@ -1,10 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import EventsList from "./EventsList";
 import EventSearch from "./EventSearch";
 import NavBar from "./navBar/NavBar";
 
 const EventsCrud: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleAddEvent = () => {
+    navigate("/edit-event/new");
+  };
+
   return (
     <div>
       <NavBar></NavBar>
@@ -29,6 +35,7 @@ const EventsCrud: React.FC = () => {
           This section allows you to view, add, edit, and delete events in the
           system.
         </p>
+        <button onClick={handleAddEvent}>Add Event</button>
         <EventSearch />
         <EventsList
           fieldsToDisplay={[
