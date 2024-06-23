@@ -21,7 +21,8 @@ const EventSearch: React.FC = () => {
       searchTerm: `${searchField}:${debouncedSearchTerm}`,
       orderBy,
     });
-  }, [debouncedSearchTerm, orderBy, searchField, currentPage, fetchEvents]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchTerm, orderBy, searchField, currentPage]);
 
   return (
     <div

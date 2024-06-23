@@ -140,7 +140,7 @@ export class PlacesService {
     this.logger.log(`Listing places with filters ${JSON.stringify(query)}`);
 
     const page = query.page ? parseInt(query.page.toString(), 10) : 1;
-    const limit = query.limit ? parseInt(query.limit.toString(), 10) : 10;
+    const limit = query.limit ? parseInt(query.limit.toString(), 10) : 10000000;
     const skip = (page - 1) * limit;
 
     const where: any = {};
