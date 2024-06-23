@@ -4,6 +4,7 @@ import { FaEllipsisV } from "react-icons/fa";
 import { useEventContext } from "../../context/EventContext";
 import styles from "./Event.module.css";
 import useOutsideClick from "../../hooks/useOutsideClick";
+import useConfirm from "../../hooks/useConfirm";
 import axios from "axios";
 
 interface EventProps {
@@ -28,6 +29,8 @@ const Event: React.FC<EventProps> = ({
   const [placeName, setPlaceName] = useState("");
   const navigate = useNavigate();
 
+  const confirm = useConfirm();
+
   useEffect(() => {
     const fetchPlaceName = async () => {
       try {
@@ -49,8 +52,11 @@ const Event: React.FC<EventProps> = ({
     navigate(`/edit-event/${id}`);
   };
 
-  const handleDelete = () => {
-    deleteEvent(id);
+  const handleDelete = async () => {
+    const isConfirmed = await confirm("evento", String(event));
+    if (isConfirmed) {
+      deleteEvent(id);
+    }
   };
 
   const ref = useOutsideClick(() => {

@@ -9,6 +9,8 @@ import EventForm from "./components/EventForm";
 import PlacesCrud from "./components/PlacesCrud";
 import { PlaceSearchProvider } from "./context/PlaceSearchContext";
 import { EventSearchProvider } from "./context/EventSearchContext";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { HelperProvider } from "./context/HelperContext";
 
 const App: React.FC = () => {
   return (
@@ -16,13 +18,15 @@ const App: React.FC = () => {
       <EventProvider>
         <PlaceSearchProvider>
           <EventSearchProvider>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/places" element={<PlacesCrud />} />
-              <Route path="/events" element={<EventsCrud />} />
-              <Route path="/edit-place/:id" element={<PlaceForm />} />
-              <Route path="/edit-event/:id" element={<EventForm />} />
-            </Routes>
+            <HelperProvider>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/places" element={<PlacesCrud />} />
+                <Route path="/events" element={<EventsCrud />} />
+                <Route path="/edit-place/:id" element={<PlaceForm />} />
+                <Route path="/edit-event/:id" element={<EventForm />} />
+              </Routes>
+            </HelperProvider>
           </EventSearchProvider>
         </PlaceSearchProvider>
       </EventProvider>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { usePlaceContext } from "../context/PlaceContext";
 import { useParams } from "react-router-dom";
+import useConfirm from "../hooks/useConfirm";
 
 interface Gate {
   id?: string;
@@ -38,6 +39,7 @@ const PlaceForm: React.FC = () => {
   });
   const [newGateName, setNewGateName] = useState("");
   const [newTurnstileName, setNewTurnstileName] = useState("");
+  const confirm = useConfirm();
 
   useEffect(() => {
     if (id) {
@@ -97,20 +99,26 @@ const PlaceForm: React.FC = () => {
     }
   };
 
-  const removeGate = (gateName?: string) => {
-    setFormState((prev) => ({
-      ...prev,
-      gates: prev.gates.filter((gate) => gate.name !== gateName),
-    }));
+  const removeGate = async (gateName?: string) => {
+    const isConfirmed = await confirm("portão", String(gateName));
+    if (isConfirmed) {
+      setFormState((prev) => ({
+        ...prev,
+        gates: prev.gates.filter((gate) => gate.name !== gateName),
+      }));
+    }
   };
 
-  const removeTurnstile = (turnstileName?: string) => {
-    setFormState((prev) => ({
-      ...prev,
-      turnstiles: prev.turnstiles.filter(
-        (turnstile) => turnstile.name !== turnstileName
-      ),
-    }));
+  const removeTurnstile = async (turnstileName?: string) => {
+    const isConfirmed = await confirm("catraca", String(turnstileName));
+    if (isConfirmed) {
+      setFormState((prev) => ({
+        ...prev,
+        turnstiles: prev.turnstiles.filter(
+          (turnstile) => turnstile.name !== turnstileName
+        ),
+      }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -123,13 +131,13 @@ const PlaceForm: React.FC = () => {
         name: turnstile.name,
       })), // Send turnstile IDs and names
     };
-      if (formState.id) {
-        updatePlace(formState.id, placeData);
-      } else {
-        addPlace({ ...placeData, id: Date.now().toString() });
-      }
+    if (formState.id) {
+      updatePlace(formState.id, placeData);
+    } else {
+      addPlace({ ...placeData, id: Date.now().toString() });
+    }
 
-     // Navigate back to the places list after submission
+    // Navigate back to the places list after submission
   };
 
   return (

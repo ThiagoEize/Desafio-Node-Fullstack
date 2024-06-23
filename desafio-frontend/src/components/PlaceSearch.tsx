@@ -21,6 +21,7 @@ const PlaceSearch: React.FC = () => {
       `${searchField}:${debouncedSearchTerm}`,
       orderBy
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm, orderBy, searchField, currentPage]);
 
   return (

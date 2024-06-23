@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEllipsisV } from "react-icons/fa";
 import { usePlaceContext } from "../../context/PlaceContext";
+import useConfirm from "../../hooks/useConfirm";
 import styles from "./Place.module.css";
 import useOutsideClick from "../../hooks/useOutsideClick";
 
@@ -40,14 +41,18 @@ const Place: React.FC<PlaceProps> = ({
 }) => {
   const { deletePlace } = usePlaceContext();
   const [showOptions, setShowOptions] = useState(false);
+  const confirm = useConfirm();
   const navigate = useNavigate();
 
   const handleEdit = () => {
     navigate(`/edit-place/${id}`);
   };
 
-  const handleDelete = () => {
-    deletePlace(id);
+  const handleDelete = async () => {
+    const isConfirmed = await confirm("lugar", String(name));
+    if (isConfirmed) {
+      deletePlace(id);
+    }
   };
 
   const ref = useOutsideClick(() => {
