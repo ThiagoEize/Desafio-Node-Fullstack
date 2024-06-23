@@ -22,7 +22,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
 
   const handlePageChange = (page: number) => {
     if (page !== currentPage) {
-      fetchPlaces(page, 10, "", "name asc");
+      fetchPlaces({ page, limit: 10, searchTerm: "", orderBy: "name asc" });
     }
   };
 

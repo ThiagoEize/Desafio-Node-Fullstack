@@ -12,16 +12,18 @@ interface Event {
   dateEnd: string;
 }
 
+interface SearchArguments {
+  page: number;
+  limit: number;
+  searchTerm: string;
+  orderBy: string;
+}
+
 interface EventContextType {
   eventsList: Event[];
   totalEvents: number;
   currentPage: number;
-  fetchEvents: (
-    page: number,
-    limit: number,
-    searchTerm: string,
-    orderBy: string
-  ) => void;
+  fetchEvents: (args: SearchArguments) => void;
   addEvent: (event: Event) => void;
   updateEvent: (id: string, updatedEvent: Event) => void;
   deleteEvent: (id: string) => void;
@@ -37,12 +39,12 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [totalEvents, setTotalEvents] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchEvents = async (
-    page: number,
-    limit: number,
-    searchTerm: string,
-    orderBy: string
-  ) => {
+  const fetchEvents = async ({
+    page,
+    limit,
+    searchTerm,
+    orderBy,
+  }: SearchArguments) => {
     try {
       const response = await axios.get(
         `http://localhost:8080/events?page=${page}&limit=${limit}&order=${orderBy}&search=${searchTerm}`

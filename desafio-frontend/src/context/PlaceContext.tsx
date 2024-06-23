@@ -31,16 +31,18 @@ interface Place {
   turnstiles: Turnstile[];
 }
 
+interface SearchArguments {
+  page: number;
+  limit: number;
+  searchTerm: string;
+  orderBy: string;
+}
+
 interface PlaceContextType {
   placesList: Place[];
   totalPlaces: number;
   currentPage: number;
-  fetchPlaces: (
-    page: number,
-    limit: number,
-    searchTerm: string,
-    orderBy: string
-  ) => void;
+  fetchPlaces: (searchArgs: SearchArguments) => void;
   addPlace: (place: Place) => void;
   updatePlace: (id: string, updatedPlace: Place) => void;
   deletePlace: (id: string) => void;
@@ -56,27 +58,20 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [totalPlaces, setTotalPlaces] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchPlaces = useCallback(
-    async (
-      page: number,
-      limit: number,
-      searchTerm: string,
-      orderBy: string
-    ) => {
-      try {
-        console.log("Fetching places...");
-        const response = await axios.get(
-          `http://localhost:8080/places?page=${page}&limit=${limit}&order=${orderBy}&search=${searchTerm}`
-        );
-        setPlacesList(response.data.data);
-        setTotalPlaces(response.data.total);
-        setCurrentPage(page);
-      } catch (error: any) {
-        console.error("Error fetching places:", error);
-      }
-    },
-    []
-  );
+  const fetchPlaces = useCallback(async (searchArgs: SearchArguments) => {
+    try {
+      console.log("Fetching places...");
+      const { page, limit, searchTerm, orderBy } = searchArgs;
+      const response = await axios.get(
+        `http://localhost:8080/places?page=${page}&limit=${limit}&order=${orderBy}&search=${searchTerm}`
+      );
+      setPlacesList(response.data.data);
+      setTotalPlaces(response.data.total);
+      setCurrentPage(page);
+    } catch (error: any) {
+      console.error("Error fetching places:", error);
+    }
+  }, []);
 
   const addPlace = async (place: Place) => {
     try {

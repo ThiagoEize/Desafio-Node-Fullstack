@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useEventContext } from "../context/EventContext";
 import { useEventSearchContext } from "../context/EventSearchContext";
 
@@ -8,33 +8,20 @@ const EventSearch: React.FC = () => {
     searchTerm,
     setSearchTerm,
     debouncedSearchTerm,
-    setDebouncedSearchTerm,
     orderBy,
     setOrderBy,
     searchField,
     setSearchField,
   } = useEventSearchContext();
 
-  // Debounce search term
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 1200); // 1200ms debounce delay
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchTerm, setDebouncedSearchTerm]);
-
-  // Fetch events when relevant dependencies change
-  useEffect(() => {
-    fetchEvents(
-      currentPage,
-      10,
-      `${searchField}:${debouncedSearchTerm}`,
-      orderBy
-    );
-  }, [currentPage, searchField, debouncedSearchTerm, orderBy]);
+    fetchEvents({
+      page: currentPage,
+      limit: 10,
+      searchTerm: `${searchField}:${debouncedSearchTerm}`,
+      orderBy,
+    });
+  }, [debouncedSearchTerm, orderBy, searchField, currentPage, fetchEvents]);
 
   return (
     <div

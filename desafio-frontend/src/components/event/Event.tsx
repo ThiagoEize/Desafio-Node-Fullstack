@@ -67,6 +67,7 @@ const Event: React.FC<EventProps> = ({
     if (placeId) {
       fetchPlaceData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placeId]);
 
   const handleEdit = () => {

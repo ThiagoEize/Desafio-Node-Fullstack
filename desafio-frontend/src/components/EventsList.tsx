@@ -24,7 +24,7 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
 
   const handlePageChange = (page: number) => {
     if (page !== currentPage) {
-      fetchEvents(page, 10, "", "event asc");
+      fetchEvents({ page, limit: 10, searchTerm: "", orderBy: "event asc" });
     }
   };
 

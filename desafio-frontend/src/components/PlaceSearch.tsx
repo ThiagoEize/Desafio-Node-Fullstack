@@ -15,12 +15,12 @@ const PlaceSearch: React.FC = () => {
   } = usePlaceSearchContext();
 
   useEffect(() => {
-    fetchPlaces(
-      currentPage,
-      10,
-      `${searchField}:${debouncedSearchTerm}`,
-      orderBy
-    );
+    fetchPlaces({
+      page: currentPage,
+      limit: 10,
+      searchTerm: `${searchField}:${debouncedSearchTerm}`,
+      orderBy,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm, orderBy, searchField, currentPage]);
 
