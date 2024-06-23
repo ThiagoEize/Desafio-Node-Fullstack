@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useEventContext } from "../context/EventContext";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useHelperContext } from "../context/HelperContext";
 
 interface Place {
   id: number;
@@ -23,6 +24,8 @@ const EventForm: React.FC = () => {
     dateEnd: "",
     hourEnd: "",
   });
+
+  const { showResponse } = useHelperContext();
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -105,7 +108,7 @@ const EventForm: React.FC = () => {
         addEvent({ ...eventData, id: Date.now().toString() });
       }
     } catch (error) {
-      console.error("Error formatting dates:", error);
+      showResponse("Erro", "Data ou horas inválidas");
     }
   };
 
