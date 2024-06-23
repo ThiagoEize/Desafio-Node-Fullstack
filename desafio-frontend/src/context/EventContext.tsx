@@ -64,7 +64,7 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       setEventsList((prevEvents) => [event, ...prevEvents]);
       setTotalEvents((prevTotal) => prevTotal + 1);
       navigate(-1); // Navigate to the previous page
-      showResponse("Sucesso", "Event added successfully");
+      showResponse("Sucesso", "Evento adicionado com sucesso");
     } catch (error: any) {
       console.error("Error adding event:", error);
       showResponse("Erro", String(error.response.data.message));

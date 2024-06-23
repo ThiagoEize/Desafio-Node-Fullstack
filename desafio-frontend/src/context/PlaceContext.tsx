@@ -79,10 +79,10 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       setPlacesList((prevPlaces) => [place, ...prevPlaces]);
       setTotalPlaces((prevTotal) => prevTotal + 1);
       navigate(-1); // Navigate to the previous page
-      showResponse("Success", "Place added successfully");
+      showResponse("Sucesso", "Lugar adicionado com sucesso");
     } catch (error: any) {
       // console.error("Error adding place:", error);
-      showResponse("Error", String(error.response.data.message));
+      showResponse("Erro", String(error.response.data.message));
     }
   };
 
@@ -110,10 +110,9 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         prevPlaces.filter((place) => place.id !== id)
       );
       setTotalPlaces((prevTotal) => prevTotal - 1);
-      showResponse("Success", "Place deleted successfully");
+      showResponse("Sucesso", "Lugar adicionado com sucesso");
     } catch (error: any) {
-      console.error("Error deleting place:", error);
-      showResponse("Error", String(error.response.data.message));
+      showResponse("Erro", String(error.response.data.message));
     }
   };
 

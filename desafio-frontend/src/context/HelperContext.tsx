@@ -54,7 +54,7 @@ const HelperProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     if (showResponseModal) {
       const timer = setTimeout(() => {
         setShowResponseModal(false);
-      }, 5000);
+      }, 10000);
       return () => clearTimeout(timer);
     }
   }, [showResponseModal]);

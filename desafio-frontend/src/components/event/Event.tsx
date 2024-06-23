@@ -114,12 +114,12 @@ const Event: React.FC<EventProps> = ({
             {formatDate(dateEnd)} {formatTime(dateEnd)}
           </div>
         )}
-        {gates.length > 0 && (
+        {showGates && (
           <div className={styles.eventField}>
             {gates.map((gate) => gate.name).join(", ")}
           </div>
         )}
-        {turnstiles.length > 0 && (
+        {showTurnstiles && (
           <div className={styles.eventField}>
             {turnstiles.map((turnstile) => turnstile.name).join(", ")}
           </div>
