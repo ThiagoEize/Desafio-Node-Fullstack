@@ -3,12 +3,11 @@ import React, {
   useContext,
   useState,
   ReactNode,
-  // useEffect,
+  useCallback,
 } from "react";
-
 import axios from "axios";
-
 import { useNavigate } from "react-router-dom";
+import { useHelperContext } from "../context/HelperContext";
 
 interface Event {
   id: string;
@@ -37,11 +36,12 @@ interface EventContextType {
 const EventContext = createContext<EventContextType | undefined>(undefined);
 
 const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const { showResponse } = useHelperContext(); // Use the HelperContext
+  const navigate = useNavigate();
+
   const [eventsList, setEventsList] = useState<Event[]>([]);
   const [totalEvents, setTotalEvents] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const navigate = useNavigate();
 
   const fetchEvents = async (
     page: number,
@@ -56,8 +56,9 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       setEventsList(response.data.data);
       setTotalEvents(response.data.total);
       setCurrentPage(page);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching events:", error);
+      showResponse("Error", String(error.response.data.message));
     }
   };
 
@@ -66,10 +67,11 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       await axios.post(`http://localhost:8080/events`, event);
       setEventsList((prevEvents) => [event, ...prevEvents]);
       setTotalEvents((prevTotal) => prevTotal + 1);
-
       navigate("/events");
-    } catch (error) {
+      showResponse("Success", "Event added successfully");
+    } catch (error: any) {
       console.error("Error adding event:", error);
+      showResponse("Error", String(error.response.data.message));
     }
   };
 
@@ -79,14 +81,18 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         ...updatedEvent,
         placeId: Number(updatedEvent.placeId),
       };
-      await axios.put(`http://localhost:8080/events/${id}`, newUdatedEvent);
-      setEventsList((prevEvents) =>
-        prevEvents.map((event) => (event.id === id ? updatedEvent : event))
+      const response = await axios.put(
+        `http://localhost:8080/events/${id}`,
+        newUdatedEvent
       );
-
+      setEventsList((prevEvents) =>
+        prevEvents.map((event) => (event.id === id ? response.data : event))
+      );
       navigate("/events");
-    } catch (error) {
+      showResponse("Success", "Event updated successfully");
+    } catch (error: any) {
       console.error("Error updating event:", error);
+      showResponse("Error", String(error.response.data.message));
     }
   };
 
@@ -97,14 +103,12 @@ const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         prevEvents.filter((event) => event.id !== id)
       );
       setTotalEvents((prevTotal) => prevTotal - 1);
-    } catch (error) {
+      showResponse("Success", "Event deleted successfully");
+    } catch (error: any) {
       console.error("Error deleting event:", error);
+      showResponse("Error", String(error.response.data.message));
     }
   };
-
-  // useEffect(() => {
-  //   fetchEvents(1, 10, "", "event asc");
-  // }, []);
 
   return (
     <EventContext.Provider

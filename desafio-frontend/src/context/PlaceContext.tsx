@@ -6,7 +6,8 @@ import React, {
   useCallback,
 } from "react";
 import axios from "axios";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useHelperContext } from "../context/HelperContext";
 
 interface Gate {
   id?: string;
@@ -49,6 +50,7 @@ const PlaceContext = createContext<PlaceContextType | undefined>(undefined);
 
 const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
+  const { showResponse } = useHelperContext(); // Use the HelperContext
 
   const [placesList, setPlacesList] = useState<Place[]>([]);
   const [totalPlaces, setTotalPlaces] = useState(0);
@@ -69,8 +71,9 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setPlacesList(response.data.data);
         setTotalPlaces(response.data.total);
         setCurrentPage(page);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error fetching places:", error);
+        showResponse("Error", String(error.response.data.message));
       }
     },
     []
@@ -81,9 +84,11 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       await axios.post(`http://localhost:8080/places`, place);
       setPlacesList((prevPlaces) => [place, ...prevPlaces]);
       setTotalPlaces((prevTotal) => prevTotal + 1);
-        navigate("/places");
-    } catch (error) {
+      navigate("/places");
+      showResponse("Success", "Place added successfully");
+    } catch (error: any) {
       console.error("Error adding place:", error);
+      showResponse("Error", String(error.response.data.message));
     }
   };
 
@@ -96,10 +101,11 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       setPlacesList((prevPlaces) =>
         prevPlaces.map((place) => (place.id === id ? response.data : place))
       );
-      
-      navigate("/places"); 
-    } catch (error) {
+      navigate("/places");
+      showResponse("Success", "Place updated successfully");
+    } catch (error: any) {
       console.error("Error updating place:", error);
+      showResponse("Error", String(error.response.data.message));
     }
   };
 
@@ -110,8 +116,10 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         prevPlaces.filter((place) => place.id !== id)
       );
       setTotalPlaces((prevTotal) => prevTotal - 1);
-    } catch (error) {
+      showResponse("Success", "Place deleted successfully");
+    } catch (error: any) {
       console.error("Error deleting place:", error);
+      showResponse("Error", String(error.response.data.message));
     }
   };
 

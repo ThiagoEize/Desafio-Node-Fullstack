@@ -1,8 +1,3 @@
-/* ConfirmDeleteModal.module.css */
-.modalDialog {
-  /* No additional styles needed for the dialog */
-}
-
 .modalContent {
   background-color: #383838;
   border: none !important; /* Remove border */

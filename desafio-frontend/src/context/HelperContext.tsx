@@ -1,20 +1,26 @@
-// context/HelperContext.tsx
-import React, { createContext, useState, ReactNode, useContext } from "react";
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  useContext,
+  useEffect,
+} from "react";
 import ConfirmDeleteModal from "../components/confirmDeleteModal/ConfirmDeleteModal"; // Adjust the import path as needed
+import ResponseModal from "../components/responseModal/ResponseModal"; // New component for response modal
 
 interface HelperContextProps {
   confirm: (message: string, title: string) => Promise<boolean>;
+  showResponse: (title: string, message: string) => void;
 }
 
 const HelperContext = createContext<HelperContextProps | undefined>(undefined);
 
 const HelperProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
-  const [modalProps, setModalProps] = useState<{
-    message: string;
-    title: string;
-    resolve?: (value: boolean) => void;
-  } | null>(null);
+  const [modalProps, setModalProps] = useState<any>(null); // Using any type
+
+  const [response, setResponse] = useState<any>(null); // Using any type
+  const [showResponseModal, setShowResponseModal] = useState(false);
 
   const handleClose = () => {
     if (modalProps?.resolve) {
@@ -39,8 +45,22 @@ const HelperProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     });
   };
 
+  const showResponse = (title: string, message: string) => {
+    setResponse({ title, message });
+    setShowResponseModal(true);
+  };
+
+  useEffect(() => {
+    if (showResponseModal) {
+      const timer = setTimeout(() => {
+        setShowResponseModal(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showResponseModal]);
+
   return (
-    <HelperContext.Provider value={{ confirm }}>
+    <HelperContext.Provider value={{ confirm, showResponse }}>
       {children}
       {showModal && modalProps && (
         <ConfirmDeleteModal
@@ -50,6 +70,9 @@ const HelperProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
           itemName={modalProps.message}
           title={modalProps.title}
         />
+      )}
+      {showResponseModal && response && (
+        <ResponseModal title={response.title} message={response.message} />
       )}
     </HelperContext.Provider>
   );

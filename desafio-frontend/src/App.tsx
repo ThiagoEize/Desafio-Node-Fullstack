@@ -14,11 +14,11 @@ import { HelperProvider } from "./context/HelperContext";
 
 const App: React.FC = () => {
   return (
-    <PlaceProvider>
-      <EventProvider>
-        <PlaceSearchProvider>
-          <EventSearchProvider>
-            <HelperProvider>
+    <HelperProvider>
+      <PlaceProvider>
+        <EventProvider>
+          <PlaceSearchProvider>
+            <EventSearchProvider>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/places" element={<PlacesCrud />} />
@@ -26,11 +26,11 @@ const App: React.FC = () => {
                 <Route path="/edit-place/:id" element={<PlaceForm />} />
                 <Route path="/edit-event/:id" element={<EventForm />} />
               </Routes>
-            </HelperProvider>
-          </EventSearchProvider>
-        </PlaceSearchProvider>
-      </EventProvider>
-    </PlaceProvider>
+            </EventSearchProvider>
+          </PlaceSearchProvider>
+        </EventProvider>
+      </PlaceProvider>
+    </HelperProvider>
   );
 };
 
