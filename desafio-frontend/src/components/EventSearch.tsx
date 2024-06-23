@@ -22,7 +22,7 @@ const EventSearch: React.FC = () => {
       orderBy,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearchTerm, orderBy, searchField, currentPage]);
+  }, [debouncedSearchTerm, orderBy, searchField]);
 
   return (
     <div
