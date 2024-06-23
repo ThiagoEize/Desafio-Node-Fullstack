@@ -14,6 +14,20 @@ interface EventProps {
   type?: string;
   dateStart?: string;
   dateEnd?: string;
+  showGates?: string;
+  showTurnstiles?: string;
+}
+
+interface Gate {
+  id: string;
+  placeId: string;
+  name: string;
+}
+
+interface Turnstile {
+  id: string;
+  placeId: string;
+  name: string;
 }
 
 const Event: React.FC<EventProps> = ({
@@ -23,28 +37,35 @@ const Event: React.FC<EventProps> = ({
   type,
   dateStart,
   dateEnd,
+  showGates,
+  showTurnstiles,
 }) => {
   const { deleteEvent } = useEventContext();
   const [showOptions, setShowOptions] = useState(false);
   const [placeName, setPlaceName] = useState("");
+  const [gates, setGates] = useState<Gate[]>([]); // State for gates
+  const [turnstiles, setTurnstiles] = useState<Turnstile[]>([]); // State for turnstiles
   const navigate = useNavigate();
 
   const confirm = useConfirm();
 
   useEffect(() => {
-    const fetchPlaceName = async () => {
+    const fetchPlaceData = async () => {
       try {
-        const response = await axios.get(
+        const placeResponse = await axios.get(
           `http://localhost:8080/places/${placeId}`
         );
-        setPlaceName(response.data.name);
+        console.log("showGates", showGates);
+        setPlaceName(placeResponse.data.name);
+        showGates && setGates(placeResponse.data.gates);
+        showTurnstiles && setTurnstiles(placeResponse.data.turnstiles);
       } catch (error) {
-        console.error("Error fetching place name:", error);
+        console.error("Error fetching place data:", error);
       }
     };
 
     if (placeId) {
-      fetchPlaceName();
+      fetchPlaceData();
     }
   }, [placeId]);
 
@@ -90,6 +111,16 @@ const Event: React.FC<EventProps> = ({
         {dateEnd && (
           <div className={styles.eventField}>
             {formatDate(dateEnd)} {formatTime(dateEnd)}
+          </div>
+        )}
+        {gates.length > 0 && (
+          <div className={styles.eventField}>
+            {gates.map((gate) => gate.name).join(", ")}
+          </div>
+        )}
+        {turnstiles.length > 0 && (
+          <div className={styles.eventField}>
+            {turnstiles.map((turnstile) => turnstile.name).join(", ")}
           </div>
         )}
       </div>

@@ -44,6 +44,8 @@ const EventsCrud: React.FC = () => {
             "type",
             "dateStart",
             "hourStart",
+            "showGates",
+            "showTurnstiles",
             "dateEnd",
             "hourEnd",
           ]}

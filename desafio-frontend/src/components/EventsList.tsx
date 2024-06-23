@@ -15,6 +15,8 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
     fieldsToDisplay.forEach((field) => {
       if (event[field] !== undefined) {
         filteredProps[field] = event[field];
+      } else if (field === "showGates" || field === "showTurnstiles") {
+        filteredProps[field] = field;
       }
     });
     return filteredProps;

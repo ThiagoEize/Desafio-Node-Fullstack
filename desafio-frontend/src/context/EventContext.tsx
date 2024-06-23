@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useCallback,
-} from "react";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useHelperContext } from "../context/HelperContext";
@@ -36,7 +30,7 @@ interface EventContextType {
 const EventContext = createContext<EventContextType | undefined>(undefined);
 
 const EventProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { showResponse } = useHelperContext(); // Use the HelperContext
+  const { showResponse } = useHelperContext();
   const navigate = useNavigate();
 
   const [eventsList, setEventsList] = useState<Event[]>([]);

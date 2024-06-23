@@ -18,12 +18,8 @@ const Home: React.FC = () => {
   const eventsToDisplay = [
     "event",
     "type",
-    "dateStart",
-    "hourStart",
-    "dateEnd",
-    "hourEnd",
-    "gates",
-    "turnstiles",
+    "placeId",
+    "showTurnstiles",
     "singlePage",
   ];
 
