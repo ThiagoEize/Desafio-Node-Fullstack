@@ -2,10 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 import EventsList from "./EventsList";
 import EventSearch from "./EventSearch";
+import NavBar from "./navBar/NavBar";
 
 const EventsCrud: React.FC = () => {
   return (
     <div>
+      <NavBar></NavBar>
       <nav>
         <Link
           to="/"

@@ -3,6 +3,7 @@ import EventsList from "./EventsList";
 import PlacesList from "./PlacesList";
 import { usePlaceContext } from "../context/PlaceContext";
 import { useEventContext } from "../context/EventContext";
+import NavBar from "./navBar/NavBar";
 
 const Home: React.FC = () => {
   const placesToDisplay = [
@@ -36,6 +37,7 @@ const Home: React.FC = () => {
 
   return (
     <div>
+      <NavBar></NavBar>
       <PlacesList fieldsToDisplay={placesToDisplay} />
       <EventsList fieldsToDisplay={eventsToDisplay} />
     </div>
