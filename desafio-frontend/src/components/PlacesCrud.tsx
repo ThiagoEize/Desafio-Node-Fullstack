@@ -2,7 +2,6 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PlacesList from "./PlacesList";
 import PlaceSearch from "./PlaceSearch";
-import NavBar from "./navBar/NavBar";
 
 const PlacesCrud: React.FC = () => {
   const navigate = useNavigate();
@@ -13,7 +12,6 @@ const PlacesCrud: React.FC = () => {
 
   return (
     <div>
-      <NavBar></NavBar>
       <nav>
         <Link
           to="/"
