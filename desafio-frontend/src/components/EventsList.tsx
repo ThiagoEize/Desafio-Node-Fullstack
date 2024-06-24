@@ -32,7 +32,6 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
 
   return (
     <div>
-      <h1>Events List</h1>
       {eventsList.length === 0 ? (
         <p>No events available.</p>
       ) : (

@@ -15,9 +15,9 @@
   border-radius: 16px;
   opacity: 0px;
   display: flex;
+  background: #461527;
   align-items: center;
   color: white;
-  background: #461527;
 }
 
 .placeIcon,
@@ -31,4 +31,11 @@
 
 .button {
   margin-left: auto;
+}
+
+.toy {
+  width: 102px;
+  height: 126px;
+  gap: 0px;
+  opacity: 0px;
 }

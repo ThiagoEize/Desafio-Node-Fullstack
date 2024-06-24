@@ -30,7 +30,6 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
 
   return (
     <div>
-      <h1>Places List</h1>
       {placesList.length === 0 ? (
         <p>No places available.</p>
       ) : (

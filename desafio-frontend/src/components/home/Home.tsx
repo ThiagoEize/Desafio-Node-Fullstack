@@ -3,17 +3,15 @@ import EventsList from "../EventsList";
 import PlacesList from "../PlacesList";
 import { usePlaceContext } from "../../context/PlaceContext";
 import { useEventContext } from "../../context/EventContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "../../index.css";
 import styles from "./Home.module.css";
 import placeIcon from "../../assets/images/placeIcon.png";
 import eventIcon from "../../assets/images/eventIcon.png";
+import toy from "../../assets/images/toy.png";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const handleNavigation = (path: string) => {
-    navigate(path);
-  };
 
   const placesToDisplay = ["name", "address", "turnstiles", "singlePage"];
   const eventsToDisplay = ["event", "type", "placeId", "singlePage"];
@@ -28,16 +26,31 @@ const Home: React.FC = () => {
   }, []);
 
   return (
+    // <div className="container">
     <div className="mainContainer">
-      <div className="row">
+      <div className="customRow">
+        <img className={styles.toy} src={toy} alt="Lugares" />
+        <div className="col-4 row">
+          <h1>Olá, Thiago</h1>
+          <p>Confira todos os seus eventos e locais em um só lugar!</p>
+        </div>
+      </div>
+      <div className="row mt-2">
         <div className="col-6">
           <div className={styles.allPlacesContainer}>
             <div className="left-align">
-              <div className="customRow">
-                <img className={styles.placeIcon} src={placeIcon} alt="House" />
-                <div>
-                  <h1>Locais</h1>
+              <div>
+                <div className="customRow">
+                  <img
+                    className={styles.placeIcon}
+                    src={placeIcon}
+                    alt="Lugares"
+                  />
+                  <div>
+                    <h1>Locais</h1>
+                  </div>
                 </div>
+                <p>Confira todo os locais cadastrados!</p>
               </div>
             </div>
             <button
@@ -47,21 +60,49 @@ const Home: React.FC = () => {
               Conferir locais
             </button>
           </div>
-          <PlacesList fieldsToDisplay={placesToDisplay} />
+          <div className="backgroundContainer">
+            <div className="customRowSpace">
+              <h2>Ultimos lugares adicionados</h2>
+              <Link to="/places" className="ml-auto">
+                Ver todos
+              </Link>
+            </div>
+            <PlacesList fieldsToDisplay={placesToDisplay} />
+          </div>
         </div>
         <div className="col-6">
           <div className={styles.allEventsContainer}>
             <div className="left-align">
-              <div className="customRow">
-                <img className={styles.eventIcon} src={eventIcon} alt="House" />
-                <div>
-                  <h1>Eventos</h1>
+              <div>
+                <div className="customRow">
+                  <img
+                    className={styles.eventIcon}
+                    src={eventIcon}
+                    alt="Eventos"
+                  />
+                  <div>
+                    <h1>Eventos</h1>
+                  </div>
                 </div>
+                <p>Confira todo os eventos cadastrados!</p>
               </div>
             </div>
-            <button className={styles.button}>Conferir Eventos</button>
+            <button
+              onClick={() => navigate("/events")}
+              className={styles.button}
+            >
+              Conferir eventos
+            </button>
           </div>
-          <EventsList fieldsToDisplay={eventsToDisplay} />
+          <div className="backgroundContainer">
+            <div className="customRowSpace">
+              <h2>Ultimos eventos adicionados</h2>
+              <Link to="/events" className="ml-auto">
+                Ver todos
+              </Link>
+            </div>
+            <EventsList fieldsToDisplay={eventsToDisplay} />
+          </div>
         </div>
       </div>
     </div>
