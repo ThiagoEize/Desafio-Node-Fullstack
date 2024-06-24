@@ -55,7 +55,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
                 .map((field) => (
                   <th key={field}>{getFieldDisplayName(field)}</th>
                 ))}
-              <th>Options</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>

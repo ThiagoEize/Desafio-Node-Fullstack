@@ -64,50 +64,52 @@ const Place: React.FC<PlaceProps> = ({
     event.stopPropagation();
     const rect = event.currentTarget.getBoundingClientRect();
     setMenuPosition({
-      top: rect.top + window.scrollY + rect.height,
-      left: rect.left + window.scrollX,
+      top: rect.bottom + window.scrollY - 60,
+      left: rect.left + window.scrollX - 96,
     });
     setShowOptions(!showOptions);
   };
 
   return (
-    <tr className={styles.place}>
-      {name !== undefined && <td>{name}</td>}
-      {address !== undefined && <td>{address}</td>}
-      {city !== undefined && <td>{city}</td>}
-      {state !== undefined && <td>{state}</td>}
-      {gates !== undefined && (
-        <td>{gates.map((gate) => gate.name).join(", ")}</td>
-      )}
-      {turnstiles !== undefined && (
-        <td>{turnstiles.map((turnstile) => turnstile.name).join(", ")}</td>
-      )}
-      {lastUpdate !== undefined && <td>{lastUpdate}</td>}
-      <td style={{ position: "relative" }}>
-        <div
-          onClick={handleOptionsClick}
-          style={{ cursor: "pointer" }}
-          role="button"
-          aria-label="options"
-        >
-          <FaEllipsisV />
-        </div>
-        {showOptions && (
-          <div
-            ref={ref}
-            className={styles.placeOptions}
-            style={{
-              position: "absolute",
-              top: menuPosition.top,
-              left: menuPosition.left,
-            }}
-          >
-            <div onClick={handleEdit}>Edit</div>
-            <div onClick={handleDelete}>Delete</div>
-          </div>
+    <>
+      <tr className={styles.place}>
+        {name !== undefined && <td>{name}</td>}
+        {address !== undefined && <td>{address}</td>}
+        {city !== undefined && <td>{city}</td>}
+        {state !== undefined && <td>{state}</td>}
+        {gates !== undefined && (
+          <td>{gates.map((gate) => gate.name).join(", ")}</td>
         )}
-      </td>
-    </tr>
+        {turnstiles !== undefined && (
+          <td>{turnstiles.map((turnstile) => turnstile.name).join(", ")}</td>
+        )}
+        {lastUpdate !== undefined && <td>{lastUpdate}</td>}
+        <td>
+          <div
+            onClick={handleOptionsClick}
+            style={{ cursor: "pointer" }}
+            role="button"
+            aria-label="options"
+          >
+            <FaEllipsisV />
+          </div>
+        </td>
+      </tr>
+      {showOptions && (
+        <div
+          ref={ref}
+          className={styles.placeOptions}
+          style={{
+            position: "absolute",
+            top: `${menuPosition.top}px`,
+            left: `${menuPosition.left}px`,
+          }}
+        >
+          <div onClick={handleEdit}>Edit</div>
+          <div onClick={handleDelete}>Delete</div>
+        </div>
+      )}
+    </>
   );
 };
 

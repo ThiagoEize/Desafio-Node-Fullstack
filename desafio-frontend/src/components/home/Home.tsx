@@ -62,7 +62,7 @@ const Home: React.FC = () => {
           </div>
           <div className="backgroundContainer">
             <div className="customRowSpace">
-              <h2>Ultimos lugares adicionados</h2>
+              <h3>Ultimos lugares adicionados</h3>
               <Link to="/places" className="ml-auto">
                 Ver todos
               </Link>
@@ -96,7 +96,7 @@ const Home: React.FC = () => {
           </div>
           <div className="backgroundContainer">
             <div className="customRowSpace">
-              <h2>Ultimos eventos adicionados</h2>
+              <h3>Ultimos eventos adicionados</h3>
               <Link to="/events" className="ml-auto">
                 Ver todos
               </Link>

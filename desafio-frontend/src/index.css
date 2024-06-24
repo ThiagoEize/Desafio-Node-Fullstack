@@ -64,6 +64,10 @@ body,
   justify-content: space-between;
 }
 
+.customAlignRight {
+  margin-left: auto;
+}
+
 button {
   padding: 16px;
   gap: 8px;
