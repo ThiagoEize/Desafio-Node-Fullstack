@@ -5,8 +5,8 @@ import React, {
   useContext,
   useEffect,
 } from "react";
-import ConfirmDeleteModal from "../components/confirmDeleteModal/ConfirmDeleteModal"; // Adjust the import path as needed
-import ResponseModal from "../components/responseModal/ResponseModal"; // New component for response modal
+import ConfirmDeleteModal from "../components/confirmDeleteModal/ConfirmDeleteModal";
+import ResponseModal from "../components/responseModal/ResponseModal";
 
 interface HelperContextProps {
   confirm: (message: string, title: string) => Promise<boolean>;
@@ -17,9 +17,9 @@ const HelperContext = createContext<HelperContextProps | undefined>(undefined);
 
 const HelperProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
-  const [modalProps, setModalProps] = useState<any>(null); // Using any type
+  const [modalProps, setModalProps] = useState<any>(null);
 
-  const [response, setResponse] = useState<any>(null); // Using any type
+  const [response, setResponse] = useState<any>(null);
   const [showResponseModal, setShowResponseModal] = useState(false);
 
   const handleClose = () => {

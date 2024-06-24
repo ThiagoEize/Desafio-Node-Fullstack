@@ -1,5 +1,4 @@
-// hooks/useConfirm.ts
-import { useHelperContext } from "../context/HelperContext"; // Adjust the import path as needed
+import { useHelperContext } from "../context/HelperContext";
 
 const useConfirm = () => {
   const { confirm } = useHelperContext();

@@ -6,7 +6,7 @@
 .placesTable th,
 .placesTable td {
   padding: 8px;
-  color: white; /* Ensures text is visible on dark backgrounds */
+  color: white;
 }
 
 .pagination {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Toast, ToastContainer } from "react-bootstrap"; // Use React Bootstrap for styling
+import { Toast, ToastContainer } from "react-bootstrap";
 
 interface ResponseModalProps {
   title: string;

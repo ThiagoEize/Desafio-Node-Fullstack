@@ -39,7 +39,7 @@ export const EventSearchProvider: React.FC<EventSearchProviderProps> = ({
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 1200); // 1200ms debounce delay
+    }, 1200);
 
     return () => {
       clearTimeout(handler);

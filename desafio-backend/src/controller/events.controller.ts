@@ -62,7 +62,7 @@ export class EventsController {
       );
     }
 
-    await this.placesService.find(data.placeId); // check if place exists
+    await this.placesService.find(data.placeId);
 
     const placeEvents = await this.eventsService.listByPlaceId(data.placeId);
 

@@ -1,5 +1,3 @@
-/* EventsList.module.css */
-
 .eventsTable {
   width: 100%;
   border-collapse: collapse;
@@ -8,7 +6,7 @@
 .eventsTable th,
 .eventsTable td {
   padding: 8px;
-  color: white; /* Ensures text is visible on dark backgrounds */
+  color: white;
 }
 
 .pagination {

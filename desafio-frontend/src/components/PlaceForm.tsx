@@ -125,11 +125,11 @@ const PlaceForm: React.FC = () => {
     e.preventDefault();
     const placeData = {
       ...formState,
-      gates: formState.gates.map((gate) => ({ id: gate.id, name: gate.name })), // Send gate IDs and names
+      gates: formState.gates.map((gate) => ({ id: gate.id, name: gate.name })),
       turnstiles: formState.turnstiles.map((turnstile) => ({
         id: turnstile.id,
         name: turnstile.name,
-      })), // Send turnstile IDs and names
+      })),
     };
     if (formState.id) {
       updatePlace(formState.id, placeData);
