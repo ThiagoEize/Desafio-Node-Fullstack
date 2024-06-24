@@ -1,7 +1,8 @@
 .navLinks {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 3rem;
+  margin-top: 3rem;
 }
 
 .navLinks a {
@@ -11,8 +12,4 @@
 
 .navLinks a.selected {
   color: blue;
-}
-
-button {
-  /* Add your button styles here */
 }

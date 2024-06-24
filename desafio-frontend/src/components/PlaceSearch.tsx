@@ -44,7 +44,7 @@ const PlaceSearch: React.FC = () => {
       </select>
       <input
         type="text"
-        placeholder={`Search by ${searchField}`}
+        placeholder={`Busque por ${searchField}`}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ flex: 1, marginRight: "10px" }}
@@ -54,10 +54,10 @@ const PlaceSearch: React.FC = () => {
         onChange={(e) => setOrderBy(e.target.value)}
         style={{ marginRight: "10px" }}
       >
-        <option value="name asc">Name Ascending</option>
-        <option value="name desc">Name Descending</option>
-        <option value="city asc">City Ascending</option>
-        <option value="city desc">City Descending</option>
+        <option value="name asc">Nome ascendente</option>
+        <option value="name desc">Nome descendente</option>
+        <option value="city asc">Cidade ascendente</option>
+        <option value="city desc">Cidade descendente</option>
       </select>
     </div>
   );

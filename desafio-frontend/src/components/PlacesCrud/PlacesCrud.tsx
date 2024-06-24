@@ -14,30 +14,30 @@ const PlacesCrud: React.FC = () => {
 
   return (
     <div className="mainContainer">
+      <div className={styles.navLinks}>
+        <Link
+          to="/"
+          className={location.pathname === "/" ? styles.selected : ""}
+        >
+          Home
+        </Link>
+        /
+        <Link
+          to="/places"
+          className={location.pathname === "/places" ? styles.selected : ""}
+        >
+          Places
+        </Link>
+      </div>
+      <h1>Lugares</h1>
+      <p>Confira a lista de locais cadastrados</p>
+
       <div className="backgroundContainer">
-        <div className={styles.navLinks}>
-          <Link
-            to="/"
-            className={location.pathname === "/" ? styles.selected : ""}
-          >
-            Home
-          </Link>
-          /
-          <Link
-            to="/places"
-            className={location.pathname === "/places" ? styles.selected : ""}
-          >
-            Places
-          </Link>
-        </div>
         <div>
-          <h1>Places</h1>
-          <p>
-            This section allows you to view, add, edit, and delete places in the
-            system.
-          </p>
-          <button onClick={handleAddPlace}>Add Place</button>
-          <PlaceSearch />
+          <div className="customRowSpace">
+            <PlaceSearch />
+            <button onClick={handleAddPlace}>Adicionar local</button>
+          </div>
           <PlacesList
             fieldsToDisplay={[
               "name",

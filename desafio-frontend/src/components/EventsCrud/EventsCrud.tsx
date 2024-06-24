@@ -14,30 +14,29 @@ const EventsCrud: React.FC = () => {
 
   return (
     <div className="mainContainer">
+      <div className={styles.navLinks}>
+        <Link
+          to="/"
+          className={location.pathname === "/" ? styles.selected : ""}
+        >
+          Home
+        </Link>
+        /
+        <Link
+          to="/events"
+          className={location.pathname === "/events" ? styles.selected : ""}
+        >
+          Events
+        </Link>
+      </div>
+      <h1>Eventos</h1>
+      <p>Confira os eventos cadastrados no sitema.</p>
       <div className="backgroundContainer">
-        <div className={styles.navLinks}>
-          <Link
-            to="/"
-            className={location.pathname === "/" ? styles.selected : ""}
-          >
-            Home
-          </Link>
-          /
-          <Link
-            to="/events"
-            className={location.pathname === "/events" ? styles.selected : ""}
-          >
-            Events
-          </Link>
-        </div>
         <div>
-          <h1>Events</h1>
-          <p>
-            This section allows you to view, add, edit, and delete events in the
-            system.
-          </p>
-          <button onClick={handleAddEvent}>Add Event</button>
-          <EventSearch />
+          <div className="customRowSpace">
+            <EventSearch />
+            <button onClick={handleAddEvent}>Adicionar evento</button>
+          </div>
           <EventsList
             fieldsToDisplay={[
               "placeId",

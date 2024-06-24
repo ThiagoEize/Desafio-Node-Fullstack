@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./NavBar.module.css";
+import logo from "../../assets/images/logo.png";
 
 const NavBar: React.FC = () => {
   const navigate = useNavigate();
@@ -12,7 +13,9 @@ const NavBar: React.FC = () => {
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.navbarBrand}>Company Name</div>
+      <div className={styles.navbarBrand}>
+        <img src={logo} alt=""></img>
+      </div>
       <div className={styles.navbarLinks}>
         <button
           className={`${styles.navbarLink} ${

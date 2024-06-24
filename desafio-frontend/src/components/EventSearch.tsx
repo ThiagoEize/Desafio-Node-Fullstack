@@ -37,14 +37,14 @@ const EventSearch: React.FC = () => {
         onChange={(e) => setSearchField(e.target.value)}
         style={{ marginRight: "10px" }}
       >
-        <option value="event">Event</option>
-        <option value="type">Type</option>
-        <option value="dateStart">Date Start</option>
-        <option value="dateEnd">Date End</option>
+        <option value="event">Evento</option>
+        <option value="type">Tipo</option>
+        <option value="dateStart">Data de inicio</option>
+        <option value="dateEnd">Data de termino</option>
       </select>
       <input
         type="text"
-        placeholder={`Search by ${searchField}`}
+        placeholder={`Busque por ${searchField}`}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ flex: 1, marginRight: "10px" }}
@@ -54,10 +54,10 @@ const EventSearch: React.FC = () => {
         onChange={(e) => setOrderBy(e.target.value)}
         style={{ marginRight: "10px" }}
       >
-        <option value="event asc">Event Ascending</option>
-        <option value="event desc">Event Descending</option>
-        <option value="type asc">Type Ascending</option>
-        <option value="type desc">Type Descending</option>
+        <option value="event asc">Evento ascendente</option>
+        <option value="event desc">Evento descendente</option>
+        <option value="type asc">Tipo ascendente</option>
+        <option value="type desc">Tipo descendente</option>
       </select>
     </div>
   );
