@@ -1,0 +1,20 @@
+/* EventsCrud.module.css */
+
+.navLinks {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.navLinks a {
+  color: white;
+  text-decoration: none;
+}
+
+.navLinks a.selected {
+  color: blue;
+}
+
+button {
+  /* Add your button styles here */
+}

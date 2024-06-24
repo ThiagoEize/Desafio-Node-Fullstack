@@ -1,6 +1,6 @@
 import React from "react";
-import { usePlaceContext } from "../context/PlaceContext";
-import Place from "./place/Place";
+import { usePlaceContext } from "../../context/PlaceContext";
+import Place from "../place/Place";
 import styles from "./PlacesList.module.css";
 
 interface PlacesListProps {

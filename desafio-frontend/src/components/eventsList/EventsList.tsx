@@ -1,6 +1,6 @@
 import React from "react";
-import { useEventContext } from "../context/EventContext";
-import Event from "./event/Event";
+import { useEventContext } from "../../context/EventContext";
+import Event from "../event/Event";
 import styles from "./EventsList.module.css";
 
 interface EventsListProps {

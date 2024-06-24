@@ -32,3 +32,19 @@
   padding: 12px 24px 12px 24px;
   cursor: pointer;
 }
+
+.optionsButton {
+  background: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+  padding: 6px 0 7px 0;
+}
+
+.optionsButton:hover,
+.optionsButton:focus,
+.optionsButton:active {
+  background-color: #999aa1;
+}

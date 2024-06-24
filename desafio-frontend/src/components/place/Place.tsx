@@ -96,9 +96,9 @@ const Place: React.FC<PlaceProps> = ({ place, fieldsToDisplay, style }) => {
         <td>
           <div
             onClick={handleOptionsClick}
-            style={{ cursor: "pointer" }}
             role="button"
             aria-label="options"
+            className={styles.optionsButton}
           >
             <FaEllipsisV />
           </div>

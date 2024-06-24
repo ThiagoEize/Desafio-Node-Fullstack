@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import EventsList from "../EventsList";
-import PlacesList from "../PlacesList";
+import EventsList from "../eventsList/EventsList";
+import PlacesList from "../placesList/PlacesList";
 import { usePlaceContext } from "../../context/PlaceContext";
 import { useEventContext } from "../../context/EventContext";
 import { useNavigate, Link } from "react-router-dom";
