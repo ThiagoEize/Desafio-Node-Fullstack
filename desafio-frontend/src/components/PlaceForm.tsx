@@ -139,88 +139,90 @@ const PlaceForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="name"
-        placeholder="Name"
-        value={formState.name}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="address"
-        placeholder="Address"
-        value={formState.address}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="city"
-        placeholder="City"
-        value={formState.city}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="state"
-        placeholder="State"
-        value={formState.state}
-        onChange={handleChange}
-        required
-      />
-      <div>
+    <div className="formContainer">
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Add a gate"
-          value={newGateName}
-          onChange={handleGateNameChange}
+          name="name"
+          placeholder="Name"
+          value={formState.name}
+          onChange={handleChange}
+          required
         />
-        <button type="button" onClick={addGate}>
-          +
-        </button>
-      </div>
-      <div>
-        {formState.gates.map((gate) => (
-          <div key={gate.id ?? gate.name}>
-            {gate.name}
-            <button type="button" onClick={() => removeGate(gate.name)}>
-              X
-            </button>
-          </div>
-        ))}
-      </div>
-      <div>
         <input
           type="text"
-          placeholder="Add a turnstile"
-          value={newTurnstileName}
-          onChange={handleTurnstileNameChange}
+          name="address"
+          placeholder="Address"
+          value={formState.address}
+          onChange={handleChange}
+          required
         />
-        <button type="button" onClick={addTurnstile}>
-          +
+        <input
+          type="text"
+          name="city"
+          placeholder="City"
+          value={formState.city}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="state"
+          placeholder="State"
+          value={formState.state}
+          onChange={handleChange}
+          required
+        />
+        <div>
+          <input
+            type="text"
+            placeholder="Add a gate"
+            value={newGateName}
+            onChange={handleGateNameChange}
+          />
+          <button type="button" onClick={addGate}>
+            +
+          </button>
+        </div>
+        <div>
+          {formState.gates.map((gate) => (
+            <div key={gate.id ?? gate.name}>
+              {gate.name}
+              <button type="button" onClick={() => removeGate(gate.name)}>
+                X
+              </button>
+            </div>
+          ))}
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Add a turnstile"
+            value={newTurnstileName}
+            onChange={handleTurnstileNameChange}
+          />
+          <button type="button" onClick={addTurnstile}>
+            +
+          </button>
+        </div>
+        <div>
+          {formState.turnstiles.map((turnstile) => (
+            <div key={turnstile.id ?? turnstile.name}>
+              {turnstile.name}
+              <button
+                type="button"
+                onClick={() => removeTurnstile(turnstile.name)}
+              >
+                X
+              </button>
+            </div>
+          ))}
+        </div>
+        <button type="submit">
+          {formState.id ? "Update Place" : "Add Place"}
         </button>
-      </div>
-      <div>
-        {formState.turnstiles.map((turnstile) => (
-          <div key={turnstile.id ?? turnstile.name}>
-            {turnstile.name}
-            <button
-              type="button"
-              onClick={() => removeTurnstile(turnstile.name)}
-            >
-              X
-            </button>
-          </div>
-        ))}
-      </div>
-      <button type="submit">
-        {formState.id ? "Update Place" : "Add Place"}
-      </button>
-    </form>
+      </form>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useEventContext } from "../context/EventContext";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { useHelperContext } from "../context/HelperContext";
 
@@ -146,81 +146,77 @@ const EventForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <select
-          name="placeId"
-          value={formState.placeId}
+    <div className="formContainer">
+      <form onSubmit={handleSubmit}>
+        <div>
+          <select
+            name="placeId"
+            value={formState.placeId}
+            onChange={handleChange}
+            required
+          >
+            <option value={0}>Select Place</option>
+            {placesList.map((place) => (
+              <option key={place.id} value={place.id}>
+                {place.name}
+              </option>
+            ))}
+          </select>
+          <Link to="/edit-place/new">Cadastrar local</Link>
+        </div>
+        <input
+          type="text"
+          name="event"
+          placeholder="Event"
+          value={formState.event}
           onChange={handleChange}
           required
-        >
-          <option value={0}>Select Place</option>
-          {placesList.map((place) => (
-            <option key={place.id} value={place.id}>
-              {place.name}
-            </option>
-          ))}
-        </select>
-        <button
-          type="button"
-          onClick={() => navigate("/edit-place/new")}
-          style={{ marginLeft: "10px" }}
-        >
-          Add New Place
+        />
+        <input
+          type="text"
+          name="type"
+          placeholder="Type"
+          value={formState.type}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type="text"
+          name="dateStart"
+          placeholder="Start Date (dd/mm/yyyy)"
+          value={formState.dateStart}
+          onChange={(e) => handleMaskedChange(e, maskDate)}
+          required
+        />
+        <input
+          type="text"
+          name="hourStart"
+          placeholder="Start Hour (hh:mm)"
+          value={formState.hourStart}
+          onChange={(e) => handleMaskedChange(e, maskTime)}
+          required
+        />
+        <input
+          type="text"
+          name="dateEnd"
+          placeholder="End Date (dd/mm/yyyy)"
+          value={formState.dateEnd}
+          onChange={(e) => handleMaskedChange(e, maskDate)}
+          required
+        />
+        <input
+          type="text"
+          name="hourEnd"
+          placeholder="End Hour (hh:mm)"
+          value={formState.hourEnd}
+          onChange={(e) => handleMaskedChange(e, maskTime)}
+          required
+        />
+        <button type="submit">
+          {formState.id ? "Update Event" : "Add Event"}
         </button>
-      </div>
-      <input
-        type="text"
-        name="event"
-        placeholder="Event"
-        value={formState.event}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="type"
-        placeholder="Type"
-        value={formState.type}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="dateStart"
-        placeholder="Start Date (dd/mm/yyyy)"
-        value={formState.dateStart}
-        onChange={(e) => handleMaskedChange(e, maskDate)}
-        required
-      />
-      <input
-        type="text"
-        name="hourStart"
-        placeholder="Start Hour (hh:mm)"
-        value={formState.hourStart}
-        onChange={(e) => handleMaskedChange(e, maskTime)}
-        required
-      />
-      <input
-        type="text"
-        name="dateEnd"
-        placeholder="End Date (dd/mm/yyyy)"
-        value={formState.dateEnd}
-        onChange={(e) => handleMaskedChange(e, maskDate)}
-        required
-      />
-      <input
-        type="text"
-        name="hourEnd"
-        placeholder="End Hour (hh:mm)"
-        value={formState.hourEnd}
-        onChange={(e) => handleMaskedChange(e, maskTime)}
-        required
-      />
-      <button type="submit">
-        {formState.id ? "Update Event" : "Add Event"}
-      </button>
-    </form>
+      </form>
+    </div>
   );
 };
 

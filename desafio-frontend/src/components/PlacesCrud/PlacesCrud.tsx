@@ -1,12 +1,11 @@
 import React from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PlacesList from "../placesList/PlacesList";
 import PlaceSearch from "../PlaceSearch";
-import styles from "./PlacesCrud.module.css";
+import ContentTop from "../contentTop/ContentTop";
 
 const PlacesCrud: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleAddPlace = () => {
     navigate("/edit-place/new");
@@ -14,23 +13,10 @@ const PlacesCrud: React.FC = () => {
 
   return (
     <div className="mainContainer">
-      <div className={styles.navLinks}>
-        <Link
-          to="/"
-          className={location.pathname === "/" ? styles.selected : ""}
-        >
-          Home
-        </Link>
-        /
-        <Link
-          to="/places"
-          className={location.pathname === "/places" ? styles.selected : ""}
-        >
-          Places
-        </Link>
-      </div>
-      <h1>Lugares</h1>
-      <p>Confira a lista de locais cadastrados</p>
+      <ContentTop
+        title="places"
+        message="Confira os lugares cadastrados no sistema."
+      />
 
       <div className="backgroundContainer">
         <div>

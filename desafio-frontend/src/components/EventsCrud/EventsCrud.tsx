@@ -1,12 +1,11 @@
 import React from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import EventsList from "../eventsList/EventsList";
 import EventSearch from "../EventSearch";
-import styles from "./EventsCrud.module.css";
+import ContentTop from "../contentTop/ContentTop";
 
 const EventsCrud: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleAddEvent = () => {
     navigate("/edit-event/new");
@@ -14,23 +13,10 @@ const EventsCrud: React.FC = () => {
 
   return (
     <div className="mainContainer">
-      <div className={styles.navLinks}>
-        <Link
-          to="/"
-          className={location.pathname === "/" ? styles.selected : ""}
-        >
-          Home
-        </Link>
-        /
-        <Link
-          to="/events"
-          className={location.pathname === "/events" ? styles.selected : ""}
-        >
-          Events
-        </Link>
-      </div>
-      <h1>Eventos</h1>
-      <p>Confira os eventos cadastrados no sitema.</p>
+      <ContentTop
+        title="events"
+        message="Confira os eventos cadastrados no sistema."
+      />
       <div className="backgroundContainer">
         <div>
           <div className="customRowSpace">
