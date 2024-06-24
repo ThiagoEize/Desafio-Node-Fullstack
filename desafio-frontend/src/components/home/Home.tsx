@@ -20,7 +20,14 @@ const Home: React.FC = () => {
     "singlePage",
     "noTitles",
   ];
-  const eventsToDisplay = ["event", "type", "placeId", "singlePage"];
+  const eventsToDisplay = [
+    "placeId",
+    "event",
+    "type",
+    "showGates",
+    "singlePage",
+    "noTitles",
+  ];
 
   const { fetchPlaces } = usePlaceContext();
   const { fetchEvents } = useEventContext();

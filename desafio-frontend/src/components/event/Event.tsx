@@ -16,6 +16,7 @@ interface EventProps {
   dateEnd?: string;
   showGates?: string;
   showTurnstiles?: string;
+  style?: React.CSSProperties;
 }
 
 interface Gate {
@@ -39,26 +40,31 @@ const Event: React.FC<EventProps> = ({
   dateEnd,
   showGates,
   showTurnstiles,
+  style,
 }) => {
   const { deleteEvent } = useEventContext();
   const [showOptions, setShowOptions] = useState(false);
-  const [placeName, setPlaceName] = useState("");
-  const [gates, setGates] = useState<Gate[]>([]); // State for gates
-  const [turnstiles, setTurnstiles] = useState<Turnstile[]>([]); // State for turnstiles
-  const navigate = useNavigate();
-
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const confirm = useConfirm();
+  const navigate = useNavigate();
+  const [placeName, setPlaceName] = useState<string>("");
+  const [gates, setGates] = useState<Gate[]>([]);
+  const [turnstiles, setTurnstiles] = useState<Turnstile[]>([]);
 
   useEffect(() => {
     const fetchPlaceData = async () => {
       try {
+        console.log(showGates, showTurnstiles);
         const placeResponse = await axios.get(
           `http://localhost:8080/places/${placeId}`
         );
-        console.log("showGates", showGates);
         setPlaceName(placeResponse.data.name);
-        showGates && setGates(placeResponse.data.gates);
-        showTurnstiles && setTurnstiles(placeResponse.data.turnstiles);
+        if (showGates) {
+          setGates(placeResponse.data.gates);
+        }
+        if (showTurnstiles) {
+          setTurnstiles(placeResponse.data.turnstiles);
+        }
       } catch (error) {
         console.error("Error fetching place data:", error);
       }
@@ -67,7 +73,6 @@ const Event: React.FC<EventProps> = ({
     if (placeId) {
       fetchPlaceData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placeId]);
 
   const handleEdit = () => {
@@ -85,6 +90,16 @@ const Event: React.FC<EventProps> = ({
     if (showOptions) setShowOptions(false);
   });
 
+  const handleOptionsClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    const rect = event.currentTarget.getBoundingClientRect();
+    setMenuPosition({
+      top: rect.bottom + window.scrollY - 60,
+      left: rect.left + window.scrollX - 96,
+    });
+    setShowOptions(!showOptions);
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-GB");
@@ -99,49 +114,53 @@ const Event: React.FC<EventProps> = ({
   };
 
   return (
-    <div className={styles.event}>
-      <div className={styles.eventInfo}>
-        {placeName && <div className={styles.eventField}>{placeName}</div>}
-        {event && <div className={styles.eventField}>{event}</div>}
-        {type && <div className={styles.eventField}>{type}</div>}
-        {dateStart && (
-          <div className={styles.eventField}>
+    <>
+      <tr className={styles.event} style={style}>
+        {placeId !== undefined && placeName && <td>{placeName}</td>}
+        {event !== undefined && <td>{event}</td>}
+        {type !== undefined && <td>{type}</td>}
+        {dateStart !== undefined && (
+          <td>
             {formatDate(dateStart)} {formatTime(dateStart)}
-          </div>
+          </td>
         )}
-        {dateEnd && (
-          <div className={styles.eventField}>
+        {dateEnd !== undefined && (
+          <td>
             {formatDate(dateEnd)} {formatTime(dateEnd)}
-          </div>
+          </td>
         )}
-        {showGates && (
-          <div className={styles.eventField}>
-            {gates.map((gate) => gate.name).join(", ")}
-          </div>
+        {showGates !== undefined && (
+          <td>{gates.map((gate) => gate.name).join(", ")}</td>
         )}
-        {showTurnstiles && (
-          <div className={styles.eventField}>
-            {turnstiles.map((turnstile) => turnstile.name).join(", ")}
-          </div>
+        {showTurnstiles !== undefined && (
+          <td>{turnstiles.map((turnstile) => turnstile.name).join(", ")}</td>
         )}
-      </div>
-      <div ref={ref} style={{ position: "relative" }}>
+        <td>
+          <div
+            onClick={handleOptionsClick}
+            style={{ cursor: "pointer" }}
+            role="button"
+            aria-label="options"
+          >
+            <FaEllipsisV />
+          </div>
+        </td>
+      </tr>
+      {showOptions && (
         <div
-          onClick={() => setShowOptions(!showOptions)}
-          style={{ cursor: "pointer" }}
-          role="button"
-          aria-label="options"
+          ref={ref}
+          className={styles.eventOptions}
+          style={{
+            position: "absolute",
+            top: `${menuPosition.top}px`,
+            left: `${menuPosition.left}px`,
+          }}
         >
-          <FaEllipsisV />
+          <div onClick={handleEdit}>Edit</div>
+          <div onClick={handleDelete}>Delete</div>
         </div>
-        {showOptions && (
-          <div className={styles.eventOptions}>
-            <div onClick={handleEdit}>Edit</div>
-            <div onClick={handleDelete}>Delete</div>
-          </div>
-        )}
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

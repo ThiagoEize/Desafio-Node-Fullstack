@@ -48,7 +48,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
         <p>No places available.</p>
       ) : (
         <table className={styles.placesTable}>
-          {fieldsToDisplay.includes("displayTitles") && (
+          {!fieldsToDisplay.includes("noTitles") && (
             <thead>
               <tr>
                 {fieldsToDisplay
