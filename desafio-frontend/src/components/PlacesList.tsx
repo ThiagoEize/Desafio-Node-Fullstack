@@ -23,13 +23,13 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
 
   const getFieldDisplayName = (field: string) => {
     const fieldNames: { [key: string]: string } = {
-      name: "Name",
-      address: "Address",
-      city: "City",
-      state: "State",
-      gates: "Gates",
-      turnstiles: "Turnstiles",
-      lastUpdate: "Last Update",
+      name: "Nome do local",
+      address: "Endereço",
+      city: "Cidade",
+      state: "Estado",
+      gates: "Portões cadastrados",
+      turnstiles: "Catracas cadastradas",
+      lastUpdate: "Atualização",
     };
     return fieldNames[field] || field;
   };
@@ -48,16 +48,18 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
         <p>No places available.</p>
       ) : (
         <table className={styles.placesTable}>
-          <thead>
-            <tr>
-              {fieldsToDisplay
-                .filter((field) => field !== "singlePage")
-                .map((field) => (
-                  <th key={field}>{getFieldDisplayName(field)}</th>
-                ))}
-              <th></th>
-            </tr>
-          </thead>
+          {fieldsToDisplay.includes("displayTitles") && (
+            <thead>
+              <tr>
+                {fieldsToDisplay
+                  .filter((field) => field !== "singlePage")
+                  .map((field) => (
+                    <th key={field}>{getFieldDisplayName(field)}</th>
+                  ))}
+                <th></th>
+              </tr>
+            </thead>
+          )}
           <tbody>
             {placesList.map((place) => (
               <Place key={place.id} {...getFilteredPlaceProps(place)} />
