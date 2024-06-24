@@ -41,6 +41,7 @@ const Place: React.FC<PlaceProps> = ({
 }) => {
   const { deletePlace } = usePlaceContext();
   const [showOptions, setShowOptions] = useState(false);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const confirm = useConfirm();
   const navigate = useNavigate();
 
@@ -59,28 +60,32 @@ const Place: React.FC<PlaceProps> = ({
     if (showOptions) setShowOptions(false);
   });
 
+  const handleOptionsClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    const rect = event.currentTarget.getBoundingClientRect();
+    setMenuPosition({
+      top: rect.top + window.scrollY + rect.height,
+      left: rect.left + window.scrollX,
+    });
+    setShowOptions(!showOptions);
+  };
+
   return (
-    <div className={styles.place}>
-      <div className={styles.placeInfo}>
-        {name && <div className={styles.placeField}>{name}</div>}
-        {address && <div className={styles.placeField}>{address}</div>}
-        {city && <div className={styles.placeField}>{city}</div>}
-        {state && <div className={styles.placeField}>{state}</div>}
-        {gates && (
-          <div className={styles.placeField}>
-            {gates.map((gate) => gate.name).join(", ")}
-          </div>
-        )}
-        {turnstiles && (
-          <div className={styles.placeField}>
-            {turnstiles.map((turnstile) => turnstile.name).join(", ")}
-          </div>
-        )}
-        {lastUpdate && <div className={styles.placeField}>{lastUpdate}</div>}
-      </div>
-      <div ref={ref} style={{ position: "relative" }}>
+    <tr className={styles.place}>
+      {name !== undefined && <td>{name}</td>}
+      {address !== undefined && <td>{address}</td>}
+      {city !== undefined && <td>{city}</td>}
+      {state !== undefined && <td>{state}</td>}
+      {gates !== undefined && (
+        <td>{gates.map((gate) => gate.name).join(", ")}</td>
+      )}
+      {turnstiles !== undefined && (
+        <td>{turnstiles.map((turnstile) => turnstile.name).join(", ")}</td>
+      )}
+      {lastUpdate !== undefined && <td>{lastUpdate}</td>}
+      <td style={{ position: "relative" }}>
         <div
-          onClick={() => setShowOptions(!showOptions)}
+          onClick={handleOptionsClick}
           style={{ cursor: "pointer" }}
           role="button"
           aria-label="options"
@@ -88,13 +93,21 @@ const Place: React.FC<PlaceProps> = ({
           <FaEllipsisV />
         </div>
         {showOptions && (
-          <div className={styles.placeOptions}>
+          <div
+            ref={ref}
+            className={styles.placeOptions}
+            style={{
+              position: "absolute",
+              top: menuPosition.top,
+              left: menuPosition.left,
+            }}
+          >
             <div onClick={handleEdit}>Edit</div>
             <div onClick={handleDelete}>Delete</div>
           </div>
         )}
-      </div>
-    </div>
+      </td>
+    </tr>
   );
 };
 

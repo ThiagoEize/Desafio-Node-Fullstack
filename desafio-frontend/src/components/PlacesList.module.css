@@ -1,4 +1,17 @@
+.placesTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.placesTable th,
+.placesTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
 .placeOptions {
+  position: absolute;
+  top: 20px;
+  right: 0;
   background-color: white;
   border: 1px solid #ddd;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);

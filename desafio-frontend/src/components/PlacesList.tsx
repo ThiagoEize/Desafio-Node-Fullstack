@@ -1,6 +1,7 @@
 import React from "react";
 import { usePlaceContext } from "../context/PlaceContext";
 import Place from "./place/Place";
+import styles from "./PlacesList.module.css";
 
 interface PlacesListProps {
   fieldsToDisplay: string[];
@@ -20,6 +21,19 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
     return filteredProps;
   };
 
+  const getFieldDisplayName = (field: string) => {
+    const fieldNames: { [key: string]: string } = {
+      name: "Name",
+      address: "Address",
+      city: "City",
+      state: "State",
+      gates: "Gates",
+      turnstiles: "Turnstiles",
+      lastUpdate: "Last Update",
+    };
+    return fieldNames[field] || field;
+  };
+
   const handlePageChange = (page: number) => {
     if (page !== currentPage) {
       fetchPlaces({ page, limit: 10, searchTerm: "", orderBy: "name asc" });
@@ -33,13 +47,27 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
       {placesList.length === 0 ? (
         <p>No places available.</p>
       ) : (
-        placesList.map((place) => (
-          <Place key={place.id} {...getFilteredPlaceProps(place)} />
-        ))
+        <table className={styles.placesTable}>
+          <thead>
+            <tr>
+              {fieldsToDisplay
+                .filter((field) => field !== "singlePage")
+                .map((field) => (
+                  <th key={field}>{getFieldDisplayName(field)}</th>
+                ))}
+              <th>Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            {placesList.map((place) => (
+              <Place key={place.id} {...getFilteredPlaceProps(place)} />
+            ))}
+          </tbody>
+        </table>
       )}
 
       {totalPlaces > 10 && !fieldsToDisplay.includes("singlePage") && (
-        <div>
+        <div className={styles.pagination}>
           {Array.from({ length: Math.ceil(totalPlaces / 10) }, (_, index) => (
             <button
               key={index + 1}
