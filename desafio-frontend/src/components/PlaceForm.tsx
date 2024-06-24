@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { usePlaceContext } from "../context/PlaceContext";
 import { useParams } from "react-router-dom";
 import useConfirm from "../hooks/useConfirm";
+import ContentTop from "./contentTop/ContentTop";
 
 interface Gate {
   id?: string;
@@ -140,6 +141,10 @@ const PlaceForm: React.FC = () => {
 
   return (
     <div className="formContainer">
+      <ContentTop
+        title="edit-place"
+        message="Confira os lugares cadastrados no sistema."
+      />
       <form onSubmit={handleSubmit}>
         <input
           type="text"

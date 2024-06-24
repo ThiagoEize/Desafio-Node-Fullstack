@@ -14,10 +14,18 @@ const ContentTop: React.FC<ContentTopProps> = ({ title, message }) => {
       ? "Eventos"
       : title === "places"
       ? "Places"
-      : title === "edit-events"
+      : title === "edit-event"
       ? "Editar Evento"
       : "Editar Lugar";
   };
+
+  const isSelected = (path: string) => {
+    const regex = new RegExp(`^/${path}`);
+    return regex.test(location.pathname);
+  };
+
+  // Extracting any parameters from the location.pathname
+  const params = location.pathname.split("/").slice(2).join("/");
 
   return (
     <>
@@ -30,8 +38,8 @@ const ContentTop: React.FC<ContentTopProps> = ({ title, message }) => {
         </Link>
         /
         <Link
-          to={`/${title}`}
-          className={location.pathname.includes(title) ? styles.selected : ""}
+          to={`/${title}${params ? `/${params}` : ""}`}
+          className={isSelected(title) ? styles.selected : ""}
         >
           {displayTitle()}
         </Link>
