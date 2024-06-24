@@ -11,14 +11,10 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
   const { placesList, totalPlaces, currentPage, fetchPlaces } =
     usePlaceContext();
 
-  const getFilteredPlaceProps = (place: any) => {
-    const filteredProps: any = { id: place.id };
-    fieldsToDisplay.forEach((field) => {
-      if (place[field] !== undefined) {
-        filteredProps[field] = place[field];
-      }
-    });
-    return filteredProps;
+  const handlePageChange = (page: number) => {
+    if (page !== currentPage) {
+      fetchPlaces({ page, limit: 10, searchTerm: "", orderBy: "name asc" });
+    }
   };
 
   const getFieldDisplayName = (field: string) => {
@@ -32,12 +28,6 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
       lastUpdate: "Atualização",
     };
     return fieldNames[field] || field;
-  };
-
-  const handlePageChange = (page: number) => {
-    if (page !== currentPage) {
-      fetchPlaces({ page, limit: 10, searchTerm: "", orderBy: "name asc" });
-    }
   };
 
   if (!placesList) return <p>Loading...</p>;
@@ -64,7 +54,8 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
             {placesList.map((place, index) => (
               <Place
                 key={place.id}
-                {...getFilteredPlaceProps(place)}
+                place={place}
+                fieldsToDisplay={fieldsToDisplay}
                 style={{
                   backgroundColor: index % 2 === 0 ? "#333B49" : "#10141D",
                 }}

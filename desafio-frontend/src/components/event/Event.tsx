@@ -8,14 +8,8 @@ import useConfirm from "../../hooks/useConfirm";
 import axios from "axios";
 
 interface EventProps {
-  id: string;
-  placeId?: number;
-  event?: string;
-  type?: string;
-  dateStart?: string;
-  dateEnd?: string;
-  showGates?: string;
-  showTurnstiles?: string;
+  event: any;
+  fieldsToDisplay: string[];
   style?: React.CSSProperties;
 }
 
@@ -31,17 +25,7 @@ interface Turnstile {
   name: string;
 }
 
-const Event: React.FC<EventProps> = ({
-  id,
-  placeId,
-  event,
-  type,
-  dateStart,
-  dateEnd,
-  showGates,
-  showTurnstiles,
-  style,
-}) => {
+const Event: React.FC<EventProps> = ({ event, fieldsToDisplay, style }) => {
   const { deleteEvent } = useEventContext();
   const [showOptions, setShowOptions] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
@@ -54,35 +38,39 @@ const Event: React.FC<EventProps> = ({
   useEffect(() => {
     const fetchPlaceData = async () => {
       try {
-        console.log(showGates, showTurnstiles);
-        const placeResponse = await axios.get(
-          `http://localhost:8080/places/${placeId}`
-        );
-        setPlaceName(placeResponse.data.name);
-        if (showGates) {
-          setGates(placeResponse.data.gates);
-        }
-        if (showTurnstiles) {
-          setTurnstiles(placeResponse.data.turnstiles);
+        if (
+          fieldsToDisplay.includes("showGates") ||
+          fieldsToDisplay.includes("showTurnstiles")
+        ) {
+          const placeResponse = await axios.get(
+            `http://localhost:8080/places/${event.placeId}`
+          );
+          setPlaceName(placeResponse.data.name);
+          if (fieldsToDisplay.includes("showGates")) {
+            setGates(placeResponse.data.gates);
+          }
+          if (fieldsToDisplay.includes("showTurnstiles")) {
+            setTurnstiles(placeResponse.data.turnstiles);
+          }
         }
       } catch (error) {
         console.error("Error fetching place data:", error);
       }
     };
 
-    if (placeId) {
+    if (event.placeId) {
       fetchPlaceData();
     }
-  }, [placeId]);
+  }, [event.placeId, fieldsToDisplay]);
 
   const handleEdit = () => {
-    navigate(`/edit-event/${id}`);
+    navigate(`/edit-event/${event.id}`);
   };
 
   const handleDelete = async () => {
-    const isConfirmed = await confirm("evento", String(event));
+    const isConfirmed = await confirm("evento", String(event.event));
     if (isConfirmed) {
-      deleteEvent(id);
+      deleteEvent(event.id);
     }
   };
 
@@ -90,9 +78,9 @@ const Event: React.FC<EventProps> = ({
     if (showOptions) setShowOptions(false);
   });
 
-  const handleOptionsClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
-    const rect = event.currentTarget.getBoundingClientRect();
+  const handleOptionsClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const rect = e.currentTarget.getBoundingClientRect();
     setMenuPosition({
       top: rect.bottom + window.scrollY - 60,
       left: rect.left + window.scrollX - 96,
@@ -116,25 +104,44 @@ const Event: React.FC<EventProps> = ({
   return (
     <>
       <tr className={styles.event} style={style}>
-        {placeId !== undefined && placeName && <td>{placeName}</td>}
-        {event !== undefined && <td>{event}</td>}
-        {type !== undefined && <td>{type}</td>}
-        {dateStart !== undefined && (
-          <td>
-            {formatDate(dateStart)} {formatTime(dateStart)}
-          </td>
-        )}
-        {dateEnd !== undefined && (
-          <td>
-            {formatDate(dateEnd)} {formatTime(dateEnd)}
-          </td>
-        )}
-        {showGates !== undefined && (
-          <td>{gates.map((gate) => gate.name).join(", ")}</td>
-        )}
-        {showTurnstiles !== undefined && (
-          <td>{turnstiles.map((turnstile) => turnstile.name).join(", ")}</td>
-        )}
+        {fieldsToDisplay.map((field) => {
+          if (field === "placeId" && placeName) {
+            return <td key={field}>{placeName}</td>;
+          }
+          if (field === "event") {
+            return <td key={field}>{event.event}</td>;
+          }
+          if (field === "type") {
+            return <td key={field}>{event.type}</td>;
+          }
+          if (field === "dateStart") {
+            return (
+              <td key={field}>
+                {formatDate(event.dateStart)} {formatTime(event.dateStart)}
+              </td>
+            );
+          }
+          if (field === "dateEnd") {
+            return (
+              <td key={field}>
+                {formatDate(event.dateEnd)} {formatTime(event.dateEnd)}
+              </td>
+            );
+          }
+          if (field === "showGates") {
+            return (
+              <td key={field}>{gates.map((gate) => gate.name).join(", ")}</td>
+            );
+          }
+          if (field === "showTurnstiles") {
+            return (
+              <td key={field}>
+                {turnstiles.map((turnstile) => turnstile.name).join(", ")}
+              </td>
+            );
+          }
+          return null;
+        })}
         <td>
           <div
             onClick={handleOptionsClick}

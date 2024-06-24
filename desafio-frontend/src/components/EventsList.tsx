@@ -11,16 +11,10 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
   const { eventsList, totalEvents, currentPage, fetchEvents } =
     useEventContext();
 
-  const getFilteredEventProps = (event: any) => {
-    const filteredProps: any = { id: event.id };
-    fieldsToDisplay.forEach((field) => {
-      if (event[field] !== undefined) {
-        filteredProps[field] = event[field];
-      } else if (field === "showGates" || field === "showTurnstiles") {
-        filteredProps[field] = field;
-      }
-    });
-    return filteredProps;
+  const handlePageChange = (page: number) => {
+    if (page !== currentPage) {
+      fetchEvents({ page, limit: 10, searchTerm: "", orderBy: "event asc" });
+    }
   };
 
   const getFieldDisplayName = (field: string) => {
@@ -34,12 +28,6 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
       showTurnstiles: "Catracas cadastradas",
     };
     return fieldNames[field] || field;
-  };
-
-  const handlePageChange = (page: number) => {
-    if (page !== currentPage) {
-      fetchEvents({ page, limit: 10, searchTerm: "", orderBy: "event asc" });
-    }
   };
 
   if (!eventsList) return <p>Loading...</p>;
@@ -66,7 +54,8 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
             {eventsList.map((event, index) => (
               <Event
                 key={event.id}
-                {...getFilteredEventProps(event)}
+                event={event}
+                fieldsToDisplay={fieldsToDisplay}
                 style={{
                   backgroundColor: index % 2 === 0 ? "#333B49" : "#10141D",
                 }}

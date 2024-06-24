@@ -19,28 +19,12 @@ interface Turnstile {
 }
 
 interface PlaceProps {
-  id: string;
-  name?: string;
-  address?: string;
-  city?: string;
-  state?: string;
-  gates?: Gate[];
-  turnstiles?: Turnstile[];
-  lastUpdate?: string;
+  place: any;
+  fieldsToDisplay: string[];
   style?: React.CSSProperties;
 }
 
-const Place: React.FC<PlaceProps> = ({
-  id,
-  name,
-  address,
-  city,
-  state,
-  gates,
-  turnstiles,
-  lastUpdate,
-  style,
-}) => {
+const Place: React.FC<PlaceProps> = ({ place, fieldsToDisplay, style }) => {
   const { deletePlace } = usePlaceContext();
   const [showOptions, setShowOptions] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
@@ -48,13 +32,13 @@ const Place: React.FC<PlaceProps> = ({
   const navigate = useNavigate();
 
   const handleEdit = () => {
-    navigate(`/edit-place/${id}`);
+    navigate(`/edit-place/${place.id}`);
   };
 
   const handleDelete = async () => {
-    const isConfirmed = await confirm("lugar", String(name));
+    const isConfirmed = await confirm("lugar", String(place.name));
     if (isConfirmed) {
-      deletePlace(id);
+      deletePlace(place.id);
     }
   };
 
@@ -75,17 +59,40 @@ const Place: React.FC<PlaceProps> = ({
   return (
     <>
       <tr className={styles.place} style={style}>
-        {name !== undefined && <td>{name}</td>}
-        {address !== undefined && <td>{address}</td>}
-        {city !== undefined && <td>{city}</td>}
-        {state !== undefined && <td>{state}</td>}
-        {gates !== undefined && (
-          <td>{gates.map((gate) => gate.name).join(", ")}</td>
-        )}
-        {turnstiles !== undefined && (
-          <td>{turnstiles.map((turnstile) => turnstile.name).join(", ")}</td>
-        )}
-        {lastUpdate !== undefined && <td>{lastUpdate}</td>}
+        {fieldsToDisplay.map((field) => {
+          if (field === "name") {
+            return <td key={field}>{place.name}</td>;
+          }
+          if (field === "address") {
+            return <td key={field}>{place.address}</td>;
+          }
+          if (field === "city") {
+            return <td key={field}>{place.city}</td>;
+          }
+          if (field === "state") {
+            return <td key={field}>{place.state}</td>;
+          }
+          if (field === "gates") {
+            return (
+              <td key={field}>
+                {place.gates.map((gate: Gate) => gate.name).join(", ")}
+              </td>
+            );
+          }
+          if (field === "turnstiles") {
+            return (
+              <td key={field}>
+                {place.turnstiles
+                  .map((turnstile: Turnstile) => turnstile.name)
+                  .join(", ")}
+              </td>
+            );
+          }
+          if (field === "lastUpdate") {
+            return <td key={field}>{place.lastUpdate}</td>;
+          }
+          return null;
+        })}
         <td>
           <div
             onClick={handleOptionsClick}
