@@ -61,8 +61,14 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
             </thead>
           )}
           <tbody>
-            {placesList.map((place) => (
-              <Place key={place.id} {...getFilteredPlaceProps(place)} />
+            {placesList.map((place, index) => (
+              <Place
+                key={place.id}
+                {...getFilteredPlaceProps(place)}
+                style={{
+                  backgroundColor: index % 2 === 0 ? "#333B49" : "#10141D",
+                }}
+              />
             ))}
           </tbody>
         </table>

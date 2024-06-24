@@ -27,6 +27,7 @@ interface PlaceProps {
   gates?: Gate[];
   turnstiles?: Turnstile[];
   lastUpdate?: string;
+  style?: React.CSSProperties;
 }
 
 const Place: React.FC<PlaceProps> = ({
@@ -38,6 +39,7 @@ const Place: React.FC<PlaceProps> = ({
   gates,
   turnstiles,
   lastUpdate,
+  style,
 }) => {
   const { deletePlace } = usePlaceContext();
   const [showOptions, setShowOptions] = useState(false);
@@ -72,7 +74,7 @@ const Place: React.FC<PlaceProps> = ({
 
   return (
     <>
-      <tr className={styles.place}>
+      <tr className={styles.place} style={style}>
         {name !== undefined && <td>{name}</td>}
         {address !== undefined && <td>{address}</td>}
         {city !== undefined && <td>{city}</td>}

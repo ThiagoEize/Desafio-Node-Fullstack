@@ -5,10 +5,10 @@
 
 .placesTable th,
 .placesTable td {
-  /* border: 1px solid #ddd; */
   padding: 8px;
   color: white; /* Ensures text is visible on dark backgrounds */
 }
+
 .placeOptions {
   position: absolute;
   top: 20px;

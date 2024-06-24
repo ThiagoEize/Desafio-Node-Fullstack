@@ -13,7 +13,13 @@ import toy from "../../assets/images/toy.png";
 const Home: React.FC = () => {
   const navigate = useNavigate();
 
-  const placesToDisplay = ["name", "address", "turnstiles", "singlePage"];
+  const placesToDisplay = [
+    "name",
+    "address",
+    "turnstiles",
+    "singlePage",
+    "noTitles",
+  ];
   const eventsToDisplay = ["event", "type", "placeId", "singlePage"];
 
   const { fetchPlaces } = usePlaceContext();
