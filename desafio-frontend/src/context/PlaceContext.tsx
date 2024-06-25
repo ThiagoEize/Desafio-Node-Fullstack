@@ -95,7 +95,7 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         prevPlaces.map((place) => (place.id === id ? response.data : place))
       );
       navigate(-1);
-      showResponse("Success", "Place updated successfully");
+      showResponse("Sucesso", "Place updated successfully");
     } catch (error: any) {
       console.error("Error updating place:", error);
       showResponse("Erro", String(error.response.data.message));
