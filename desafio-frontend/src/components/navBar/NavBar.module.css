@@ -2,9 +2,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
   color: white;
   margin-bottom: 1rem;
+  padding-left: 90px;
+  padding-right: 90px;
 }
 
 .navbarBrand img {

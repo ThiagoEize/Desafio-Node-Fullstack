@@ -37,10 +37,10 @@ const PlaceSearch: React.FC = () => {
         onChange={(e) => setSearchField(e.target.value)}
         style={{ marginRight: "10px" }}
       >
-        <option value="name">Name</option>
-        <option value="address">Address</option>
-        <option value="city">City</option>
-        <option value="state">State</option>
+        <option value="name">Nome</option>
+        <option value="address">Endereço</option>
+        <option value="city">Cidade</option>
+        <option value="state">Estado</option>
       </select>
       <input
         type="text"

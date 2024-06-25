@@ -149,92 +149,111 @@ const EventForm: React.FC = () => {
 
   return (
     <div className="formContainer">
-      <ContentTop
-        title="edit-event"
-        message="Confira os eventos cadastrados no sistema."
-      />
-      <form onSubmit={handleSubmit}>
-        <div className="row">
-          <input
-            className={`col-5 ${styles.formInput}`}
-            type="text"
-            name="event"
-            placeholder="Event"
-            value={formState.event}
-            onChange={handleChange}
-            required
-          />
-          <input
-            className={`col-5 float-right ${styles.formInput}`}
-            type="text"
-            name="type"
-            placeholder="Type"
-            value={formState.type}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="row">
-          <input
-            className={`col-5 ${styles.formInput}`}
-            type="text"
-            name="dateStart"
-            placeholder="Start Date (dd/mm/yyyy)"
-            value={formState.dateStart}
-            onChange={(e) => handleMaskedChange(e, maskDate)}
-            required
-          />
-          <input
-            className={`col-5 float-right ${styles.formInput}`}
-            type="text"
-            name="hourStart"
-            placeholder="Start Hour (hh:mm)"
-            value={formState.hourStart}
-            onChange={(e) => handleMaskedChange(e, maskTime)}
-            required
-          />
-        </div>
-        <div className="row">
-          <input
-            className={`col-5 ${styles.formInput}`}
-            type="text"
-            name="dateEnd"
-            placeholder="End Date (dd/mm/yyyy)"
-            value={formState.dateEnd}
-            onChange={(e) => handleMaskedChange(e, maskDate)}
-            required
-          />
-          <input
-            className={`col-5 float-right ${styles.formInput}`}
-            type="text"
-            name="hourEnd"
-            placeholder="End Hour (hh:mm)"
-            value={formState.hourEnd}
-            onChange={(e) => handleMaskedChange(e, maskTime)}
-            required
-          />
-        </div>
+      <ContentTop title="edit-event" message="*Campos obrigatórios." />
+      <div className="backgroundContainer">
+        <form onSubmit={handleSubmit}>
+          <div className={styles.formGroup}>
+            <div className={styles.inputLabel}>
+              <label>Evento*</label>
+              <input
+                type="text"
+                name="event"
+                placeholder="Evento"
+                value={formState.event}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className={styles.inputLabel}>
+              <label>Tipo*</label>
+              <input
+                type="text"
+                name="type"
+                placeholder="Tipo"
+                value={formState.type}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className={styles.formGroup}>
+            <div className={styles.inputLabel}>
+              <label>Data de início*</label>
+              <input
+                type="text"
+                name="dateStart"
+                placeholder="Data de Início (dd/mm/yyyy)"
+                value={formState.dateStart}
+                onChange={(e) => handleMaskedChange(e, maskDate)}
+                required
+              />
+            </div>
+            <div className={styles.inputLabel}>
+              <label>Hora de início*</label>
+              <input
+                type="text"
+                name="hourStart"
+                placeholder="Hora de Início (hh:mm)"
+                value={formState.hourStart}
+                onChange={(e) => handleMaskedChange(e, maskTime)}
+                required
+              />
+            </div>
+          </div>
+          <div className={styles.formGroup}>
+            <div className={styles.inputLabel}>
+              <label>Data de término*</label>
+              <input
+                type="text"
+                name="dateEnd"
+                placeholder="Data de Término (dd/mm/yyyy)"
+                value={formState.dateEnd}
+                onChange={(e) => handleMaskedChange(e, maskDate)}
+                required
+              />
+            </div>
+            <div className={styles.inputLabel}>
+              <label>Hora de término*</label>
+              <input
+                type="text"
+                name="hourEnd"
+                placeholder="Hora de Término (hh:mm)"
+                value={formState.hourEnd}
+                onChange={(e) => handleMaskedChange(e, maskTime)}
+                required
+              />
+            </div>
+          </div>
+          <div className={styles.place}>
+            <label>Lugar*</label>
+            <select
+              name="placeId"
+              value={formState.placeId}
+              onChange={handleChange}
+              required
+            >
+              <option value={0}>Selecione um local</option>
+              {placesList.map((place) => (
+                <option key={place.id} value={place.id}>
+                  {place.name}
+                </option>
+              ))}
+            </select>
+            <div className={styles.link}>
+              <Link to="/edit-place/new">Cadastrar local</Link>
+            </div>
+          </div>
 
-        <div className={`form-group ${styles.formInput}`}>
-          <select
-            name="placeId"
-            value={formState.placeId}
-            onChange={handleChange}
-            required
-          >
-            <option value={0}>Select Place</option>
-            {placesList.map((place) => (
-              <option key={place.id} value={place.id}>
-                {place.name}
-              </option>
-            ))}
-          </select>
-          <Link to="/edit-place/new">Cadastrar local</Link>
-        </div>
-        <button type="submit">
-          {formState.id ? "Update Event" : "Add Event"}
-        </button>
-      </form>
+          <div className={styles.formActions}>
+            <button type="button" onClick={() => navigate(-1)}>
+              Cancelar
+            </button>
+            <button type="submit">
+              {formState.id ? "Salvar" : "Cadastrar"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

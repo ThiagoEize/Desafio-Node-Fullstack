@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { usePlaceContext } from "../context/PlaceContext";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import useConfirm from "../hooks/useConfirm";
 import ContentTop from "./contentTop/ContentTop";
+import styles from "./PlaceForm.module.css";
 
 interface Gate {
   id?: string;
@@ -29,6 +30,7 @@ interface PlaceFormState {
 const PlaceForm: React.FC = () => {
   const { placesList, addPlace, updatePlace } = usePlaceContext();
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [formState, setFormState] = useState<PlaceFormState>({
     id: "",
     name: "",
@@ -76,22 +78,15 @@ const PlaceForm: React.FC = () => {
 
   const addGate = () => {
     if (newGateName.trim()) {
-      const newGate: Gate = {
-        name: newGateName.trim(),
-      };
-      setFormState((prev) => ({
-        ...prev,
-        gates: [...prev.gates, newGate],
-      }));
+      const newGate: Gate = { name: newGateName.trim() };
+      setFormState((prev) => ({ ...prev, gates: [...prev.gates, newGate] }));
       setNewGateName("");
     }
   };
 
   const addTurnstile = () => {
     if (newTurnstileName.trim()) {
-      const newTurnstile: Turnstile = {
-        name: newTurnstileName.trim(),
-      };
+      const newTurnstile: Turnstile = { name: newTurnstileName.trim() };
       setFormState((prev) => ({
         ...prev,
         turnstiles: [...prev.turnstiles, newTurnstile],
@@ -141,92 +136,124 @@ const PlaceForm: React.FC = () => {
 
   return (
     <div className="formContainer">
-      <ContentTop
-        title="edit-place"
-        message="Confira os lugares cadastrados no sistema."
-      />
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formState.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="address"
-          placeholder="Address"
-          value={formState.address}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="city"
-          placeholder="City"
-          value={formState.city}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="state"
-          placeholder="State"
-          value={formState.state}
-          onChange={handleChange}
-          required
-        />
-        <div>
-          <input
-            type="text"
-            placeholder="Add a gate"
-            value={newGateName}
-            onChange={handleGateNameChange}
-          />
-          <button type="button" onClick={addGate}>
-            +
-          </button>
-        </div>
-        <div>
-          {formState.gates.map((gate) => (
-            <div key={gate.id ?? gate.name}>
-              {gate.name}
-              <button type="button" onClick={() => removeGate(gate.name)}>
-                X
-              </button>
+      <ContentTop title="edit-place" message="*Campos obrigatórios." />
+      <div className="backgroundContainer">
+        <form onSubmit={handleSubmit}>
+          <div className={styles.formGroup}>
+            <div className={styles.inputLabel}>
+              <label>Nome</label>
+              <input
+                type="text"
+                name="name"
+                placeholder="Nome"
+                value={formState.name}
+                onChange={handleChange}
+                required
+              />
             </div>
-          ))}
-        </div>
-        <div>
-          <input
-            type="text"
-            placeholder="Add a turnstile"
-            value={newTurnstileName}
-            onChange={handleTurnstileNameChange}
-          />
-          <button type="button" onClick={addTurnstile}>
-            +
-          </button>
-        </div>
-        <div>
-          {formState.turnstiles.map((turnstile) => (
-            <div key={turnstile.id ?? turnstile.name}>
-              {turnstile.name}
-              <button
-                type="button"
-                onClick={() => removeTurnstile(turnstile.name)}
-              >
-                X
-              </button>
+            <div className={styles.inputLabel}>
+              <label>Endereço</label>
+              <input
+                type="text"
+                name="address"
+                placeholder="Endereço"
+                value={formState.address}
+                onChange={handleChange}
+                required
+              />
             </div>
-          ))}
-        </div>
-        <button type="submit">
-          {formState.id ? "Update Place" : "Add Place"}
-        </button>
-      </form>
+          </div>
+          <div className={styles.formGroup}>
+            <div className={styles.inputLabel}>
+              <label>Cidade</label>
+              <input
+                type="text"
+                name="city"
+                placeholder="Cidade"
+                value={formState.city}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className={styles.inputLabel}>
+              <label>Estado</label>
+              <input
+                type="text"
+                name="state"
+                placeholder="Estado"
+                value={formState.state}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+          <div className={styles.formGroup}>
+            <div className={styles.inputLabel}>
+              <label>Portões</label>
+              <div className={styles.inputWithButton}>
+                <input
+                  type="text"
+                  placeholder="Adicionar portão"
+                  value={newGateName}
+                  onChange={handleGateNameChange}
+                />
+                <button
+                  type="button"
+                  onClick={addGate}
+                  className={styles.addButton}
+                >
+                  +
+                </button>
+              </div>
+              <div className={styles.itemsList}>
+                {formState.gates.map((gate) => (
+                  <div className={styles.itens} key={gate.id ?? gate.name}>
+                    {gate.name}
+                    <div onClick={() => removeGate(gate.name)}>X</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className={styles.inputLabel}>
+              <label>Catracas</label>
+              <div className={styles.inputWithButton}>
+                <input
+                  type="text"
+                  placeholder="Adicionar catraca"
+                  value={newTurnstileName}
+                  onChange={handleTurnstileNameChange}
+                />
+                <button
+                  type="button"
+                  onClick={addTurnstile}
+                  className={styles.addButton}
+                >
+                  +
+                </button>
+              </div>
+              <div className={styles.itemsList}>
+                {formState.turnstiles.map((turnstile) => (
+                  <div
+                    className={styles.itens}
+                    key={turnstile.id ?? turnstile.name}
+                  >
+                    {turnstile.name}
+                    <div onClick={() => removeTurnstile(turnstile.name)}>X</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className={styles.formActions}>
+            <button type="button" onClick={() => navigate(-1)}>
+              Cancelar
+            </button>
+            <button type="submit">
+              {formState.id ? "Atualizar Lugar" : "Adicionar Lugar"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

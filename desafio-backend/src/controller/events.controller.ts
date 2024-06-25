@@ -91,6 +91,18 @@ export class EventsController {
   @ApiOperation({ summary: 'Update an event' })
   @ApiParam({ name: 'id', type: Number, description: 'Event ID' })
   async update(@Param('id') id: number, @Body() data: EventsUpdateDto) {
+    const dateStart = parseISO(String(data.dateStart));
+    const dateEnd = parseISO(String(data.dateEnd));
+    const now = new Date();
+    if (isBefore(dateStart, now)) {
+      throw new BadRequestException('Data do evento não pode ser no passado');
+    }
+
+    if (isAfter(dateStart, dateEnd)) {
+      throw new BadRequestException(
+        'Data de início deve ser anterior a data de término',
+      );
+    }
     data.id = id;
     return this.eventsService.update(data);
   }
