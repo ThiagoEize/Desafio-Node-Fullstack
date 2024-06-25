@@ -13,21 +13,8 @@ import toy from "../../assets/images/toy.png";
 const Home: React.FC = () => {
   const navigate = useNavigate();
 
-  const placesToDisplay = [
-    "name",
-    "address",
-    "turnstiles",
-    "singlePage",
-    "noTitles",
-  ];
-  const eventsToDisplay = [
-    "placeId",
-    "event",
-    "type",
-    "showGates",
-    "singlePage",
-    "noTitles",
-  ];
+  const placesToDisplay = ["name", "address", "turnstiles"];
+  const eventsToDisplay = ["placeId", "event", "type", "gates"];
 
   const { fetchPlaces } = usePlaceContext();
   const { fetchEvents } = useEventContext();
@@ -80,7 +67,11 @@ const Home: React.FC = () => {
                 Ver todos
               </Link>
             </div>
-            <PlacesList fieldsToDisplay={placesToDisplay} />
+            <PlacesList
+              fieldsToDisplay={placesToDisplay}
+              showTitles={false}
+              showPagination={false}
+            />
           </div>
         </div>
         <div className="col-6">
@@ -114,7 +105,11 @@ const Home: React.FC = () => {
                 Ver todos
               </Link>
             </div>
-            <EventsList fieldsToDisplay={eventsToDisplay} />
+            <EventsList
+              fieldsToDisplay={eventsToDisplay}
+              showTitles={false}
+              showPagination={false}
+            />
           </div>
         </div>
       </div>

@@ -39,17 +39,17 @@ const Event: React.FC<EventProps> = ({ event, fieldsToDisplay, style }) => {
     const fetchPlaceData = async () => {
       try {
         if (
-          fieldsToDisplay.includes("showGates") ||
-          fieldsToDisplay.includes("showTurnstiles")
+          fieldsToDisplay.includes("gates") ||
+          fieldsToDisplay.includes("turnstiles")
         ) {
           const placeResponse = await axios.get(
             `http://localhost:8080/places/${event.placeId}`
           );
           setPlaceName(placeResponse.data.name);
-          if (fieldsToDisplay.includes("showGates")) {
+          if (fieldsToDisplay.includes("gates")) {
             setGates(placeResponse.data.gates);
           }
-          if (fieldsToDisplay.includes("showTurnstiles")) {
+          if (fieldsToDisplay.includes("turnstiles")) {
             setTurnstiles(placeResponse.data.turnstiles);
           }
         }
@@ -128,12 +128,12 @@ const Event: React.FC<EventProps> = ({ event, fieldsToDisplay, style }) => {
               </td>
             );
           }
-          if (field === "showGates") {
+          if (field === "gates") {
             return (
               <td key={field}>{gates.map((gate) => gate.name).join(", ")}</td>
             );
           }
-          if (field === "showTurnstiles") {
+          if (field === "turnstiles") {
             return (
               <td key={field}>
                 {turnstiles.map((turnstile) => turnstile.name).join(", ")}

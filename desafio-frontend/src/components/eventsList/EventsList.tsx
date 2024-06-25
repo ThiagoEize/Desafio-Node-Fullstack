@@ -5,9 +5,15 @@ import styles from "./EventsList.module.css";
 
 interface EventsListProps {
   fieldsToDisplay: string[];
+  showTitles: boolean;
+  showPagination: boolean;
 }
 
-const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
+const EventsList: React.FC<EventsListProps> = ({
+  fieldsToDisplay,
+  showTitles,
+  showPagination,
+}) => {
   const { eventsList, totalEvents, currentPage, fetchEvents } =
     useEventContext();
 
@@ -24,8 +30,8 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
       type: "Tipo",
       dateStart: "Data Início",
       dateEnd: "Data Fim",
-      showGates: "Portões cadastrados",
-      showTurnstiles: "Catracas cadastradas",
+      gates: "Portões cadastrados",
+      turnstiles: "Catracas cadastradas",
     };
     return fieldNames[field] || field;
   };
@@ -38,14 +44,12 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
         <p>No events available.</p>
       ) : (
         <table className={styles.eventsTable}>
-          {!fieldsToDisplay.includes("noTitles") && (
+          {showTitles && (
             <thead>
               <tr>
-                {fieldsToDisplay
-                  .filter((field) => field !== "singlePage")
-                  .map((field) => (
-                    <th key={field}>{getFieldDisplayName(field)}</th>
-                  ))}
+                {fieldsToDisplay.map((field) => (
+                  <th key={field}>{getFieldDisplayName(field)}</th>
+                ))}
                 <th></th>
               </tr>
             </thead>
@@ -64,7 +68,7 @@ const EventsList: React.FC<EventsListProps> = ({ fieldsToDisplay }) => {
           </tbody>
         </table>
       )}
-      {totalEvents > 10 && !fieldsToDisplay.includes("singlePage") && (
+      {totalEvents > 10 && showPagination && (
         <div className={styles.pagination}>
           {Array.from({ length: Math.ceil(totalEvents / 10) }, (_, index) => (
             <button

@@ -33,6 +33,8 @@ const PlacesCrud: React.FC = () => {
               "gates",
               "turnstiles",
             ]}
+            showTitles={true}
+            showPagination={true}
           />
         </div>
       </div>

@@ -5,9 +5,15 @@ import styles from "./PlacesList.module.css";
 
 interface PlacesListProps {
   fieldsToDisplay: string[];
+  showTitles: boolean;
+  showPagination: boolean;
 }
 
-const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
+const PlacesList: React.FC<PlacesListProps> = ({
+  fieldsToDisplay,
+  showTitles,
+  showPagination,
+}) => {
   const { placesList, totalPlaces, currentPage, fetchPlaces } =
     usePlaceContext();
 
@@ -38,14 +44,12 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
         <p>No places available.</p>
       ) : (
         <table className={styles.placesTable}>
-          {!fieldsToDisplay.includes("noTitles") && (
+          {showTitles && (
             <thead>
               <tr>
-                {fieldsToDisplay
-                  .filter((field) => field !== "singlePage")
-                  .map((field) => (
-                    <th key={field}>{getFieldDisplayName(field)}</th>
-                  ))}
+                {fieldsToDisplay.map((field) => (
+                  <th key={field}>{getFieldDisplayName(field)}</th>
+                ))}
                 <th></th>
               </tr>
             </thead>
@@ -65,7 +69,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ fieldsToDisplay }) => {
         </table>
       )}
 
-      {totalPlaces > 10 && !fieldsToDisplay.includes("singlePage") && (
+      {totalPlaces > 10 && showPagination && (
         <div className={styles.pagination}>
           {Array.from({ length: Math.ceil(totalPlaces / 10) }, (_, index) => (
             <button
