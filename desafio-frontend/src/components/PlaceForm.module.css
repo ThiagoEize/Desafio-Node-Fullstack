@@ -78,3 +78,10 @@
   padding: 5px 10px 5px 10px;
   color: black;
 }
+
+.cancelar {
+  background: #10141d;
+  color: white;
+  box-shadow: none;
+  border: 1px solid white;
+}

@@ -248,7 +248,7 @@ const EventForm: React.FC = () => {
             <button type="button" onClick={() => navigate(-1)}>
               Cancelar
             </button>
-            <button type="submit">
+            <button className={styles.cancelar} type="submit">
               {formState.id ? "Salvar" : "Cadastrar"}
             </button>
           </div>

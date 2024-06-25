@@ -245,11 +245,15 @@ const PlaceForm: React.FC = () => {
             </div>
           </div>
           <div className={styles.formActions}>
-            <button type="button" onClick={() => navigate(-1)}>
+            <button
+              className={styles.cancelar}
+              type="button"
+              onClick={() => navigate(-1)}
+            >
               Cancelar
             </button>
             <button type="submit">
-              {formState.id ? "Atualizar Lugar" : "Adicionar Lugar"}
+              {formState.id ? "Salvar" : "Cadastrar"}
             </button>
           </div>
         </form>
