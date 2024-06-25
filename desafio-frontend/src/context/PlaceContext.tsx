@@ -98,7 +98,7 @@ const PlaceProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       showResponse("Success", "Place updated successfully");
     } catch (error: any) {
       console.error("Error updating place:", error);
-      showResponse("Error", String(error.response.data.message));
+      showResponse("Erro", String(error.response.data.message));
     }
   };
 
