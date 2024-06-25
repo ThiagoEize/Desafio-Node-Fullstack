@@ -39,8 +39,6 @@ const EventSearch: React.FC = () => {
       >
         <option value="event">Evento</option>
         <option value="type">Tipo</option>
-        <option value="dateStart">Data de inicio</option>
-        <option value="dateEnd">Data de termino</option>
       </select>
       <input
         type="text"
@@ -54,10 +52,12 @@ const EventSearch: React.FC = () => {
         onChange={(e) => setOrderBy(e.target.value)}
         style={{ marginRight: "10px" }}
       >
-        <option value="event asc">Evento ascendente</option>
-        <option value="event desc">Evento descendente</option>
-        <option value="type asc">Tipo ascendente</option>
-        <option value="type desc">Tipo descendente</option>
+        <option value="event asc">Evento A ... Z</option>
+        <option value="event desc">Evento Z ... A</option>
+        <option value="type asc">Tipo A ... Z</option>
+        <option value="type desc">Tipo Z ... A</option>
+        <option value="dateStart asc">Data de início novos ... antigos</option>
+        <option value="dateEnd desc">Data de término antigos ... novos</option>
       </select>
     </div>
   );

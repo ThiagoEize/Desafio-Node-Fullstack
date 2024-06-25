@@ -54,10 +54,10 @@ const PlaceSearch: React.FC = () => {
         onChange={(e) => setOrderBy(e.target.value)}
         style={{ marginRight: "10px" }}
       >
-        <option value="name asc">Nome ascendente</option>
-        <option value="name desc">Nome descendente</option>
-        <option value="city asc">Cidade ascendente</option>
-        <option value="city desc">Cidade descendente</option>
+        <option value="name asc">Nome A ... Z</option>
+        <option value="name desc">Nome Z ... A</option>
+        <option value="city asc">Cidade A ... Z</option>
+        <option value="city desc">Cidade Z ... A</option>
       </select>
     </div>
   );

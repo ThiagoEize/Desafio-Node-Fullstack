@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useEventContext } from "../context/EventContext";
+import { useEventContext } from "../../context/EventContext";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import { useHelperContext } from "../context/HelperContext";
-import ContentTop from "./contentTop/ContentTop";
+import { useHelperContext } from "../../context/HelperContext";
+import ContentTop from "../contentTop/ContentTop";
 import styles from "./EventForm.module.css";
 
 interface Place {

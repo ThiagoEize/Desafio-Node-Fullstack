@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { usePlaceContext } from "../context/PlaceContext";
+import { usePlaceContext } from "../../context/PlaceContext";
 import { useParams, useNavigate } from "react-router-dom";
-import useConfirm from "../hooks/useConfirm";
-import ContentTop from "./contentTop/ContentTop";
+import useConfirm from "../../hooks/useConfirm";
+import ContentTop from "../contentTop/ContentTop";
 import styles from "./PlaceForm.module.css";
 
 interface Gate {
