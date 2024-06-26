@@ -58,6 +58,10 @@ const EventSearch: React.FC = () => {
         <option value="type desc">Tipo Z ... A</option>
         <option value="dateStart asc">Data de início novos ... antigos</option>
         <option value="dateEnd desc">Data de término antigos ... novos</option>
+        <option value="createdAt asc">Data de criação novos ... antigos</option>
+        <option value="createdAt desc">
+          Data de criação antigos ... novos
+        </option>
       </select>
     </div>
   );

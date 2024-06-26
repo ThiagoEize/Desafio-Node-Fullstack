@@ -112,6 +112,8 @@ export class EventsController {
   @ApiQuery({ name: 'placeId', required: false, type: Number })
   @ApiQuery({ name: 'event', required: false, type: String })
   @ApiQuery({ name: 'type', required: false, type: String })
+  @ApiQuery({ name: 'email', required: false, type: String })
+  @ApiQuery({ name: 'phone', required: false, type: String })
   @ApiQuery({ name: 'dateStart', required: false, type: Date })
   @ApiQuery({ name: 'dateEnd', required: false, type: Date })
   @ApiQuery({ name: 'order', required: false, type: String })

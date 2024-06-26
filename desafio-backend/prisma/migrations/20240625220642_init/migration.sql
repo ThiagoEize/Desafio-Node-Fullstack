@@ -17,8 +17,12 @@ CREATE TABLE "events" (
     "placeId" INTEGER NOT NULL,
     "event" TEXT NOT NULL,
     "type" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "phone" TEXT NOT NULL,
     "dateStart" TIMESTAMP(3) NOT NULL,
     "dateEnd" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "events_pkey" PRIMARY KEY ("id")
 );

@@ -21,6 +21,8 @@ const EventForm: React.FC = () => {
     placeId: 0,
     event: "",
     type: "",
+    email: "",
+    phone: "",
     dateStart: "",
     hourStart: "",
     dateEnd: "",
@@ -52,6 +54,8 @@ const EventForm: React.FC = () => {
           placeId: event.placeId,
           event: event.event,
           type: event.type,
+          email: event.email,
+          phone: event.phone,
           dateStart: formatDate(startDate),
           hourStart: formatTime(startDate),
           dateEnd: formatDate(endDate),
@@ -243,6 +247,35 @@ const EventForm: React.FC = () => {
               <Link to="/edit-place/new">Cadastrar local</Link>
             </div>
           </div>
+
+          <div className={styles.customLine}></div>
+
+          <div className={styles.formGroup}>
+            <div className={styles.inputLabel}>
+              <label>Email*</label>
+              <input
+                type="text"
+                name="email"
+                placeholder="Email"
+                value={formState.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className={styles.inputLabel}>
+              <label>Celular*</label>
+              <input
+                type="text"
+                name="phone"
+                placeholder="Celular"
+                value={formState.phone}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+
+          <div className={styles.customLine}></div>
 
           <div className={styles.formActions}>
             <button type="button" onClick={() => navigate(-1)}>

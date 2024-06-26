@@ -36,3 +36,10 @@
   box-shadow: none;
   border: 1px solid white;
 }
+
+.customLine {
+  width: 96%;
+  height: 1px;
+  border-top: 0.1px solid lightgrey;
+  margin: 4rem auto;
+}

@@ -20,6 +20,8 @@ export class EventsService {
         placeId: data.placeId,
         event: data.event,
         type: data.type,
+        email: data.email,
+        phone: data.phone,
         dateStart: new Date(data.dateStart).toISOString(),
         dateEnd: new Date(data.dateEnd).toISOString(),
       },
@@ -47,6 +49,8 @@ export class EventsService {
         placeId: data.placeId ?? event.placeId,
         event: data.event ?? event.event,
         type: data.type ?? event.type,
+        email: data.email ?? event.email,
+        phone: data.phone ?? event.phone,
         dateStart: data.dateStart
           ? new Date(data.dateStart).toISOString()
           : event.dateStart,

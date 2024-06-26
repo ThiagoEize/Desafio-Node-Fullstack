@@ -58,6 +58,8 @@ const PlaceSearch: React.FC = () => {
         <option value="name desc">Nome Z ... A</option>
         <option value="city asc">Cidade A ... Z</option>
         <option value="city desc">Cidade Z ... A</option>
+        <option value="address asc">Endereço A ... Z</option>
+        <option value="address desc">Endereço Z ... A</option>
       </select>
     </div>
   );

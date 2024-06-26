@@ -20,8 +20,8 @@ const Home: React.FC = () => {
   const { fetchEvents } = useEventContext();
 
   useEffect(() => {
-    fetchPlaces({ page: 1, limit: 3, searchTerm: "", orderBy: "dateStart" });
-    fetchEvents({ page: 1, limit: 3, searchTerm: "", orderBy: "dateStart" });
+    fetchPlaces({ page: 1, limit: 3, searchTerm: "", orderBy: "updatedAt" });
+    fetchEvents({ page: 1, limit: 3, searchTerm: "", orderBy: "createdAt" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

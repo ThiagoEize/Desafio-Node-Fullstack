@@ -8,6 +8,12 @@ export class EventsCreateDto {
   event: string;
 
   @ApiProperty()
+  email: string;
+
+  @ApiProperty()
+  phone: string;
+
+  @ApiProperty()
   type: string;
 
   @ApiProperty()
@@ -28,7 +34,19 @@ export class EventsUpdateDto {
   event?: string;
 
   @ApiPropertyOptional()
+  email?: string;
+
+  @ApiPropertyOptional()
+  phone?: string;
+
+  @ApiPropertyOptional()
   type?: string;
+
+  @ApiPropertyOptional()
+  createdAt?: Date;
+
+  @ApiPropertyOptional()
+  updatedAt?: Date;
 
   @ApiPropertyOptional()
   dateStart?: Date;
@@ -52,6 +70,12 @@ export class EventsQueryDto {
 
   @ApiPropertyOptional()
   dateEnd?: Date;
+
+  @ApiPropertyOptional()
+  createdAt?: Date;
+
+  @ApiPropertyOptional()
+  updatedAt?: Date;
 
   @ApiPropertyOptional()
   order?: string;

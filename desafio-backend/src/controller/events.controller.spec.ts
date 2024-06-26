@@ -55,8 +55,12 @@ describe('EventsController', () => {
         placeId: 1,
         event: 'Sample Event',
         type: 'Sample Type',
+        email: 'Sample Email',
+        phone: 'Sample Phone',
         dateStart: new Date('2024-06-22T00:02:59.322Z'),
         dateEnd: new Date('2024-06-23T00:02:59.322Z'),
+        createdAt: new Date(),
+        updatedAt: new Date(),
         place: {
           id: 1,
           name: 'Sample Place',
@@ -76,17 +80,21 @@ describe('EventsController', () => {
   });
 
   describe('create', () => {
-    it.skip('should create a new event', async () => {
+    it('should create a new event', async () => {
       const data: EventsCreateDto = {
         dateStart: new Date('2024-07-22T00:02:59.322Z'),
         dateEnd: new Date('2024-07-23T00:02:59.322Z'),
         placeId: 1,
         event: 'Sample Event',
         type: 'Sample Type',
+        email: 'Sample Email',
+        phone: 'Sample Phone',
       };
       const result = {
         id: 1,
         ...data,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         place: {
           id: 1,
           name: 'Sample Place',
@@ -120,6 +128,8 @@ describe('EventsController', () => {
 
     it('should throw a BadRequestException for invalid dateStart', async () => {
       const data: EventsCreateDto = {
+        email: 'Sample Email',
+        phone: 'Sample Phone',
         dateStart: new Date('invalid-date'),
         dateEnd: new Date('2024-06-23T00:02:59.322Z'),
         placeId: 1,
@@ -134,6 +144,8 @@ describe('EventsController', () => {
 
     it('should throw a BadRequestException for dateStart in the past', async () => {
       const data: EventsCreateDto = {
+        email: 'Sample Email',
+        phone: 'Sample Phone',
         dateStart: new Date(Date.now() - 1000),
         dateEnd: new Date(Date.now() + 10000),
         placeId: 1,
@@ -146,14 +158,15 @@ describe('EventsController', () => {
       );
     });
 
-    it.skip('should throw a ConflictException for overlapping event', async () => {
-      const data: EventsCreateDto & { id: number } = {
+    it('should throw a ConflictException for overlapping event', async () => {
+      const data: EventsCreateDto = {
+        email: 'Sample Email',
+        phone: 'Sample Phone',
         dateStart: new Date('2024-07-22T00:02:59.322Z'),
         dateEnd: new Date('2024-07-23T00:02:59.322Z'),
         placeId: 1,
         event: 'Sample Event',
         type: 'Sample Type',
-        id: 1,
       };
       jest.spyOn(placesService, 'find').mockResolvedValue({
         id: 1,
@@ -166,14 +179,23 @@ describe('EventsController', () => {
         gates: [],
         turnstiles: [],
       });
-      jest.spyOn(eventsService, 'listByPlaceId').mockResolvedValue([data]);
+      jest.spyOn(eventsService, 'listByPlaceId').mockResolvedValue([
+        {
+          id: 1,
+          ...data,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
       jest.spyOn(eventsService, 'isEventOverlapping').mockReturnValue(true);
 
       await expect(controller.create(data)).rejects.toThrow(ConflictException);
     });
 
-    it.skip('should throw a ConflictException for existing event name', async () => {
+    it('should throw a ConflictException for existing event name', async () => {
       const data: EventsCreateDto = {
+        email: 'Sample Email',
+        phone: 'Sample Phone',
         dateStart: new Date('2024-06-22T00:02:59.322Z'),
         dateEnd: new Date('2024-06-23T00:02:59.322Z'),
         placeId: 1,
@@ -201,7 +223,12 @@ describe('EventsController', () => {
 
   describe('update', () => {
     it('should update an event', async () => {
-      const data: EventsUpdateDto = { id: 1, event: 'Updated Event' };
+      const data: EventsUpdateDto = {
+        id: 1,
+        event: 'Updated Event',
+        email: 'Sample Email',
+        phone: 'Sample Phone',
+      };
       const result = {
         id: 1,
         placeId: 1,
@@ -209,6 +236,10 @@ describe('EventsController', () => {
         type: 'Updated Type',
         dateStart: new Date('2024-06-22T00:02:59.322Z'),
         dateEnd: new Date('2024-06-23T00:02:59.322Z'),
+        email: 'Sample Email',
+        phone: 'Sample Phone',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
       jest.spyOn(eventsService, 'update').mockResolvedValue(result);
 
@@ -228,6 +259,10 @@ describe('EventsController', () => {
             type: 'Sample Type',
             dateStart: new Date('2024-06-22T00:02:59.322Z'),
             dateEnd: new Date('2024-06-23T00:02:59.322Z'),
+            email: 'Sample Email',
+            phone: 'Sample Phone',
+            createdAt: new Date(Date.now() - 1000),
+            updatedAt: new Date(Date.now() + 10000),
           },
         ],
         total: 1,
@@ -250,6 +285,10 @@ describe('EventsController', () => {
         type: 'Sample Type',
         dateStart: new Date('2024-06-22T00:02:59.322Z'),
         dateEnd: new Date('2024-06-23T00:02:59.322Z'),
+        email: 'Sample Email',
+        phone: 'Sample Phone',
+        createdAt: new Date(Date.now() - 1000),
+        updatedAt: new Date(Date.now() + 10000),
       };
       jest.spyOn(eventsService, 'delete').mockResolvedValue(result);
 

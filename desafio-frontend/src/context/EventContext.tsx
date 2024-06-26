@@ -7,6 +7,8 @@ interface Event {
   id: string;
   placeId: number;
   event: string;
+  email: string;
+  phone: string;
   type: string;
   dateStart: string;
   dateEnd: string;

@@ -28,6 +28,8 @@ const EventsList: React.FC<EventsListProps> = ({
       placeId: "Nome do local",
       event: "Evento",
       type: "Tipo",
+      email: "Email",
+      phone: "Celular",
       dateStart: "Data Início",
       dateEnd: "Data Fim",
       gates: "Portões cadastrados",

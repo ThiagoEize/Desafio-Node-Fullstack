@@ -114,6 +114,12 @@ const Event: React.FC<EventProps> = ({ event, fieldsToDisplay, style }) => {
           if (field === "type") {
             return <td key={field}>{event.type}</td>;
           }
+          if (field === "email") {
+            return <td key={field}>{event.email}</td>;
+          }
+          if (field === "phone") {
+            return <td key={field}>{event.phone}</td>;
+          }
           if (field === "dateStart") {
             return (
               <td key={field}>

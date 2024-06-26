@@ -6,11 +6,8 @@ import {
   PlacesUpdateDto,
   PlacesQueryDto,
 } from '../application/dto/places.dto';
-import { GateCreateDto, GateUpdateDto } from '../application/dto/gates.dto';
-import {
-  TurnstileCreateDto,
-  TurnstileUpdateDto,
-} from '../application/dto/turnstiles.dto';
+import { GateCreateDto } from '../application/dto/gates.dto';
+import { TurnstileCreateDto } from '../application/dto/turnstiles.dto';
 
 describe('PlacesController', () => {
   let controller: PlacesController;

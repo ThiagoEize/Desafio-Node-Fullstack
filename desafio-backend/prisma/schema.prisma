@@ -27,8 +27,12 @@ model Event {
   placeId   Int
   event     String
   type      String
+  email     String
+  phone     String
   dateStart DateTime
   dateEnd   DateTime
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
   place     Place    @relation(fields: [placeId], references: [id])
 
   @@index([placeId])
