@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, ListGroup } from "react-bootstrap";
 import { FaArrowsUpDown } from "react-icons/fa6";
 
@@ -10,23 +10,30 @@ interface Field {
 interface FieldsModalProps {
   show: boolean;
   handleClose: () => void;
-  eventFieldsToDisplay: Field[];
-  setEventFieldsToDisplay: (fields: Field[]) => void;
-  availableEventFields: Field[];
-  setAvailableEventFields: (fields: Field[]) => void;
+  type: "event" | "place";
+  fieldsToDisplay: Field[];
+  setFieldsToDisplay: (fields: Field[]) => void;
+  availableFields: Field[];
+  setAvailableFields: (fields: Field[]) => void;
 }
 
 const FieldsModal: React.FC<FieldsModalProps> = ({
   show,
   handleClose,
-  eventFieldsToDisplay,
-  setEventFieldsToDisplay,
-  availableEventFields,
-  setAvailableEventFields,
+  type,
+  fieldsToDisplay,
+  setFieldsToDisplay,
+  availableFields,
+  setAvailableFields,
 }) => {
   const [draggedField, setDraggedField] = useState<number | null>(null);
   const [draggedFromAvailable, setDraggedFromAvailable] =
     useState<boolean>(false);
+
+  const storageKeyFieldsToDisplay =
+    type === "event" ? "eventFieldsToDisplay" : "placeFieldsToDisplay";
+  const storageKeyAvailableFields =
+    type === "event" ? "availableEventFields" : "availablePlaceFields";
 
   const ModalComponent: any = Modal;
   const ModalHeader: any = Modal.Header;
@@ -36,6 +43,24 @@ const FieldsModal: React.FC<FieldsModalProps> = ({
   const ListGroupComponent: any = ListGroup;
   const ListGroupItem: any = ListGroup.Item;
   const ButtonComponent: any = Button;
+
+  useEffect(() => {
+    const savedFieldsToDisplay = localStorage.getItem(
+      storageKeyFieldsToDisplay
+    );
+    const savedAvailableFields = localStorage.getItem(
+      storageKeyAvailableFields
+    );
+    if (savedFieldsToDisplay && savedAvailableFields) {
+      setFieldsToDisplay(JSON.parse(savedFieldsToDisplay));
+      setAvailableFields(JSON.parse(savedAvailableFields));
+    }
+  }, [
+    storageKeyFieldsToDisplay,
+    storageKeyAvailableFields,
+    setFieldsToDisplay,
+    setAvailableFields,
+  ]);
 
   const handleDragStart = (index: any, fromAvailable: boolean) => {
     setDraggedField(index);
@@ -47,31 +72,31 @@ const FieldsModal: React.FC<FieldsModalProps> = ({
 
     if (toAvailable !== draggedFromAvailable) {
       if (draggedFromAvailable) {
-        const updatedAvailableFields = [...availableEventFields];
+        const updatedAvailableFields = [...availableFields];
         const [addedField] = updatedAvailableFields.splice(draggedField, 1);
-        const updatedFields = [...eventFieldsToDisplay];
+        const updatedFields = [...fieldsToDisplay];
         updatedFields.splice(index, 0, addedField);
-        setEventFieldsToDisplay(updatedFields);
-        setAvailableEventFields(updatedAvailableFields);
+        setFieldsToDisplay(updatedFields);
+        setAvailableFields(updatedAvailableFields);
       } else {
-        const updatedFields = [...eventFieldsToDisplay];
+        const updatedFields = [...fieldsToDisplay];
         const [removedField] = updatedFields.splice(draggedField, 1);
-        const updatedAvailableFields = [...availableEventFields];
+        const updatedAvailableFields = [...availableFields];
         updatedAvailableFields.splice(index, 0, removedField);
-        setEventFieldsToDisplay(updatedFields);
-        setAvailableEventFields(updatedAvailableFields);
+        setFieldsToDisplay(updatedFields);
+        setAvailableFields(updatedAvailableFields);
       }
     } else {
       const updatedList = draggedFromAvailable
-        ? [...availableEventFields]
-        : [...eventFieldsToDisplay];
+        ? [...availableFields]
+        : [...fieldsToDisplay];
       const [removedField] = updatedList.splice(draggedField, 1);
       updatedList.splice(index, 0, removedField);
 
       if (draggedFromAvailable) {
-        setAvailableEventFields(updatedList);
+        setAvailableFields(updatedList);
       } else {
-        setEventFieldsToDisplay(updatedList);
+        setFieldsToDisplay(updatedList);
       }
     }
 
@@ -80,27 +105,27 @@ const FieldsModal: React.FC<FieldsModalProps> = ({
   };
 
   const handleRemoveField = (index: any) => {
-    const updatedFields = [...eventFieldsToDisplay];
+    const updatedFields = [...fieldsToDisplay];
     const [removedField] = updatedFields.splice(index, 1);
-    setEventFieldsToDisplay(updatedFields);
-    setAvailableEventFields([...availableEventFields, removedField]);
+    setFieldsToDisplay(updatedFields);
+    setAvailableFields([...availableFields, removedField]);
   };
 
   const handleAddField = (index: any) => {
-    const updatedAvailableFields = [...availableEventFields];
+    const updatedAvailableFields = [...availableFields];
     const [addedField] = updatedAvailableFields.splice(index, 1);
-    setAvailableEventFields(updatedAvailableFields);
-    setEventFieldsToDisplay([...eventFieldsToDisplay, addedField]);
+    setAvailableFields(updatedAvailableFields);
+    setFieldsToDisplay([...fieldsToDisplay, addedField]);
   };
 
   const handleSaveFields = () => {
     localStorage.setItem(
-      "eventFieldsToDisplay",
-      JSON.stringify(eventFieldsToDisplay)
+      storageKeyFieldsToDisplay,
+      JSON.stringify(fieldsToDisplay)
     );
     localStorage.setItem(
-      "availableEventFields",
-      JSON.stringify(availableEventFields)
+      storageKeyAvailableFields,
+      JSON.stringify(availableFields)
     );
     handleClose();
   };
@@ -108,12 +133,16 @@ const FieldsModal: React.FC<FieldsModalProps> = ({
   return (
     <ModalComponent show={show} onHide={handleClose}>
       <ModalHeader closeButton>
-        <ModalTitle>Modifique a visualização</ModalTitle>
+        <ModalTitle>Altere a vizualização da tabela</ModalTitle>
       </ModalHeader>
       <ModalBody>
+        <p>
+          Arraste os campos para mudar a ordem ou para retirar/inserir campos da
+          lista de campos visíveis.
+        </p>
         <h5>Campos visíveis</h5>
         <ListGroupComponent>
-          {eventFieldsToDisplay.map((field, index) => (
+          {fieldsToDisplay.map((field, index) => (
             <ListGroupItem
               key={field.key}
               draggable
@@ -134,10 +163,22 @@ const FieldsModal: React.FC<FieldsModalProps> = ({
               {field.name}
             </ListGroupItem>
           ))}
+          {fieldsToDisplay.length === 0 && (
+            <ListGroupItem
+              draggable
+              onDragOver={(e: React.DragEvent<HTMLDivElement>) =>
+                e.preventDefault()
+              }
+              onDrop={() => handleDrop(0, false)}
+              style={{ height: "40px" }}
+            >
+              <span>Arraste aqui para adicionar</span>
+            </ListGroupItem>
+          )}
         </ListGroupComponent>
         <h5 className="mt-4">Campos disponíveis</h5>
         <ListGroupComponent>
-          {availableEventFields.map((field, index) => (
+          {availableFields.map((field, index) => (
             <ListGroupItem
               key={field.key}
               draggable
@@ -158,6 +199,18 @@ const FieldsModal: React.FC<FieldsModalProps> = ({
               {field.name}
             </ListGroupItem>
           ))}
+          {availableFields.length === 0 && (
+            <ListGroupItem
+              draggable
+              onDragOver={(e: React.DragEvent<HTMLDivElement>) =>
+                e.preventDefault()
+              }
+              onDrop={() => handleDrop(0, true)}
+              style={{ height: "40px" }}
+            >
+              <span>Arraste aqui para adicionar</span>
+            </ListGroupItem>
+          )}
         </ListGroupComponent>
       </ModalBody>
       <ModalFooter>
@@ -166,10 +219,10 @@ const FieldsModal: React.FC<FieldsModalProps> = ({
           onClick={handleClose}
           style={{ marginRight: "10px" }}
         >
-          Fechar
+          Close
         </ButtonComponent>
         <ButtonComponent variant="primary" onClick={handleSaveFields}>
-          Salvar visualização
+          Save
         </ButtonComponent>
       </ModalFooter>
     </ModalComponent>

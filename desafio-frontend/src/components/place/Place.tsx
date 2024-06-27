@@ -98,7 +98,7 @@ const Place: React.FC<PlaceProps> = ({ place, fieldsToDisplay, style }) => {
             onClick={handleOptionsClick}
             role="button"
             aria-label="options"
-            className={styles.optionsButton}
+            // className={styles.optionsButton}
           >
             <FaEllipsisV />
           </div>

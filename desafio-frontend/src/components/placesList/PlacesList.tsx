@@ -4,7 +4,7 @@ import Place from "../place/Place";
 import styles from "./PlacesList.module.css";
 
 interface PlacesListProps {
-  fieldsToDisplay: string[];
+  fieldsToDisplay: { key: string; name: string }[];
   showTitles: boolean;
   showPagination: boolean;
 }
@@ -23,19 +23,6 @@ const PlacesList: React.FC<PlacesListProps> = ({
     }
   };
 
-  const getFieldDisplayName = (field: string) => {
-    const fieldNames: { [key: string]: string } = {
-      name: "Nome do local",
-      address: "Endereço",
-      city: "Cidade",
-      state: "Estado",
-      gates: "Portões cadastrados",
-      turnstiles: "Catracas cadastradas",
-      lastUpdate: "Atualização",
-    };
-    return fieldNames[field] || field;
-  };
-
   if (!placesList) return <p>Loading...</p>;
 
   return (
@@ -47,8 +34,8 @@ const PlacesList: React.FC<PlacesListProps> = ({
           {showTitles && (
             <thead>
               <tr>
-                {fieldsToDisplay.map((field) => (
-                  <th key={field}>{getFieldDisplayName(field)}</th>
+                {fieldsToDisplay.map(({ key, name }) => (
+                  <th key={key}>{name}</th>
                 ))}
                 <th></th>
               </tr>
@@ -59,7 +46,7 @@ const PlacesList: React.FC<PlacesListProps> = ({
               <Place
                 key={place.id}
                 place={place}
-                fieldsToDisplay={fieldsToDisplay}
+                fieldsToDisplay={fieldsToDisplay.map((field) => field.key)}
                 style={{
                   backgroundColor: index % 2 === 0 ? "#333B49" : "#10141D",
                 }}

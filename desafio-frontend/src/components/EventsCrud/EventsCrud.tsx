@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EventsList from "../eventsList/EventsList";
 import EventSearch from "../EventSearch";
@@ -27,19 +27,6 @@ const EventsCrud: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const savedEventFieldsToDisplay = localStorage.getItem(
-      "eventFieldsToDisplay"
-    );
-    const savedAvailableEventFields = localStorage.getItem(
-      "availableEventFields"
-    );
-    if (savedEventFieldsToDisplay && savedAvailableEventFields) {
-      setEventFieldsToDisplay(JSON.parse(savedEventFieldsToDisplay));
-      setAvailableEventFields(JSON.parse(savedAvailableEventFields));
-    }
-  }, []);
-
   const handleAddEvent = () => {
     navigate("/edit-event/new");
   };
@@ -57,7 +44,7 @@ const EventsCrud: React.FC = () => {
         <div>
           <div className="customRowSpace">
             <EventSearch />
-            <button onClick={handleShowModal}>Modifique a visualização</button>
+            <button onClick={handleShowModal}>Alterar visualização</button>
             <button onClick={handleAddEvent}>Adicionar evento</button>
           </div>
           <EventsList
@@ -70,10 +57,11 @@ const EventsCrud: React.FC = () => {
       <FieldsModal
         show={showModal}
         handleClose={handleCloseModal}
-        eventFieldsToDisplay={eventFieldsToDisplay}
-        setEventFieldsToDisplay={setEventFieldsToDisplay}
-        availableEventFields={availableEventFields}
-        setAvailableEventFields={setAvailableEventFields}
+        type="event"
+        fieldsToDisplay={eventFieldsToDisplay}
+        setFieldsToDisplay={setEventFieldsToDisplay}
+        availableFields={availableEventFields}
+        setAvailableFields={setAvailableEventFields}
       />
     </div>
   );

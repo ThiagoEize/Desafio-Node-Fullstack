@@ -151,7 +151,7 @@ const Event: React.FC<EventProps> = ({ event, fieldsToDisplay, style }) => {
         <td>
           <div
             onClick={handleOptionsClick}
-            className={styles.optionsButton}
+            // className={styles.optionsButton}
             role="button"
             aria-label="options"
           >

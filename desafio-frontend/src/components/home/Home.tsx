@@ -13,7 +13,11 @@ import toy from "../../assets/images/toy.png";
 const Home: React.FC = () => {
   const navigate = useNavigate();
 
-  const placesToDisplay = ["name", "address", "turnstiles"];
+  const placesToDisplay = [
+    { key: "name", name: "Nome do lugar" },
+    { key: "address", name: "Endereço" },
+    { key: "turnstiles", name: "Catracas" },
+  ];
   const eventFieldsToDisplay = [
     { key: "placeId", name: "Nome do lugar" },
     { key: "event", name: "Evento" },
