@@ -14,7 +14,12 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
 
   const placesToDisplay = ["name", "address", "turnstiles"];
-  const eventsToDisplay = ["placeId", "event", "type", "gates"];
+  const eventFieldsToDisplay = [
+    { key: "placeId", name: "Nome do lugar" },
+    { key: "event", name: "Evento" },
+    { key: "type", name: "Tipo" },
+    { key: "gates", name: "Portões cadastrados" },
+  ];
 
   const { fetchPlaces } = usePlaceContext();
   const { fetchEvents } = useEventContext();
@@ -106,7 +111,7 @@ const Home: React.FC = () => {
               </Link>
             </div>
             <EventsList
-              fieldsToDisplay={eventsToDisplay}
+              fieldsToDisplay={eventFieldsToDisplay}
               showTitles={false}
               showPagination={false}
             />

@@ -4,7 +4,7 @@ import Event from "../event/Event";
 import styles from "./EventsList.module.css";
 
 interface EventsListProps {
-  fieldsToDisplay: string[];
+  fieldsToDisplay: { key: string; name: string }[];
   showTitles: boolean;
   showPagination: boolean;
 }
@@ -23,21 +23,6 @@ const EventsList: React.FC<EventsListProps> = ({
     }
   };
 
-  const getFieldDisplayName = (field: string) => {
-    const fieldNames: { [key: string]: string } = {
-      placeId: "Nome do local",
-      event: "Evento",
-      type: "Tipo",
-      email: "Email",
-      phone: "Celular",
-      dateStart: "Data Início",
-      dateEnd: "Data Fim",
-      gates: "Portões cadastrados",
-      turnstiles: "Catracas cadastradas",
-    };
-    return fieldNames[field] || field;
-  };
-
   if (!eventsList) return <p>Loading...</p>;
 
   return (
@@ -49,10 +34,9 @@ const EventsList: React.FC<EventsListProps> = ({
           {showTitles && (
             <thead>
               <tr>
-                {fieldsToDisplay.map((field) => (
-                  <th key={field}>{getFieldDisplayName(field)}</th>
+                {fieldsToDisplay.map(({ key, name }) => (
+                  <th key={key}>{name}</th>
                 ))}
-                <th></th>
               </tr>
             </thead>
           )}
@@ -61,7 +45,7 @@ const EventsList: React.FC<EventsListProps> = ({
               <Event
                 key={event.id}
                 event={event}
-                fieldsToDisplay={fieldsToDisplay}
+                fieldsToDisplay={fieldsToDisplay.map((field) => field.key)}
                 style={{
                   backgroundColor: index % 2 === 0 ? "#333B49" : "#10141D",
                 }}
