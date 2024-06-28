@@ -12,17 +12,27 @@ const EventSearch: React.FC = () => {
     setOrderBy,
     searchField,
     setSearchField,
+    limit,
+    setLimit,
   } = useEventSearchContext();
 
   useEffect(() => {
     fetchEvents({
       page: currentPage,
-      limit: 10,
+      limit: limit ? limit : 10,
       searchTerm: `${searchField}:${debouncedSearchTerm}`,
       orderBy,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearchTerm, orderBy, searchField]);
+  }, [debouncedSearchTerm, orderBy, searchField, limit]);
+
+  const handleLimitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value !== "") {
+      setLimit(Number(e.target.value));
+    } else {
+      setLimit(undefined);
+    }
+  };
 
   return (
     <div
@@ -42,7 +52,7 @@ const EventSearch: React.FC = () => {
       </select>
       <input
         type="text"
-        placeholder={`Busque por ${searchField}`}
+        placeholder="Digite para buscar"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ flex: 1, marginRight: "10px" }}
@@ -63,6 +73,13 @@ const EventSearch: React.FC = () => {
           Data de criação antigos ... novos
         </option>
       </select>
+      <input
+        type="number"
+        placeholder="Itens por pagina"
+        value={limit}
+        onChange={(e) => handleLimitChange(e)}
+        style={{ flex: 1, marginRight: "10px" }}
+      />
     </div>
   );
 };

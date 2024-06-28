@@ -17,6 +17,8 @@ interface PlaceSearchContextType {
   setSearchField: React.Dispatch<React.SetStateAction<string>>;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  limit: number | undefined;
+  setLimit: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 interface PlaceSearchProviderProps {
@@ -35,6 +37,7 @@ export const PlaceSearchProvider: React.FC<PlaceSearchProviderProps> = ({
   const [orderBy, setOrderBy] = useState("name asc");
   const [searchField, setSearchField] = useState("name");
   const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState<number | undefined>();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -59,6 +62,8 @@ export const PlaceSearchProvider: React.FC<PlaceSearchProviderProps> = ({
         setSearchField,
         currentPage,
         setCurrentPage,
+        limit,
+        setLimit,
       }}
     >
       {children}

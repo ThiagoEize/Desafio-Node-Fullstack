@@ -17,6 +17,8 @@ interface EventSearchContextType {
   setSearchField: React.Dispatch<React.SetStateAction<string>>;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  limit: number | undefined;
+  setLimit: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 interface EventSearchProviderProps {
@@ -35,6 +37,7 @@ export const EventSearchProvider: React.FC<EventSearchProviderProps> = ({
   const [orderBy, setOrderBy] = useState("event asc");
   const [searchField, setSearchField] = useState("event");
   const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState<number | undefined>();
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -59,6 +62,8 @@ export const EventSearchProvider: React.FC<EventSearchProviderProps> = ({
         setSearchField,
         currentPage,
         setCurrentPage,
+        limit,
+        setLimit,
       }}
     >
       {children}
