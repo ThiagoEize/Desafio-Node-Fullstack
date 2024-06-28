@@ -37,7 +37,7 @@ const EventsCrud: React.FC = () => {
   return (
     <div className="mainContainer">
       <ContentTop
-        title="events"
+        title="Eventos"
         message="Confira os eventos cadastrados no sistema."
       />
       <div className="backgroundContainer">

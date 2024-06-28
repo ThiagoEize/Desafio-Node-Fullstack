@@ -9,24 +9,6 @@ interface ContentTopProps {
 const ContentTop: React.FC<ContentTopProps> = ({ title, message }) => {
   const location = useLocation();
 
-  const displayTitle = (): string => {
-    return title === "events"
-      ? "Eventos"
-      : title === "places"
-      ? "Places"
-      : title === "edit-event"
-      ? "Editar Evento"
-      : "Editar Lugar";
-  };
-
-  const isSelected = (path: string) => {
-    const regex = new RegExp(`^/${path}`);
-    return regex.test(location.pathname);
-  };
-
-  // Extracting any parameters from the location.pathname
-  const params = location.pathname.split("/").slice(2).join("/");
-
   return (
     <>
       <div className={styles.navLinks}>
@@ -37,14 +19,11 @@ const ContentTop: React.FC<ContentTopProps> = ({ title, message }) => {
           Home
         </Link>
         /
-        <Link
-          to={`/${title}${params ? `/${params}` : ""}`}
-          className={isSelected(title) ? styles.selected : ""}
-        >
-          {displayTitle()}
+        <Link to={location.pathname} className={styles.selected}>
+          {title}
         </Link>
       </div>
-      <h1>{displayTitle()}</h1>
+      <h1>{title}</h1>
       <p>{message}</p>
     </>
   );

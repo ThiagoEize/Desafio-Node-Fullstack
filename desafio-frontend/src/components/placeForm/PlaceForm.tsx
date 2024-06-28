@@ -136,7 +136,7 @@ const PlaceForm: React.FC = () => {
 
   return (
     <div className="formContainer">
-      <ContentTop title="edit-place" message="*Campos obrigatórios." />
+      <ContentTop title="Editar Lugar" message="*Campos obrigatórios." />
       <div className="backgroundContainer">
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>

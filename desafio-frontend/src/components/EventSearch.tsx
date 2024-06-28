@@ -27,10 +27,11 @@ const EventSearch: React.FC = () => {
   }, [debouncedSearchTerm, orderBy, searchField, limit]);
 
   const handleLimitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value !== "") {
-      setLimit(Number(e.target.value));
-    } else {
+    const value = Number(e.target.value);
+    if (value === 0) {
       setLimit(undefined);
+    } else if (!isNaN(value)) {
+      setLimit(value);
     }
   };
 
@@ -74,9 +75,9 @@ const EventSearch: React.FC = () => {
         </option>
       </select>
       <input
-        type="number"
+        type="text"
         placeholder="Itens por pagina"
-        value={limit}
+        value={limit || ""}
         onChange={(e) => handleLimitChange(e)}
         style={{ flex: 1, marginRight: "10px" }}
       />

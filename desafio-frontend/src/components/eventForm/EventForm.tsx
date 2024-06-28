@@ -153,7 +153,7 @@ const EventForm: React.FC = () => {
 
   return (
     <div className="formContainer">
-      <ContentTop title="edit-event" message="*Campos obrigatórios." />
+      <ContentTop title="Editar Evento" message="*Campos obrigatórios." />
       <div className="backgroundContainer">
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>

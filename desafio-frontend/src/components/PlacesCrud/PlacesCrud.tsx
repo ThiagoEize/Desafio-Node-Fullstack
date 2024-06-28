@@ -37,7 +37,7 @@ const PlacesCrud: React.FC = () => {
   return (
     <div className="mainContainer">
       <ContentTop
-        title="places"
+        title="Lugares"
         message="Confira os lugares cadastrados no sistema."
       />
       <div className="backgroundContainer">
